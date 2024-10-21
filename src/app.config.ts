@@ -2,21 +2,26 @@ import "dotenv/config";
 import { PullRequestNotification } from "./use-cases/contracts";
 
 export const AppConfig = {
+    NODE_ENV: process.env.NODE_ENV,
     HMAC_SECRET: process.env.HMAC_SECRET as string,
+
     SLACK_SIGNING_SECRET: process.env.SLACK_SIGNING_SECRET as string,
     SLACK_BOT_TOKEN: process.env.SLACK_BOT_TOKEN,
     SLACK_BOT_PORT: parseInt(process.env.SLACK_BOT_PORT, 10) || 8080,
     SLACK_BOT_HOST: process.env.SLACK_BOT_HOST || "0.0.0.0",
+    DIAGNOSTIC_CHANNEL: process.env.DIAGNOSTIC_CHANNEL,
+
     BITBUCKET_READ_API_TOKEN: process.env.BITBUCKET_READ_API_TOKEN,
     BITBUCKET_BASE_URL: process.env.BITBUCKET_BASE_URL,
-    DIAGNOSTIC_CHANNEL: process.env.DIAGNOSTIC_CHANNEL,
-    NODE_ENV: process.env.NODE_ENV,
-
     /*
     If you want to use public channels and kick the users removed from PR review, you need to configure Slack permissions properly - https://stackoverflow.com/a/75442078
      */
     USE_PRIVATE_CHANNELS: true,
     DEFAULT_CHANNEL_PARTICIPANTS: process.env.DEFAULT_CHANNEL_PARTICIPANTS?.split(",").map(u => u.trim()),
+
+    tryGetGitHubReadToken(organizationMName: string): string | null {
+        return process.env[`${organizationMName.toUpperCase()}_GITHUB_READ_API_TOKEN`] ?? process.env.GITHUB_READ_API_TOKEN ?? null;
+    },
     /*
     * You can implement any other logic depending on the granularity level you need
     * */
@@ -36,8 +41,5 @@ export const AppConfig = {
                 ?? process.env.OPENED_PRS_BROADCAST_CHANNEL;
         }
         return channelName ?? null;
-    },
-    getUserEmailFromGithubLogin(login: string): string {
-        return login.replace("_webpros", "").split("-").join(".") + "@webpros.com";
     }
 };

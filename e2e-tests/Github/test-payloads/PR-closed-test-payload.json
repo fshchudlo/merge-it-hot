@@ -20,9 +20,8 @@
     "merge_commit_sha": "50744a2546074a4b906d0f925f954ccf26b6a93d",
     "assignee": null,
     "assignees": [
-
     ],
-    "requested_reviewers":  [
+    "requested_reviewers": [
       {
         "login": "{{FirstReviewerName}}",
         "type": "User"
@@ -71,5 +70,8 @@
   "sender": {
     "login": "{{PRAuthorName}}",
     "type": "User"
+  },
+  "organization": {
+    "login": "{{OrganizationName}}"
   }
 }

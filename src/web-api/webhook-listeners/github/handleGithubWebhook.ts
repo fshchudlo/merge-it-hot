@@ -5,10 +5,15 @@ import { AppConfig } from "../../../app.config";
 import { PullRequestNotification } from "../../../use-cases/contracts";
 import handlePullRequestEvent from "../../../use-cases/handlePullRequestEvent";
 import { SlackUserIdResolver } from "../ports/SlackUserIdResolver";
+import GitHubAPI from "../../../adapters/GitHubAPI";
+import { GithubNotification } from "./payload-normalization/GitHub.contracts";
 
 export async function handleGithubWebhook(req: Request, res: Response, next: NextFunction, slackChannelFactory: SlackChannelProvisioner, slackUserIdResolver: SlackUserIdResolver) {
     try {
-        const payload = await normalizeGithubPayload(req.body, slackUserIdResolver);
+
+        const githubAPI = new GitHubAPI(AppConfig.tryGetGitHubReadToken((<GithubNotification>req.body).organization.login));
+
+        const payload = await normalizeGithubPayload(req.body, slackUserIdResolver, githubAPI);
         const broadcastChannelName = AppConfig.getOpenedPRBroadcastChannel(payload);
         const broadcastChannel = broadcastChannelName ? await slackChannelFactory.getBroadcastChannel(broadcastChannelName) : null;
 
