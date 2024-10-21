@@ -1,5 +1,5 @@
 {
-  "action": "review_request_removed",
+  "action": "synchronize",
   "number": "{{PullRequestId}}",
   "pull_request": {
     "html_url": "https://github.com/{{OrganizationName}}/{{RepositoryName}}/pull/{{PullRequestId}}",
@@ -64,10 +64,8 @@
     "deletions": 0,
     "changed_files": 1
   },
-  "requested_reviewer": {
-    "login": "{{SecondReviewerName}}",
-    "type": "User"
-  },
+  "before": "9d172e3a50d5a1dfa947edcc1c17e436fe712234",
+  "after": "f24325b357033d3b567c90c23604471f27ca841d",
   "repository": {
     "name": "{{RepositoryName}}"
   },

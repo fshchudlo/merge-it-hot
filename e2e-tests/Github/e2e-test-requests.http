@@ -34,6 +34,18 @@ Content-Type: application/json
     });
 %}
 
+### Add commit
+POST {{EndpointHost}}/github-webhook
+Content-Type: application/json
+
+< ./test-payloads/PR-synchronized-test-payload.json
+
+> {%
+    client.test("Adding commit to open Pull request should be successful", function() {
+        client.assert(response.status === 200);
+    });
+%}
+
 
 ### Merge pull request
 POST {{EndpointHost}}/github-webhook

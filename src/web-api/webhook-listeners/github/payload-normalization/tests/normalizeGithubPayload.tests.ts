@@ -7,7 +7,7 @@ describe("normalizeGithubPayload.tests", () => {
         try {
             await normalizeGithubPayload({
                 action: "unknown action"
-            } as any, null);
+            } as any, null, null);
         } catch (error) {
             expect((error as Error).message).toBe("\"unknown action\" action key is unknown.");
         }

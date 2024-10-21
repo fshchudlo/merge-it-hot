@@ -68,12 +68,14 @@
     "login": "{{SecondReviewerName}}",
     "type": "User"
   },
-
   "repository": {
     "name": "{{RepositoryName}}"
   },
   "sender": {
     "login": "{{PRAuthorName}}",
     "type": "User"
+  },
+  "organization": {
+    "login": "{{OrganizationName}}"
   }
 }

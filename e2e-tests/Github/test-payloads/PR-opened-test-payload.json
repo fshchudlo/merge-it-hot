@@ -70,5 +70,8 @@
   "sender": {
     "login": "{{PRAuthorName}}",
     "type": "User"
+  },
+  "organization": {
+    "login": "{{OrganizationName}}"
   }
 }
