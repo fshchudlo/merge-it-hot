@@ -1,6 +1,6 @@
-import { PullRequestGenericNotification, PullRequestNotification, PullRequestReviewersUpdatedNotification, ReviewerPayload } from "../../use-cases/contracts";
-import { AppConfig } from "../../app.config";
-import { SlackUserIdResolver } from "./ports/SlackUserIdResolver";
+import { PullRequestGenericNotification, PullRequestNotification, PullRequestReviewersUpdatedNotification, ReviewerPayload } from "../../../../use-cases/contracts";
+import { AppConfig } from "../../../../app.config";
+import { SlackUserIdResolver } from "../../ports/SlackUserIdResolver";
 
 export async function normalizeGithubPayload(notification: GithubNotification, slackUserIdResolver: SlackUserIdResolver): Promise<PullRequestNotification> {
     const eventKey = notification.action;

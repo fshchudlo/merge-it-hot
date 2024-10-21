@@ -1,14 +1,17 @@
+import handlePullRequestEvent from "../../../use-cases/handlePullRequestEvent";
+import BitbucketAPI from "../../../adapters/BitbucketAPI";
+import { AppConfig } from "../../../app.config";
 import { NextFunction, Request, Response } from "express";
-import { SlackChannelProvisioner } from "../adapters/slack-api/SlackChannelProvisioner";
-import { normalizeGithubPayload } from "./payload-normalization/normalizeGithubPayload";
-import { AppConfig } from "../app.config";
-import { PullRequestNotification } from "../use-cases/contracts";
-import handlePullRequestEvent from "../use-cases/handlePullRequestEvent";
-import { SlackUserIdResolver } from "./payload-normalization/ports/SlackUserIdResolver";
+import { normalizeBitbucketPayload } from "./payload-normalization/normalizeBitbucketPayload";
+import { SlackChannelProvisioner } from "../../../adapters/slack-api/SlackChannelProvisioner";
+import { PullRequestGenericNotification } from "../../../use-cases/contracts";
+import { SlackUserIdResolver } from "../ports/SlackUserIdResolver";
 
-export async function handleGithubWebhookCall(req: Request, res: Response, next: NextFunction, slackChannelFactory: SlackChannelProvisioner, slackUserIdResolver: SlackUserIdResolver) {
+const bitbucketAPI = new BitbucketAPI(AppConfig.BITBUCKET_BASE_URL, AppConfig.BITBUCKET_READ_API_TOKEN);
+
+export async function handleBitbucketWebhook(req: Request, res: Response, next: NextFunction, slackChannelFactory: SlackChannelProvisioner, slackUserIdResolver: SlackUserIdResolver) {
     try {
-        const payload = await normalizeGithubPayload(req.body, slackUserIdResolver);
+        const payload = await normalizeBitbucketPayload(req.body, bitbucketAPI, slackUserIdResolver);
         const broadcastChannelName = AppConfig.getOpenedPRBroadcastChannel(payload);
         const broadcastChannel = broadcastChannelName ? await slackChannelFactory.getBroadcastChannel(broadcastChannelName) : null;
 
@@ -16,7 +19,7 @@ export async function handleGithubWebhookCall(req: Request, res: Response, next:
         const provisionResult = await slackChannelFactory.provisionChannelFor(payload, AppConfig.USE_PRIVATE_CHANNELS, AppConfig.DEFAULT_CHANNEL_PARTICIPANTS);
 
         if (!provisionResult.isSetUpProperly) {
-            const payloadToReplay = <PullRequestNotification>{
+            const payloadToReplay = <PullRequestGenericNotification>{
                 eventKey: "pr:opened",
                 actor: {
                     name: payload.pullRequest.author.name,
@@ -35,3 +38,4 @@ export async function handleGithubWebhookCall(req: Request, res: Response, next:
         next(error);
     }
 }
+
