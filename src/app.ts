@@ -1,16 +1,17 @@
 import { App, ExpressReceiver } from "@slack/bolt";
 import { AppConfig } from "./app.config";
 import express, { NextFunction } from "express";
-import { getSlackChannelInfo, handleBitbucketWebhookCall } from "./web-api-entrypoints/handleBitbucketWebhookCall";
+import { handleBitbucketWebhook } from "./web-api/webhook-listeners/bitbucket/handleBitbucketWebhook";
 import { SlackChannelProvisioner } from "./adapters/slack-api/SlackChannelProvisioner";
 import measureRequestDuration from "./app.metrics";
-import logErrorMessage from "./web-api-helpers/logErrorMessage";
+import logErrorMessage from "./web-api/helpers/logErrorMessage";
 import { register } from "prom-client";
-import { handleGithubWebhookCall } from "./web-api-entrypoints/handleGithubWebhookCall";
+import { handleGithubWebhook } from "./web-api/webhook-listeners/github/handleGithubWebhook";
 import bodyParser from "body-parser";
-import verifyHMACSignature from "./web-api-helpers/verifyHMACSignature";
+import verifyHMACSignature from "./web-api/helpers/verifyHMACSignature";
 import util from "util";
 import { SlackWebClientUserIdResolver } from "./adapters/slack-api/SlackWebClientUserIdResolver";
+import { getSlackChannelInfo } from "./web-api/getSlackChannelInfo";
 
 
 const expressReceiver = new ExpressReceiver({
@@ -37,11 +38,11 @@ if (AppConfig.HMAC_SECRET) {
 expressReceiver.router.use(measureRequestDuration);
 
 expressReceiver.router.post("/bitbucket-webhook", verifyHMACSignature, async (req, res, next: NextFunction) => {
-    await handleBitbucketWebhookCall(req, res, next, slackChannelFactory, userIdResolver);
+    await handleBitbucketWebhook(req, res, next, slackChannelFactory, userIdResolver);
 });
 
 expressReceiver.router.post("/github-webhook", verifyHMACSignature, async (req, res, next: NextFunction) => {
-    await handleGithubWebhookCall(req, res, next, slackChannelFactory, userIdResolver);
+    await handleGithubWebhook(req, res, next, slackChannelFactory, userIdResolver);
 });
 
 expressReceiver.router.get("/metrics", async (req, res) => {

@@ -1,4 +1,4 @@
-import { AppConfig } from "../app.config";
+import { AppConfig } from "../../app.config";
 import { WebClient } from "@slack/web-api";
 
 export default async function logErrorMessage(errorMessage: string, slackWebClient: WebClient) {
