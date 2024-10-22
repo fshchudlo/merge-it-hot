@@ -3,7 +3,7 @@ export type PullRequestNotification =
     | PullRequestCommentActionNotification
     | PullRequestModifiedNotification
     | PullRequestFromBranchUpdatedNotification
-    | PullRequestReviewersUpdatedNotification;
+    | PullRequestParticipantsUpdatedNotification;
 
 export type PullRequestNotificationBasicPayload = {
     readonly actor: UserPayload;
@@ -29,10 +29,10 @@ export type PullRequestModifiedNotification = PullRequestNotificationBasicPayloa
         readonly latestCommit: string
     }
 };
-export type PullRequestReviewersUpdatedNotification = PullRequestNotificationBasicPayload & {
-    readonly eventKey: "pr:reviewer:updated";
-    readonly addedReviewers: Array<UserPayload>;
-    readonly removedReviewers: Array<UserPayload>;
+export type PullRequestParticipantsUpdatedNotification = PullRequestNotificationBasicPayload & {
+    readonly eventKey: "pr:participants:changed";
+    readonly addedParticipants: Array<UserPayload>;
+    readonly removedParticipants: Array<UserPayload>;
 };
 export type PullRequestFromBranchUpdatedNotification = PullRequestNotificationBasicPayload & {
     readonly eventKey: "pr:from_ref_updated";

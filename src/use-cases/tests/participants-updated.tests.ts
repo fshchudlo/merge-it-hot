@@ -7,7 +7,7 @@ describe("handleBitbucketWebhook", () => {
         const channelMock = new SlackChannelSnapshottingMock();
 
 
-        await handlePullRequestEvent(TestPayloadBuilder.reviewersUpdated(), channelMock, null);
+        await handlePullRequestEvent(TestPayloadBuilder.participantsUpdated(), channelMock, null);
 
 
         expect(channelMock.snapshot).toMatchSnapshot();
