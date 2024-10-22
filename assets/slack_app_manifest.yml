@@ -1,12 +1,12 @@
 display_information:
-  name: bitbucket-slack-connector
+  name: code-review-herald
 features:
   app_home:
     home_tab_enabled: true
     messages_tab_enabled: true
     messages_tab_read_only_enabled: false
   bot_user:
-    display_name: bitbucket-slack-connector
+    display_name: code-review-herald
     always_online: true
   slash_commands:
 oauth_config:

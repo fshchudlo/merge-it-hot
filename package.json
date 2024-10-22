@@ -1,5 +1,5 @@
 {
-  "name": "bitbucket-slack-connector",
+  "name": "code-review-herald",
   "version": "1.0.0",
   "description": "An application for reflecting Bitbucket Pull Requests events to the Slack channels for PR author and all of reviewers.",
   "main": "src/app.ts",
