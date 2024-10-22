@@ -1,7 +1,7 @@
 {
   "name": "code-review-herald",
   "version": "1.0.0",
-  "description": "An application for reflecting Bitbucket Pull Requests events to the Slack channels for PR author and all of reviewers.",
+  "description": "An application for reflecting GitHub/Bitbucket Pull Requests events to the Slack channels for PR author and all of participants.",
   "main": "src/app.ts",
   "scripts": {
     "start": "ts-node src/app.ts",
