@@ -34,7 +34,7 @@ exports[`handleBitbucketWebhook Should send message when PR modified 1`] = `
         },
         {
           "text": {
-            "text": "Target is changed to \`not-the-master\`",
+            "text": "Target is changed to \`not-the-main\`",
             "type": "mrkdwn",
           },
           "type": "section",

@@ -58,6 +58,18 @@ Content-Type: application/json
     });
 %}
 
+### Edit pull request
+POST {{EndpointHost}}/github-webhook
+Content-Type: application/json
+
+< ./test-payloads/PR-edited-test-payload.json
+
+> {%
+    client.test("Editing PR information about body, title, and base href should be successful", function() {
+        client.assert(response.status === 200);
+    });
+%}
+
 ### Remove assignee
 POST {{EndpointHost}}/github-webhook
 Content-Type: application/json

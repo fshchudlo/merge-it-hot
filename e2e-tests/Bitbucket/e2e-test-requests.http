@@ -53,7 +53,7 @@ Content-Type: application/json
 < ./test-payloads/PR-modified-test-payload.json
 
 > {%
-    client.test("Pull Request change of open Pull request should be successful", function() {
+    client.test("Pull Request change of body, title, and base href should be successful", function() {
         client.assert(response.status === 200);
     });
 

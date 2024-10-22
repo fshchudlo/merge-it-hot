@@ -1,6 +1,6 @@
 import {
     PullRequestFromBranchUpdatedNotification,
-    PullRequestGenericNotification,
+    PullRequestGenericNotification, PullRequestModifiedNotification,
     PullRequestNotification,
     PullRequestParticipantsUpdatedNotification,
     ReviewerPayload
@@ -69,6 +69,17 @@ export async function normalizeGithubPayload(notification: GithubNotification, u
                 latestCommitMessage: githubAPI.canRead() ? await githubAPI.fetchCommitMessage(notification.pull_request.head.repo.owner.login, notification.pull_request.head.repo.name, notification.pull_request.head.sha) : null,
                 latestCommitViewUrl: `${notification.pull_request.html_url}/commits/${notification.pull_request.head.sha}`
             } as PullRequestFromBranchUpdatedNotification;
+        case "edited":
+            return {
+                ...(await normalizePayloadGenericPart(notification, userIdResolver)),
+                eventKey: "pr:modified",
+                previousDescription: notification.changes.body?.from,
+                previousTitle: notification.changes.title?.from,
+                previousTargetBranch: notification.changes.base ? {
+                    branchName: notification.changes.base.ref?.from,
+                    latestCommit: notification.changes.base.sha?.from
+                } : null
+            } as PullRequestModifiedNotification;
         default:
             throw new Error(`"${eventKey}" action key is unknown.`);
     }
