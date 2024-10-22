@@ -1,4 +1,4 @@
-export type GithubNotification = GithubPullRequestBasicNotification | GithubPullRequestReviewersUpdatedNotification;
+export type GithubNotification = GithubPullRequestBasicNotification | GithubPullRequestReviewersUpdatedNotification | GithubPullRequestAssigneesUpdatedNotification;
 
 
 export type GithubPullRequestBasicNotification = GithubPullRequestNotificationBasicPayload & {
@@ -8,6 +8,11 @@ export type GithubPullRequestBasicNotification = GithubPullRequestNotificationBa
 export export type GithubPullRequestReviewersUpdatedNotification = GithubPullRequestNotificationBasicPayload & {
     readonly action: "review_requested" | "review_request_removed";
     readonly requested_reviewer: GithubUserPayload;
+};
+
+export export type GithubPullRequestAssigneesUpdatedNotification = GithubPullRequestNotificationBasicPayload & {
+    readonly action: "assigned" | "unassigned";
+    readonly assignee: GithubUserPayload;
 };
 
 export type GithubPullRequestNotificationBasicPayload = {

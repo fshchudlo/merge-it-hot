@@ -4,7 +4,7 @@ export { PullRequestOpenedHandler } from "./targeted-channel-handlers/PullReques
 export { PullRequestCompletionHandler } from "./targeted-channel-handlers/PullRequestCompletionHandler";
 export { NewCommitAddedHandler } from "./targeted-channel-handlers/NewCommitAddedHandler";
 export { CommentAddedHandler } from "./targeted-channel-handlers/CommentAddedHandler";
-export { PullRequestReviewersUpdatedHandler } from "./targeted-channel-handlers/PullRequestReviewersUpdatedHandler";
+export { PullRequestParticipantsChangedHandler } from "./targeted-channel-handlers/PullRequestParticipantsChangedHandler";
 export { PullRequestReviewerActionHandler } from "./targeted-channel-handlers/PullRequestReviewerActionHandler";
 export { CommentDeletedHandler } from "./targeted-channel-handlers/CommentDeletedHandler";
 export { CommentEditedHandler } from "./targeted-channel-handlers/CommentEditedHandler";

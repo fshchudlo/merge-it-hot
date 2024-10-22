@@ -2,7 +2,7 @@ import {
     PullRequestFromBranchUpdatedNotification,
     PullRequestGenericNotification,
     PullRequestNotification,
-    PullRequestReviewersUpdatedNotification,
+    PullRequestParticipantsUpdatedNotification,
     ReviewerPayload
 } from "../../../../use-cases/contracts";
 import { SlackUserIdResolver } from "../../ports/SlackUserIdResolver";
@@ -25,23 +25,43 @@ export async function normalizeGithubPayload(notification: GithubNotification, u
         case "review_requested":
             return {
                 ...(await normalizePayloadGenericPart(notification, userIdResolver)),
-                eventKey: "pr:reviewer:updated",
-                addedReviewers: [{
+                eventKey: "pr:participants:changed",
+                addedParticipants: [{
                     name: notification.requested_reviewer.login,
                     slackUserId: await getSlackUserId(userIdResolver, notification.requested_reviewer.login)
                 }],
-                removedReviewers: []
-            } as PullRequestReviewersUpdatedNotification;
+                removedParticipants: []
+            } as PullRequestParticipantsUpdatedNotification;
         case "review_request_removed":
             return {
                 ...(await normalizePayloadGenericPart(notification, userIdResolver)),
-                eventKey: "pr:reviewer:updated",
-                addedReviewers: [],
-                removedReviewers: [{
+                eventKey: "pr:participants:changed",
+                addedParticipants: [],
+                removedParticipants: [{
                     name: notification.requested_reviewer.login,
                     slackUserId: await getSlackUserId(userIdResolver, notification.requested_reviewer.login)
                 }]
-            } as PullRequestReviewersUpdatedNotification;
+            } as PullRequestParticipantsUpdatedNotification;
+        case "assigned":
+            return {
+                ...(await normalizePayloadGenericPart(notification, userIdResolver)),
+                eventKey: "pr:participants:changed",
+                addedParticipants: [{
+                    name: notification.assignee.login,
+                    slackUserId: await getSlackUserId(userIdResolver, notification.assignee.login)
+                }],
+                removedParticipants: []
+            } as PullRequestParticipantsUpdatedNotification;
+        case "unassigned":
+            return {
+                ...(await normalizePayloadGenericPart(notification, userIdResolver)),
+                eventKey: "pr:participants:changed",
+                removedParticipants: [{
+                    name: notification.assignee.login,
+                    slackUserId: await getSlackUserId(userIdResolver, notification.assignee.login)
+                }],
+                addedParticipants: []
+            } as PullRequestParticipantsUpdatedNotification;
         case "synchronize":
             return {
                 ...(await normalizePayloadGenericPart(notification, userIdResolver)),
@@ -128,6 +148,10 @@ function getUserEmailFromGithubLogin(login: string): string {
 }
 
 async function getSlackUserId(userIdResolver: SlackUserIdResolver, login: string): Promise<string> {
-    return await userIdResolver.getUserId(getUserEmailFromGithubLogin(login));
+    const userId = await userIdResolver.getUserId(getUserEmailFromGithubLogin(login));
+    if (!userId) {
+        console.warn(`Could not find Slack user for the login ${login}`);
+    }
+    return userId;
 }
 

@@ -3,7 +3,7 @@ import {
     PullRequestGenericNotification,
     PullRequestCommentActionNotification,
     PullRequestModifiedNotification,
-    PullRequestReviewersUpdatedNotification
+    PullRequestParticipantsUpdatedNotification
 } from "../../contracts";
 
 const authorUser = {
@@ -302,12 +302,12 @@ export default class TestPayloadBuilder {
         };
     }
 
-    static reviewersUpdated(): PullRequestReviewersUpdatedNotification {
+    static participantsUpdated(): PullRequestParticipantsUpdatedNotification {
         return {
             ...getBasicPayload(),
-            eventKey: "pr:reviewer:updated",
-            addedReviewers: [reviewer3User],
-            removedReviewers: [reviewer1User]
+            eventKey: "pr:participants:changed",
+            addedParticipants: [reviewer3User],
+            removedParticipants: [reviewer1User]
         };
     }
 }

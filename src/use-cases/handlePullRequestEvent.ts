@@ -6,7 +6,7 @@ import { SlackBroadcastChannel, SlackTargetedChannel } from "./slack-api-ports";
 const payloadHandlers = new Array<useCases.WebhookPayloadHandler>(
     new useCases.PullRequestOpenedHandler(),
     new useCases.PullRequestModifiedHandler(),
-    new useCases.PullRequestReviewersUpdatedHandler(),
+    new useCases.PullRequestParticipantsChangedHandler(),
     new useCases.PullRequestReviewerActionHandler(),
     new useCases.CommentAddedHandler(),
     new useCases.CommentEditedHandler(),

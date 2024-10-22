@@ -5,7 +5,7 @@ import {
     PullRequestGenericNotification,
     PullRequestModifiedNotification,
     PullRequestNotification,
-    PullRequestReviewersUpdatedNotification, UserPayload
+    PullRequestParticipantsUpdatedNotification, UserPayload
 } from "../../../../use-cases/contracts";
 import { SlackUserIdResolver } from "../../ports/SlackUserIdResolver";
 import { BitbucketNotification, BitbucketUserPayload } from "./Bitbucket.contracts";
@@ -44,11 +44,11 @@ export async function normalizeBitbucketPayload(notification: BitbucketNotificat
                 latestCommitViewUrl: `${notification.pullRequest.links.self[0].href.replace("/overview", "")}/commits/${notification.pullRequest.fromRef.latestCommit}`
             };
         case "pr:reviewer:updated":
-            return <PullRequestReviewersUpdatedNotification>{
+            return <PullRequestParticipantsUpdatedNotification>{
                 ...(await normalizePayloadGenericPart(notification, slackUserIdResolver)),
-                eventKey,
-                addedReviewers: await normalizeUserPayloads(notification.addedReviewers, slackUserIdResolver),
-                removedReviewers: await normalizeUserPayloads(notification.removedReviewers, slackUserIdResolver)
+                "eventKey": "pr:participants:changed",
+                addedParticipants: await normalizeUserPayloads(notification.addedReviewers, slackUserIdResolver),
+                removedParticipants: await normalizeUserPayloads(notification.removedReviewers, slackUserIdResolver)
             };
         case "pr:comment:added":
         case "pr:comment:edited":

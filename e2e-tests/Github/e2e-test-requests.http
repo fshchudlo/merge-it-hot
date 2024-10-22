@@ -17,19 +17,19 @@ Content-Type: application/json
 < ./test-payloads/PR-review-requested-test-payload.json
 
 > {%
-    client.test("Update of reviewers in open Pull request should be successful", function() {
+    client.test("Adding reviewer to the open Pull request should be successful", function() {
         client.assert(response.status === 200);
     });
 %}
 
-### Remove reviewer
+### Change to another reviewer
 POST {{EndpointHost}}/github-webhook
 Content-Type: application/json
 
-< ./test-payloads/PR-review-request-removed-test-payload.json
+< ./test-payloads/PR-review-request-changed-test-payload.json
 
 > {%
-    client.test("Update of reviewers in open Pull request should be successful", function() {
+    client.test("Changing reviewer for the open Pull request should be successful", function() {
         client.assert(response.status === 200);
     });
 %}
@@ -41,7 +41,31 @@ Content-Type: application/json
 < ./test-payloads/PR-synchronized-test-payload.json
 
 > {%
-    client.test("Adding commit to open Pull request should be successful", function() {
+    client.test("Adding commit to the open Pull request should be successful", function() {
+        client.assert(response.status === 200);
+    });
+%}
+
+### Add assignee
+POST {{EndpointHost}}/github-webhook
+Content-Type: application/json
+
+< ./test-payloads/PR-assigned-test-payload.json
+
+> {%
+    client.test("Adding assignee to the open Pull request should be successful", function() {
+        client.assert(response.status === 200);
+    });
+%}
+
+### Remove assignee
+POST {{EndpointHost}}/github-webhook
+Content-Type: application/json
+
+< ./test-payloads/PR-unassigned-test-payload.json
+
+> {%
+    client.test("Removing assignee from the open Pull request should be successful", function() {
         client.assert(response.status === 200);
     });
 %}
