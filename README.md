@@ -1,4 +1,4 @@
-# bitbucket-slack-connector
+# code-review-herald
 
 Bot to keep code review participants on the same field by broadcasting pull requests events to the Slack.
 Built on top of [Slack bolt API](https://slack.dev/bolt-js/tutorial/getting-started)
