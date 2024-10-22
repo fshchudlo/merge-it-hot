@@ -21,7 +21,7 @@
       }
     },
     "toRef": {
-      "displayId": "master",
+      "displayId": "main",
       "repository": {
         "slug": "{{RepositoryName}}",
         "project": {

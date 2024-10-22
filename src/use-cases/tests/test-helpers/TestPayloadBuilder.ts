@@ -39,7 +39,7 @@ function getBasicPayload(): PullRequestGenericNotification {
                 projectKey: "TEST-PROJ"
             },
             targetBranch: {
-                branchName: "master",
+                branchName: "main",
                 latestCommit: "to-ref-commit-hash",
                 repositoryName: "test-repository",
                 projectKey: "TEST-PROJ"
@@ -238,7 +238,7 @@ export default class TestPayloadBuilder {
                 ...payload.pullRequest,
                 title: "New pull request title",
                 description: "New pull request description",
-                targetBranch: { ...payload.pullRequest.targetBranch, branchName: "not-the-master" }
+                targetBranch: { ...payload.pullRequest.targetBranch, branchName: "not-the-main" }
             }
         };
     }

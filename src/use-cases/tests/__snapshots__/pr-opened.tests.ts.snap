@@ -134,7 +134,7 @@ exports[`handleBitbucketWebhook Should send notification to the broadcast channe
         {
           "elements": [
             {
-              "text": "Target: \`test-repository/master\`",
+              "text": "Target: \`test-repository/main\`",
               "type": "mrkdwn",
             },
           ],

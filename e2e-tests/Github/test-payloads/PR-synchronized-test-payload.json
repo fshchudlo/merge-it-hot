@@ -39,7 +39,7 @@
       }
     },
     "base": {
-      "ref": "master",
+      "ref": "main",
       "sha": "0c8673d66241b550e0bae14a0778a3d9e62d1300",
       "repo": {
         "name": "{{RepositoryName}}",
