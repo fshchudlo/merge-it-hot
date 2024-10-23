@@ -85,7 +85,7 @@ export async function normalizeGithubPayload(notification: GithubNotification, u
                 ...(await normalizePayloadGenericPart(notification, userIdResolver)),
                 eventKey: "pr:review:submitted",
                 review: {
-                    body: notification.review.body,
+                    comment: notification.review.body || null,
                     state: mapGithubReviewState(notification.review.state)
                 }
             } as PullRequestReviewSubmittedNotification;
@@ -114,8 +114,7 @@ async function normalizePayloadGenericPart(payload: GithubNotification, userIdRe
                 user: {
                     name: reviewer.login,
                     slackUserId: await getSlackUserId(userIdResolver, reviewer.login)
-                },
-                status: "UNAPPROVED"
+                }
             } as ReviewerPayload;
         }));
 
@@ -130,6 +129,7 @@ async function normalizePayloadGenericPart(payload: GithubNotification, userIdRe
             title: payload.pull_request.title,
             description: payload.pull_request.body,
             createdAt: new Date(payload.pull_request.created_at),
+            draft: payload.pull_request.draft,
             targetBranch: {
                 branchName: payload.pull_request.base.ref,
                 latestCommit: payload.pull_request.base.sha,
