@@ -7,7 +7,7 @@ const payloadHandlers = new Array<useCases.WebhookPayloadHandler>(
     new useCases.PullRequestOpenedHandler(),
     new useCases.PullRequestModifiedHandler(),
     new useCases.PullRequestParticipantsChangedHandler(),
-    new useCases.PullRequestReviewerActionHandler(),
+    new useCases.PullRequestReviewSubmittedHandler(),
     new useCases.CommentAddedHandler(),
     new useCases.CommentEditedHandler(),
     new useCases.CommentDeletedHandler(),

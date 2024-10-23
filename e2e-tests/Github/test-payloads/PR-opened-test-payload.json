@@ -1,6 +1,9 @@
 {
   "action": "opened",
-  "number": "{{PullRequestId}}",
+  "sender": {
+    "login": "{{PRAuthorName}}",
+    "type": "User"
+  },
   "pull_request": {
     "html_url": "https://github.com/{{OrganizationName}}/{{RepositoryName}}/pull/{{PullRequestId}}",
     "number": "{{PullRequestId}}",
@@ -66,10 +69,6 @@
   },
   "repository": {
     "name": "{{RepositoryName}}"
-  },
-  "sender": {
-    "login": "{{PRAuthorName}}",
-    "type": "User"
   },
   "organization": {
     "login": "{{OrganizationName}}"

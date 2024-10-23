@@ -3,7 +3,8 @@ export type PullRequestNotification =
     | PullRequestCommentActionNotification
     | PullRequestModifiedNotification
     | PullRequestFromBranchUpdatedNotification
-    | PullRequestParticipantsUpdatedNotification;
+    | PullRequestParticipantsUpdatedNotification
+    | PullRequestReviewSubmittedNotification;
 
 export type PullRequestNotificationBasicPayload = {
     readonly actor: UserPayload;
@@ -11,7 +12,15 @@ export type PullRequestNotificationBasicPayload = {
 };
 
 export type PullRequestGenericNotification = PullRequestNotificationBasicPayload & {
-    readonly eventKey: "pr:opened" | "pr:merged" | "pr:declined" | "pr:deleted" | "pr:reviewer:unapproved" | "pr:reviewer:needs_work" | "pr:reviewer:approved";
+    readonly eventKey: "pr:opened" | "pr:merged" | "pr:declined" | "pr:deleted";
+};
+
+export type PullRequestReviewSubmittedNotification = PullRequestNotificationBasicPayload & {
+    readonly eventKey: "pr:review:submitted";
+    readonly review: {
+        state: PullRequestReviewState;
+        comment?: string;
+    }
 };
 
 export type PullRequestCommentActionNotification = PullRequestNotificationBasicPayload & {
@@ -75,6 +84,7 @@ export type PullRequestPayload = {
 };
 export type ReviewerPayload = {
     user: UserPayload,
-    status: ReviewStatus
+    status: ReviewerReviewStatus
 }
-export type ReviewStatus = "UNAPPROVED" | "NEEDS_WORK" | "APPROVED";
+export type ReviewerReviewStatus = "UNAPPROVED" | "NEEDS_WORK" | "APPROVED";
+export type PullRequestReviewState = "COMMENTED" | "APPROVED" | "CHANGES_REQUESTED" | "DISMISSED";

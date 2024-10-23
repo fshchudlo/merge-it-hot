@@ -2,7 +2,8 @@ export type GithubNotification =
     GithubPullRequestBasicNotification
     | GithubPullRequestReviewersUpdatedNotification
     | GithubPullRequestAssigneesUpdatedNotification
-    | GithubPullRequestEditedNotification;
+    | GithubPullRequestEditedNotification
+    | GithubPullRequestReviewSubmittedNotification;
 
 
 export type GithubPullRequestBasicNotification = GithubPullRequestNotificationBasicPayload & {
@@ -37,6 +38,15 @@ export export type GithubPullRequestEditedNotification = GithubPullRequestNotifi
         }
     }
 };
+
+export export type GithubPullRequestReviewSubmittedNotification = GithubPullRequestNotificationBasicPayload & {
+    readonly action: "submitted";
+    readonly review: {
+        state: GitHubPullRequestReviewState;
+        body?: null
+    };
+};
+
 
 export type GithubPullRequestNotificationBasicPayload = {
     readonly number: number;
@@ -96,3 +106,5 @@ export type GithubRefPayload = {
         readonly owner: GithubUserPayload
     };
 };
+
+export type GitHubPullRequestReviewState = "commented" | "approved" | "changes_requested" | "dismissed";

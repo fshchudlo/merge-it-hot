@@ -1,21 +1,12 @@
 {
-  "action": "created",
+  "action": "review_request_removed",
   "sender": {
-    "login": "{{FirstReviewerName}}",
+    "login": "{{PRAuthorName}}",
     "type": "User"
   },
-  "comment": {
-    "pull_request_review_id": 2378151121,
-    "id": "{{CommentId}}",
-    "user": {
-      "login": "{{FirstReviewerName}}",
-      "type": "User"
-    },
-    "body": "test comment",
-    "created_at": "2024-10-18T13:57:36Z",
-    "updated_at": "2024-10-18T13:57:54Z",
-    "html_url": "https://github.com/{{OrganizationName}}/{{RepositoryName}}/pull/{{PullRequestId}}#discussion_r1806537166",
-    "author_association": "CONTRIBUTOR"
+  "requested_reviewer": {
+    "login": "{{SecondReviewerName}}",
+    "type": "User"
   },
   "pull_request": {
     "html_url": "https://github.com/{{OrganizationName}}/{{RepositoryName}}/pull/{{PullRequestId}}",
@@ -35,8 +26,9 @@
     "merge_commit_sha": null,
     "assignee": null,
     "assignees": [
+
     ],
-    "requested_reviewers": [
+    "requested_reviewers":  [
       {
         "login": "{{FirstReviewerName}}",
         "type": "User"
