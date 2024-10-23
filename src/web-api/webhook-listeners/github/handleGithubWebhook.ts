@@ -10,8 +10,7 @@ import { GithubNotification } from "./payload-normalization/GitHub.contracts";
 
 export async function handleGithubWebhook(req: Request, res: Response, next: NextFunction, slackChannelFactory: SlackChannelProvisioner, slackUserIdResolver: SlackUserIdResolver) {
     try {
-
-        const githubAPI = new GitHubAPI(AppConfig.tryGetGitHubReadToken((<GithubNotification>req.body).organization.login));
+        const githubAPI = new GitHubAPI(AppConfig.tryGetGitHubReadToken((<GithubNotification>req.body)?.organization?.login));
 
         const payload = await normalizeGithubPayload(req.body, slackUserIdResolver, githubAPI);
         const broadcastChannelName = AppConfig.getOpenedPRBroadcastChannel(payload);

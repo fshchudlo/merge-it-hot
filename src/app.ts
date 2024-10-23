@@ -61,7 +61,7 @@ expressReceiver.router.get("/health", async (req, res) => {
 });
 
 expressReceiver.router.use(async (error: any, req: express.Request, res: express.Response, next: NextFunction) => {
-    const errorMessage = ["Error processing webhook.", `Error: ${util.inspect(error, false, 8)}.`, `Payload: ${util.inspect(req.body, false, 8)}`].join("\n\n");
+    const errorMessage = ["Error processing webhook.", `Error: ${util.inspect(error, false, 8)}.`].join("\n\n");
     await logErrorMessage(errorMessage, slackApp.client);
 
     if (res.headersSent) {
