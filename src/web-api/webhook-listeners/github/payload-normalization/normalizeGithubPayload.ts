@@ -126,7 +126,7 @@ async function normalizePayloadGenericPart(payload: GithubNotification, userIdRe
             slackUserId: await getSlackUserId(userIdResolver, payload.sender.login)
         },
         pullRequest: {
-            number: +payload.number,
+            number: payload.pull_request.number,
             title: payload.pull_request.title,
             description: payload.pull_request.body,
             createdAt: new Date(payload.pull_request.created_at),
