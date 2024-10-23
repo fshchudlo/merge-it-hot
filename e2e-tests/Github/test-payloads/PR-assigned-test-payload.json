@@ -1,6 +1,13 @@
 {
   "action": "assigned",
-  "number": "{{PullRequestId}}",
+  "sender": {
+    "login": "{{PRAuthorName}}",
+    "type": "User"
+  },
+  "assignee": {
+    "login": "{{FirstAssigneeName}}",
+    "type": "User"
+  },
   "pull_request": {
     "html_url": "https://github.com/{{OrganizationName}}/{{RepositoryName}}/pull/{{PullRequestId}}",
     "number": "{{PullRequestId}}",
@@ -66,16 +73,8 @@
     "deletions": 0,
     "changed_files": 1
   },
-  "assignee": {
-    "login": "{{FirstAssigneeName}}",
-    "type": "User"
-  },
   "repository": {
     "name": "{{RepositoryName}}"
-  },
-  "sender": {
-    "login": "{{PRAuthorName}}",
-    "type": "User"
   },
   "organization": {
     "login": "{{OrganizationName}}"

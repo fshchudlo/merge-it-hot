@@ -5,25 +5,34 @@ import {
     PullRequestGenericNotification,
     PullRequestModifiedNotification,
     PullRequestNotification,
-    PullRequestParticipantsUpdatedNotification, UserPayload
+    PullRequestParticipantsUpdatedNotification, PullRequestReviewState,
+    PullRequestReviewSubmittedNotification,
+    UserPayload
 } from "../../../../use-cases/contracts";
 import { SlackUserIdResolver } from "../../ports/SlackUserIdResolver";
 import { BitbucketNotification, BitbucketUserPayload } from "./Bitbucket.contracts";
 
 export async function normalizeBitbucketPayload(notification: BitbucketNotification, bitbucketAPI: BitbucketAPI, slackUserIdResolver: SlackUserIdResolver): Promise<PullRequestNotification> {
     const eventKey = notification.eventKey;
-
     switch (eventKey) {
         case "pr:opened":
         case "pr:merged":
         case "pr:declined":
         case "pr:deleted":
-        case "pr:reviewer:unapproved":
-        case "pr:reviewer:needs_work":
-        case "pr:reviewer:approved":
             return {
                 ...(await normalizePayloadGenericPart(notification, slackUserIdResolver)),
                 eventKey
+            };
+        case "pr:reviewer:approved":
+        case "pr:reviewer:needs_work":
+        case "pr:reviewer:unapproved":
+            return <PullRequestReviewSubmittedNotification>{
+                ...(await normalizePayloadGenericPart(notification, slackUserIdResolver)),
+                eventKey: "pr:review:submitted",
+                review: {
+                    comment: null,
+                    state: mapEventKeyToReviewState(eventKey)
+                }
             };
         case "pr:modified":
             return <PullRequestModifiedNotification>{
@@ -73,6 +82,17 @@ export async function normalizeBitbucketPayload(notification: BitbucketNotificat
             };
         default:
             throw new Error(`"${eventKey}" event key is unknown.`);
+    }
+}
+
+function mapEventKeyToReviewState(eventKey: "pr:reviewer:approved" | "pr:reviewer:needs_work" | "pr:reviewer:unapproved"): PullRequestReviewState {
+    switch (eventKey) {
+        case "pr:reviewer:approved":
+            return "APPROVED";
+        case "pr:reviewer:needs_work":
+            return "CHANGES_REQUESTED";
+        case "pr:reviewer:unapproved":
+            return "DISMISSED";
     }
 }
 

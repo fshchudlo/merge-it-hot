@@ -2,12 +2,12 @@ import {
     PullRequestFromBranchUpdatedNotification,
     PullRequestGenericNotification, PullRequestModifiedNotification,
     PullRequestNotification,
-    PullRequestParticipantsUpdatedNotification,
+    PullRequestParticipantsUpdatedNotification, PullRequestReviewState, PullRequestReviewSubmittedNotification,
     ReviewerPayload
 } from "../../../../use-cases/contracts";
 import { SlackUserIdResolver } from "../../ports/SlackUserIdResolver";
 import GitHubAPI from "../../../../adapters/GitHubAPI";
-import { GithubNotification } from "./GitHub.contracts";
+import { GithubNotification, GitHubPullRequestReviewState } from "./GitHub.contracts";
 
 export async function normalizeGithubPayload(notification: GithubNotification, userIdResolver: SlackUserIdResolver, githubAPI: GitHubAPI): Promise<PullRequestNotification> {
     const eventKey = notification.action;
@@ -80,8 +80,30 @@ export async function normalizeGithubPayload(notification: GithubNotification, u
                     latestCommit: notification.changes.base.sha?.from
                 } : null
             } as PullRequestModifiedNotification;
+        case "submitted":
+            return {
+                ...(await normalizePayloadGenericPart(notification, userIdResolver)),
+                eventKey: "pr:review:submitted",
+                review: {
+                    body: notification.review.body,
+                    state: mapGithubReviewState(notification.review.state)
+                }
+            } as PullRequestReviewSubmittedNotification;
         default:
             throw new Error(`"${eventKey}" action key is unknown.`);
+    }
+}
+
+function mapGithubReviewState(state: GitHubPullRequestReviewState): PullRequestReviewState {
+    switch (state) {
+        case "approved":
+            return "APPROVED";
+        case "changes_requested":
+            return "CHANGES_REQUESTED";
+        case "commented":
+            return "COMMENTED";
+        case "dismissed":
+            return "DISMISSED";
     }
 }
 

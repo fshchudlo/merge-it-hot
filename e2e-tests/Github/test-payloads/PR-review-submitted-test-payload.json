@@ -1,6 +1,13 @@
 {
-  "action": "review_request_removed",
-  "number": "{{PullRequestId}}",
+  "action": "submitted",
+  "sender": {
+    "login": "{{FirstReviewerName}}",
+    "type": "User"
+  },
+  "review": {
+    "body": "Please, implement x, y, and z",
+    "state": "commented"
+  },
   "pull_request": {
     "html_url": "https://github.com/{{OrganizationName}}/{{RepositoryName}}/pull/{{PullRequestId}}",
     "number": "{{PullRequestId}}",
@@ -64,16 +71,8 @@
     "deletions": 0,
     "changed_files": 1
   },
-  "requested_reviewer": {
-    "login": "{{SecondReviewerName}}",
-    "type": "User"
-  },
   "repository": {
     "name": "{{RepositoryName}}"
-  },
-  "sender": {
-    "login": "{{PRAuthorName}}",
-    "type": "User"
   },
   "organization": {
     "login": "{{OrganizationName}}"

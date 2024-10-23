@@ -1,6 +1,11 @@
 {
   "action": "synchronize",
-  "number": "{{PullRequestId}}",
+  "sender": {
+    "login": "{{PRAuthorName}}",
+    "type": "User"
+  },
+  "before": "9d172e3a50d5a1dfa947edcc1c17e436fe712234",
+  "after": "f24325b357033d3b567c90c23604471f27ca841d",
   "pull_request": {
     "html_url": "https://github.com/{{OrganizationName}}/{{RepositoryName}}/pull/{{PullRequestId}}",
     "number": "{{PullRequestId}}",
@@ -64,14 +69,8 @@
     "deletions": 0,
     "changed_files": 1
   },
-  "before": "9d172e3a50d5a1dfa947edcc1c17e436fe712234",
-  "after": "f24325b357033d3b567c90c23604471f27ca841d",
   "repository": {
     "name": "{{RepositoryName}}"
-  },
-  "sender": {
-    "login": "{{PRAuthorName}}",
-    "type": "User"
   },
   "organization": {
     "login": "{{OrganizationName}}"

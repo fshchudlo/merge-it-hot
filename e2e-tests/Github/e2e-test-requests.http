@@ -22,14 +22,14 @@ Content-Type: application/json
     });
 %}
 
-### Change to another reviewer
+### Remove reviewer
 POST {{EndpointHost}}/github-webhook
 Content-Type: application/json
 
-< ./test-payloads/PR-review-request-changed-test-payload.json
+< ./test-payloads/PR-review-request-removed-test-payload.json
 
 > {%
-    client.test("Changing reviewer for the open Pull request should be successful", function() {
+    client.test("Removing reviewer for the open Pull request should be successful", function() {
         client.assert(response.status === 200);
     });
 %}
@@ -78,6 +78,18 @@ Content-Type: application/json
 
 > {%
     client.test("Removing assignee from the open Pull request should be successful", function() {
+        client.assert(response.status === 200);
+    });
+%}
+
+### Submit review
+POST {{EndpointHost}}/github-webhook
+Content-Type: application/json
+
+< ./test-payloads/PR-review-submitted-test-payload.json
+
+> {%
+    client.test("Submitting review to the open Pull request should be successful", function() {
         client.assert(response.status === 200);
     });
 %}

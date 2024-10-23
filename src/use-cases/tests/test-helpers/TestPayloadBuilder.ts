@@ -253,8 +253,12 @@ export default class TestPayloadBuilder {
 
         return {
             ...payload,
-            eventKey: "pr:reviewer:needs_work",
-            actor: { ...reviewer1User }
+            eventKey: "pr:review:submitted",
+            actor: { ...reviewer1User },
+            review: {
+                state: "CHANGES_REQUESTED",
+                comment: null
+            }
         };
     }
 
@@ -267,8 +271,30 @@ export default class TestPayloadBuilder {
 
         return {
             ...payload,
-            eventKey: "pr:reviewer:approved",
-            actor: { ...reviewer1User }
+            eventKey: "pr:review:submitted",
+            actor: { ...reviewer1User },
+            review: {
+                state: "APPROVED",
+                comment: null
+            }
+        };
+    }
+
+    static pullRequestReviewedWithComments(): PullRequestNotification {
+        const payload = getBasicPayload();
+        payload.pullRequest.reviewers[0] = {
+            ...payload.pullRequest.reviewers[0],
+            status: "APPROVED"
+        };
+
+        return {
+            ...payload,
+            eventKey: "pr:review:submitted",
+            actor: { ...reviewer1User },
+            review: {
+                state: "COMMENTED",
+                comment: "Please, implement x, y, and z"
+            }
         };
     }
 
@@ -282,8 +308,12 @@ export default class TestPayloadBuilder {
 
         return {
             ...payload,
-            eventKey: "pr:reviewer:unapproved",
-            actor: { ...reviewer1User }
+            eventKey: "pr:review:submitted",
+            actor: { ...reviewer1User },
+            review: {
+                state: "DISMISSED",
+                comment: null
+            }
         };
     }
 

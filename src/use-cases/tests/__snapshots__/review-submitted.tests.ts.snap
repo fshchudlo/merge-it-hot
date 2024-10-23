@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`handleBitbucketWebhook Should send message on PR approval/unapproval/needs work 1`] = `
+exports[`handleBitbucketWebhook Should send message on PR review submit 1`] = `
 {
   "addedBookmarks": [],
   "addedReactions": [],
@@ -38,7 +38,7 @@ exports[`handleBitbucketWebhook Should send message on PR approval/unapproval/ne
       "blocks": [
         {
           "text": {
-            "text": ":traffic_light: Test Reviewer 1 unapproved <https://git.test.com/projects/TEST-PROJ/repos/test-repository/pull-requests/1/overview|pull request>.",
+            "text": ":traffic_light: Test Reviewer 1 dismissed <https://git.test.com/projects/TEST-PROJ/repos/test-repository/pull-requests/1/overview|pull request>.",
             "type": "mrkdwn",
           },
           "type": "section",
@@ -56,7 +56,7 @@ exports[`handleBitbucketWebhook Should send message on PR approval/unapproval/ne
           "type": "context",
         },
       ],
-      "text": ":traffic_light: Test Reviewer 1 unapproved <https://git.test.com/projects/TEST-PROJ/repos/test-repository/pull-requests/1/overview|pull request>.",
+      "text": ":traffic_light: Test Reviewer 1 dismissed <https://git.test.com/projects/TEST-PROJ/repos/test-repository/pull-requests/1/overview|pull request>.",
     },
     {
       "blocks": [
@@ -81,6 +81,30 @@ exports[`handleBitbucketWebhook Should send message on PR approval/unapproval/ne
         },
       ],
       "text": ":traffic_light: Test Reviewer 1 approved <https://git.test.com/projects/TEST-PROJ/repos/test-repository/pull-requests/1/overview|pull request>.",
+    },
+    {
+      "blocks": [
+        {
+          "text": {
+            "text": ":traffic_light: Test Reviewer 1 submitted review comments <https://git.test.com/projects/TEST-PROJ/repos/test-repository/pull-requests/1/overview|pull request>.",
+            "type": "mrkdwn",
+          },
+          "type": "section",
+        },
+        {
+          "type": "divider",
+        },
+        {
+          "elements": [
+            {
+              "text": ":large_yellow_circle:  Approved: Test Reviewer 1 |  Not reviewed: Test Reviewer 2",
+              "type": "mrkdwn",
+            },
+          ],
+          "type": "context",
+        },
+      ],
+      "text": ":traffic_light: Test Reviewer 1 submitted review comments <https://git.test.com/projects/TEST-PROJ/repos/test-repository/pull-requests/1/overview|pull request>.",
     },
   ],
 }
