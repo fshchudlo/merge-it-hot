@@ -49,7 +49,6 @@ export export type GithubPullRequestReviewSubmittedNotification = GithubPullRequ
 
 
 export type GithubPullRequestNotificationBasicPayload = {
-    readonly number: number;
     readonly pull_request: GithubPullRequestPayload;
     readonly repository: {
         readonly name: string;
@@ -60,7 +59,7 @@ export type GithubPullRequestNotificationBasicPayload = {
 
 export type GithubPullRequestPayload = {
     readonly html_url: string;
-    readonly number: string;
+    readonly number: number;
     readonly state: "open" | "closed";
     readonly locked: boolean;
     readonly title: string;
