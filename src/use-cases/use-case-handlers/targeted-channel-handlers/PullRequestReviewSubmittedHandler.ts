@@ -34,7 +34,7 @@ function getReviewerActionDescription(payload: PullRequestReviewSubmittedNotific
         case "APPROVED":
             return `:traffic_light: ${formatUserName(payload.actor)} approved ${prLink}.`;
         case "COMMENTED":
-            return `:traffic_light: ${formatUserName(payload.actor)} submitted review comments ${prLink}.`;
+            return `:traffic_light: ${formatUserName(payload.actor)} submitted review comments to the ${prLink}.`;
     }
 }
 

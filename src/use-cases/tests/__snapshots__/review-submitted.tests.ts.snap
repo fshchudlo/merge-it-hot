@@ -86,7 +86,7 @@ exports[`handleBitbucketWebhook Should send message on PR review submit 1`] = `
       "blocks": [
         {
           "text": {
-            "text": ":traffic_light: Test Reviewer 1 submitted review comments <https://git.test.com/projects/TEST-PROJ/repos/test-repository/pull-requests/1/overview|pull request>.",
+            "text": ":traffic_light: Test Reviewer 1 submitted review comments to the <https://git.test.com/projects/TEST-PROJ/repos/test-repository/pull-requests/1/overview|pull request>.",
             "type": "mrkdwn",
           },
           "type": "section",
@@ -104,7 +104,7 @@ exports[`handleBitbucketWebhook Should send message on PR review submit 1`] = `
           "type": "context",
         },
       ],
-      "text": ":traffic_light: Test Reviewer 1 submitted review comments <https://git.test.com/projects/TEST-PROJ/repos/test-repository/pull-requests/1/overview|pull request>.",
+      "text": ":traffic_light: Test Reviewer 1 submitted review comments to the <https://git.test.com/projects/TEST-PROJ/repos/test-repository/pull-requests/1/overview|pull request>.",
     },
   ],
 }
