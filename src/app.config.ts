@@ -20,6 +20,9 @@ export const AppConfig = {
     DEFAULT_CHANNEL_PARTICIPANTS: process.env.DEFAULT_CHANNEL_PARTICIPANTS?.split(",").map(u => u.trim()),
 
     tryGetGitHubReadToken(organizationMName: string): string | null {
+        if (!organizationMName) {
+            return null;
+        }
         return process.env[`${organizationMName.toUpperCase()}_GITHUB_READ_API_TOKEN`] ?? process.env.GITHUB_READ_API_TOKEN ?? null;
     },
     /*

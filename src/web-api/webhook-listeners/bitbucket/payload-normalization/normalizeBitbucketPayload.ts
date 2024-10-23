@@ -76,7 +76,7 @@ export async function normalizeBitbucketPayload(notification: BitbucketNotificat
                     },
                     resolvedAt: notification.comment.resolvedDate ? new Date(notification.comment.resolvedDate) : null,
                     threadResolvedAt: notification.comment.threadResolvedDate ? new Date(notification.comment.threadResolvedDate) : null,
-                    link: `${notification.pullRequest.links.self}?commentId=${notification.comment.id}`
+                    link: `${notification.pullRequest.links.self[0].href}?commentId=${notification.comment.id}`
                 },
                 previousComment: notification.previousComment
             };
