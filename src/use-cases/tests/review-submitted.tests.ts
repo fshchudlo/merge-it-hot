@@ -11,6 +11,7 @@ describe("handleBitbucketWebhook", () => {
         await handlePullRequestEvent(TestPayloadBuilder.pullRequestUnapproved(), channelMock);
         await handlePullRequestEvent(TestPayloadBuilder.pullRequestApproved(), channelMock);
         await handlePullRequestEvent(TestPayloadBuilder.pullRequestReviewedWithComments(), channelMock);
+        await handlePullRequestEvent(TestPayloadBuilder.pullRequestReviewedNoReviewerStatuses(), channelMock);
 
 
         expect(channelMock.snapshot).toMatchSnapshot();

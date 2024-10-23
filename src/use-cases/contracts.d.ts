@@ -19,7 +19,7 @@ export type PullRequestReviewSubmittedNotification = PullRequestNotificationBasi
     readonly eventKey: "pr:review:submitted";
     readonly review: {
         state: PullRequestReviewState;
-        comment?: string;
+        comment: string | null;
     }
 };
 
@@ -74,6 +74,7 @@ export type PullRequestPayload = {
     readonly createdAt: Date;
     readonly title: string;
     readonly description: string | null;
+    readonly draft: boolean;
     readonly author: UserPayload;
     readonly reviewers: Array<ReviewerPayload>;
     readonly links: {
@@ -84,7 +85,7 @@ export type PullRequestPayload = {
 };
 export type ReviewerPayload = {
     user: UserPayload,
-    status: ReviewerReviewStatus
+    status?: ReviewerReviewStatus
 }
 export type ReviewerReviewStatus = "UNAPPROVED" | "NEEDS_WORK" | "APPROVED";
 export type PullRequestReviewState = "COMMENTED" | "APPROVED" | "CHANGES_REQUESTED" | "DISMISSED";

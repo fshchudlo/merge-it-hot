@@ -120,6 +120,7 @@ async function normalizePayloadGenericPart(payload: BitbucketNotification, slack
                 slackUserId: await slackUserIdResolver.getUserId(payload.pullRequest.author.user.emailAddress)
             },
             description: payload.pullRequest.description,
+            draft: false,
             links: {
                 self: payload.pullRequest.links.self[0].href
             },

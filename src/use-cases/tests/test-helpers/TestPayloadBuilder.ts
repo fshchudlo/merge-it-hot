@@ -32,6 +32,7 @@ function getBasicPayload(): PullRequestGenericNotification {
             createdAt: new Date(1714381184802),
             title: "Test pull request title",
             description: "Test pull request description",
+            draft: false,
             fromBranch: {
                 branchName: "feature/test-branch",
                 latestCommit: "from-ref-commit-hash",
@@ -294,6 +295,27 @@ export default class TestPayloadBuilder {
             review: {
                 state: "COMMENTED",
                 comment: "Please, implement x, y, and z"
+            }
+        };
+    }
+
+    static pullRequestReviewedNoReviewerStatuses(): PullRequestNotification {
+        const payload = getBasicPayload();
+        return {
+            ...payload,
+            pullRequest: {
+                ...payload.pullRequest,
+                reviewers: payload.pullRequest.reviewers.map(r => {
+                    return {
+                        user: r.user
+                    };
+                })
+            },
+            eventKey: "pr:review:submitted",
+            actor: { ...reviewer1User },
+            review: {
+                state: "APPROVED",
+                comment: null
             }
         };
     }
