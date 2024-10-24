@@ -94,6 +94,8 @@ function mapEventKeyToReviewState(eventKey: "pr:reviewer:approved" | "pr:reviewe
             return "CHANGES_REQUESTED";
         case "pr:reviewer:unapproved":
             return "DISMISSED";
+        default:
+            throw new Error(`"${eventKey}" event key is unknown.`);
     }
 }
 

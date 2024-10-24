@@ -49,7 +49,7 @@ export export type GitHubPullRequestReviewSubmittedNotification = GitHubPullRequ
 };
 
 export export type GitHubPullRequestCommentNotification = GitHubPullRequestNotificationBasicPayload & {
-    readonly action: "created";
+    readonly action: GitHubPullRequestCommentActionType;
     readonly comment: {
         readonly html_url: string;
         readonly id: number;
@@ -58,6 +58,11 @@ export export type GitHubPullRequestCommentNotification = GitHubPullRequestNotif
         readonly body: string;
         in_reply_to_id?: number;
     }
+    readonly changes?: {
+        readonly body?: {
+            readonly from: string;
+        }
+    };
 };
 
 
@@ -119,4 +124,5 @@ export type GitHubRefPayload = {
     };
 };
 
+export type GitHubPullRequestCommentActionType = "created" | "comment_edited" | "deleted";
 export type GitHubPullRequestReviewState = "commented" | "approved" | "changes_requested" | "dismissed";
