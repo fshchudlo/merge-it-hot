@@ -61,13 +61,13 @@ function getUserAction(payload: PullRequestCommentActionNotification, previousCo
         }
         if (!previousCommentSnapshot.threadResolvedDate && payload.comment.threadResolvedAt) {
             return {
-                title: `resolved ${commentType}`,
+                title: `resolved thread`,
                 emoji: ":white_check_mark:"
             };
         }
         if (previousCommentSnapshot.threadResolvedDate && !payload.comment.threadResolvedAt) {
             return {
-                title: `reopened ${commentType}`,
+                title: `reopened thread`,
                 emoji: ":repeat:"
             };
         }

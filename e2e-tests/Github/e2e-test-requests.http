@@ -58,6 +58,30 @@ Content-Type: application/json
     });
 %}
 
+### Resolve thread
+POST {{EndpointHost}}/github-webhook
+Content-Type: application/json
+
+< ./test-payloads/PR-thread-resolved-test-payload.json
+
+> {%
+    client.test("Thread resolution should be successful", function() {
+        client.assert(response.status === 200);
+    });
+%}
+
+### Unresolve thread
+POST {{EndpointHost}}/github-webhook
+Content-Type: application/json
+
+< ./test-payloads/PR-thread-unresolved-test-payload.json
+
+> {%
+    client.test("Thread unresolving should be successful", function() {
+        client.assert(response.status === 200);
+    });
+%}
+
 ### Delete comment
 POST {{EndpointHost}}/github-webhook
 Content-Type: application/json
