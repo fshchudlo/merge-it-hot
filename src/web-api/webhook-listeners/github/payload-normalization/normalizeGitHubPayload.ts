@@ -8,11 +8,22 @@ import {
 } from "../../../../use-cases/contracts";
 import { SlackUserIdResolver } from "../../ports/SlackUserIdResolver";
 import GitHubAPI from "../../../../adapters/GitHubAPI";
-import { GitHubNotification, GitHubPullRequestReviewState } from "./GitHub.contracts";
+import {
+    GitHubNotification,
+    GitHubPullRequestCommentActionType,
+    GitHubPullRequestReviewState
+} from "./GitHub.contracts";
 
 export async function normalizeGitHubPayload(notification: GitHubNotification, userIdResolver: SlackUserIdResolver, githubAPI: GitHubAPI): Promise<PullRequestNotification> {
-    const eventKey = notification.action;
-    switch (eventKey) {
+
+    // Small duck-typing hack because GitHub has identical action keys for PR edit and comment edit events
+    if (notification.action === "edited" && (<any>notification).comment) {
+        (<any>notification).action = "comment_edited";
+    }
+
+    const action = notification.action;
+
+    switch (action) {
         case "opened":
             return {
                 ...(await normalizePayloadGenericPart(notification, userIdResolver)),
@@ -91,9 +102,11 @@ export async function normalizeGitHubPayload(notification: GitHubNotification, u
                 }
             } as PullRequestReviewSubmittedNotification;
         case "created":
+        case "comment_edited":
+        case "deleted":
             return {
                 ...(await normalizePayloadGenericPart(notification, userIdResolver)),
-                "eventKey": "pr:comment:added",
+                eventKey: mapGitHubCommentActionToEventKey(action),
                 comment: {
                     id: notification.comment.id,
                     replyToCommentId: notification.comment.in_reply_to_id,
@@ -107,12 +120,26 @@ export async function normalizeGitHubPayload(notification: GitHubNotification, u
                     threadResolvedAt: null,
                     link: notification.comment.html_url
                 },
-                previousComment: null
+                previousComment: notification.changes?.body?.from
             } as PullRequestCommentActionNotification;
         default:
-            throw new Error(`"${eventKey}" action key is unknown.`);
+            throw new Error(`"${action}" action key is unknown.`);
     }
 }
+
+function mapGitHubCommentActionToEventKey(action: GitHubPullRequestCommentActionType): string {
+    switch (action) {
+        case "created":
+            return "pr:comment:added";
+        case "comment_edited":
+            return "pr:comment:edited";
+        case "deleted":
+            return "pr:comment:deleted";
+        default:
+            throw new Error(`"${action}" comment action is unknown.`);
+    }
+}
+
 
 function mapGitHubReviewState(state: GitHubPullRequestReviewState): PullRequestReviewState {
     switch (state) {
@@ -124,6 +151,8 @@ function mapGitHubReviewState(state: GitHubPullRequestReviewState): PullRequestR
             return "COMMENTED";
         case "dismissed":
             return "DISMISSED";
+        default:
+            throw new Error(`"${state}" review state is unknown.`);
     }
 }
 
