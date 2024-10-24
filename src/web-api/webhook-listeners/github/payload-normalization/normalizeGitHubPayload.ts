@@ -122,6 +122,26 @@ export async function normalizeGitHubPayload(notification: GitHubNotification, u
                 },
                 previousComment: notification.changes?.body?.from
             } as PullRequestCommentActionNotification;
+        case "resolved":
+        case "unresolved":
+            const rootComment = notification.thread.comments.find(comment => !comment.in_reply_to_id);
+            return {
+                ...(await normalizePayloadGenericPart(notification, userIdResolver)),
+                eventKey: "pr:comment:edited",
+                comment: {
+                    id: rootComment.id,
+                    replyToCommentId: rootComment.in_reply_to_id,
+                    text: rootComment.body,
+                    severity: "NORMAL",
+                    author: {
+                        name: rootComment.user.login,
+                        slackUserId: await getSlackUserId(userIdResolver, rootComment.user.login)
+                    },
+                    resolvedAt: null,
+                    threadResolvedAt: action == "resolved" ? new Date(rootComment.updated_at) : null,
+                    link: rootComment.html_url
+                }
+            } as PullRequestCommentActionNotification;
         default:
             throw new Error(`"${action}" action key is unknown.`);
     }

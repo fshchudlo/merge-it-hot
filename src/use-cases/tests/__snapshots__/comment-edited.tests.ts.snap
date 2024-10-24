@@ -266,7 +266,7 @@ exports[`Comment edited use-case Should send message on comment resolving and re
       "blocks": [
         {
           "text": {
-            "text": ":white_check_mark: Test Reviewer 1 <https://git.test.com/projects/TEST-PROJ/repos/test-repository/pull-requests/1/overview?commentId=1|resolved comment>:",
+            "text": ":white_check_mark: Test Reviewer 1 <https://git.test.com/projects/TEST-PROJ/repos/test-repository/pull-requests/1/overview?commentId=1|resolved thread>:",
             "type": "mrkdwn",
           },
           "type": "section",
@@ -290,14 +290,14 @@ exports[`Comment edited use-case Should send message on comment resolving and re
         "eventType": "review_comment_snapshot_saved",
       },
       "replyBroadcast": true,
-      "text": ":white_check_mark: Test Reviewer 1 <https://git.test.com/projects/TEST-PROJ/repos/test-repository/pull-requests/1/overview?commentId=1|resolved comment>:",
+      "text": ":white_check_mark: Test Reviewer 1 <https://git.test.com/projects/TEST-PROJ/repos/test-repository/pull-requests/1/overview?commentId=1|resolved thread>:",
       "threadId": "ABCDE",
     },
     {
       "blocks": [
         {
           "text": {
-            "text": ":repeat: Test Reviewer 1 <https://git.test.com/projects/TEST-PROJ/repos/test-repository/pull-requests/1/overview?commentId=1|reopened comment>:",
+            "text": ":repeat: Test Reviewer 1 <https://git.test.com/projects/TEST-PROJ/repos/test-repository/pull-requests/1/overview?commentId=1|reopened thread>:",
             "type": "mrkdwn",
           },
           "type": "section",
@@ -321,7 +321,7 @@ exports[`Comment edited use-case Should send message on comment resolving and re
         "eventType": "review_comment_snapshot_saved",
       },
       "replyBroadcast": true,
-      "text": ":repeat: Test Reviewer 1 <https://git.test.com/projects/TEST-PROJ/repos/test-repository/pull-requests/1/overview?commentId=1|reopened comment>:",
+      "text": ":repeat: Test Reviewer 1 <https://git.test.com/projects/TEST-PROJ/repos/test-repository/pull-requests/1/overview?commentId=1|reopened thread>:",
       "threadId": "ABCDE",
     },
   ],

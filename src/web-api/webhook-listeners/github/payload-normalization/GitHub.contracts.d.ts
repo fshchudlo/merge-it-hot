@@ -4,7 +4,8 @@ export type GitHubNotification =
     | GitHubPullRequestAssigneesUpdatedNotification
     | GitHubPullRequestEditedNotification
     | GitHubPullRequestReviewSubmittedNotification
-    | GitHubPullRequestCommentNotification;
+    | GitHubPullRequestCommentNotification
+    | GitHubPullRequestThreadResolutionNotification;
 
 
 export type GitHubPullRequestBasicNotification = GitHubPullRequestNotificationBasicPayload & {
@@ -50,18 +51,18 @@ export export type GitHubPullRequestReviewSubmittedNotification = GitHubPullRequ
 
 export export type GitHubPullRequestCommentNotification = GitHubPullRequestNotificationBasicPayload & {
     readonly action: GitHubPullRequestCommentActionType;
-    readonly comment: {
-        readonly html_url: string;
-        readonly id: number;
-        readonly path?: string;
-        readonly user: GitHubUserPayload;
-        readonly body: string;
-        in_reply_to_id?: number;
-    }
+    readonly comment: GitHubPullRequestCommentPayload;
     readonly changes?: {
         readonly body?: {
             readonly from: string;
         }
+    };
+};
+
+export export type GitHubPullRequestThreadResolutionNotification = GitHubPullRequestNotificationBasicPayload & {
+    readonly action: "resolved" | "unresolved";
+    readonly thread: {
+        comments: GitHubPullRequestCommentPayload[]
     };
 };
 
@@ -74,6 +75,16 @@ export type GitHubPullRequestNotificationBasicPayload = {
     readonly sender: GitHubUserPayload;
     readonly organization: { readonly login: string }
 }
+
+export type GitHubPullRequestCommentPayload = {
+    readonly html_url: string;
+    readonly id: number;
+    readonly path?: string;
+    readonly user: GitHubUserPayload;
+    readonly body: string;
+    readonly updated_at: string;
+    readonly in_reply_to_id?: number;
+};
 
 export type GitHubPullRequestPayload = {
     readonly html_url: string;
