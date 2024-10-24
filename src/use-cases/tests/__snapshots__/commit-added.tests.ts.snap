@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`handleBitbucketWebhook Should send message on PR commit 1`] = `
+exports[`Commit added use-case Should send message on PR commit 1`] = `
 {
   "addedBookmarks": [],
   "addedReactions": [],

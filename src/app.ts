@@ -4,9 +4,9 @@ import express, { NextFunction } from "express";
 import { handleBitbucketWebhook } from "./web-api/webhook-listeners/bitbucket/handleBitbucketWebhook";
 import { SlackChannelProvisioner } from "./adapters/slack-api/SlackChannelProvisioner";
 import measureRequestDuration from "./app.metrics";
-import logErrorMessage from "./web-api/helpers/logErrorMessage";
+import logUnhandledError from "./web-api/helpers/logErrorMessage";
 import { register } from "prom-client";
-import { handleGithubWebhook } from "./web-api/webhook-listeners/github/handleGithubWebhook";
+import { handleGitHubWebhook } from "./web-api/webhook-listeners/github/handleGitHubWebhook";
 import bodyParser from "body-parser";
 import verifyHMACSignature from "./web-api/helpers/verifyHMACSignature";
 import util from "util";
@@ -42,7 +42,7 @@ expressReceiver.router.post("/bitbucket-webhook", verifyHMACSignature, async (re
 });
 
 expressReceiver.router.post("/github-webhook", verifyHMACSignature, async (req, res, next: NextFunction) => {
-    await handleGithubWebhook(req, res, next, slackChannelFactory, userIdResolver);
+    await handleGitHubWebhook(req, res, next, slackChannelFactory, userIdResolver);
 });
 
 expressReceiver.router.get("/metrics", async (req, res) => {
@@ -62,7 +62,7 @@ expressReceiver.router.get("/health", async (req, res) => {
 
 expressReceiver.router.use(async (error: any, req: express.Request, res: express.Response, next: NextFunction) => {
     const errorMessage = ["Error processing webhook.", `Error: ${util.inspect(error, false, 8)}.`].join("\n\n");
-    await logErrorMessage(errorMessage, slackApp.client);
+    await logUnhandledError(errorMessage, slackApp.client);
 
     if (res.headersSent) {
         return next(error);

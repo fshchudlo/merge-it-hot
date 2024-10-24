@@ -12,7 +12,7 @@ import {
 import { SlackUserIdResolver } from "../../ports/SlackUserIdResolver";
 import { BitbucketNotification, BitbucketUserPayload } from "./Bitbucket.contracts";
 
-export async function normalizeBitbucketPayload(notification: BitbucketNotification, bitbucketAPI: BitbucketAPI, slackUserIdResolver: SlackUserIdResolver): Promise<PullRequestNotification> {
+export async function normalizeBitbucketPayload(notification: BitbucketNotification, bitbucketAPI: BitbucketAPI, userIdResolver: SlackUserIdResolver): Promise<PullRequestNotification> {
     const eventKey = notification.eventKey;
     switch (eventKey) {
         case "pr:opened":
@@ -20,14 +20,14 @@ export async function normalizeBitbucketPayload(notification: BitbucketNotificat
         case "pr:declined":
         case "pr:deleted":
             return {
-                ...(await normalizePayloadGenericPart(notification, slackUserIdResolver)),
+                ...(await normalizePayloadGenericPart(notification, userIdResolver)),
                 eventKey
             };
         case "pr:reviewer:approved":
         case "pr:reviewer:needs_work":
         case "pr:reviewer:unapproved":
             return <PullRequestReviewSubmittedNotification>{
-                ...(await normalizePayloadGenericPart(notification, slackUserIdResolver)),
+                ...(await normalizePayloadGenericPart(notification, userIdResolver)),
                 eventKey: "pr:review:submitted",
                 review: {
                     comment: null,
@@ -36,7 +36,7 @@ export async function normalizeBitbucketPayload(notification: BitbucketNotificat
             };
         case "pr:modified":
             return <PullRequestModifiedNotification>{
-                ...(await normalizePayloadGenericPart(notification, slackUserIdResolver)),
+                ...(await normalizePayloadGenericPart(notification, userIdResolver)),
                 eventKey,
                 previousTitle: notification.previousTitle,
                 previousDescription: notification.previousDescription,
@@ -47,32 +47,33 @@ export async function normalizeBitbucketPayload(notification: BitbucketNotificat
             };
         case "pr:from_ref_updated":
             return <PullRequestFromBranchUpdatedNotification>{
-                ...(await normalizePayloadGenericPart(notification, slackUserIdResolver)),
+                ...(await normalizePayloadGenericPart(notification, userIdResolver)),
                 eventKey,
                 latestCommitMessage: bitbucketAPI.canRead() ? await bitbucketAPI.fetchCommitMessage(notification.pullRequest.fromRef.repository.project.key, notification.pullRequest.fromRef.repository.slug, notification.pullRequest.fromRef.latestCommit) : null,
                 latestCommitViewUrl: `${notification.pullRequest.links.self[0].href.replace("/overview", "")}/commits/${notification.pullRequest.fromRef.latestCommit}`
             };
         case "pr:reviewer:updated":
             return <PullRequestParticipantsUpdatedNotification>{
-                ...(await normalizePayloadGenericPart(notification, slackUserIdResolver)),
+                ...(await normalizePayloadGenericPart(notification, userIdResolver)),
                 "eventKey": "pr:participants:changed",
-                addedParticipants: await normalizeUserPayloads(notification.addedReviewers, slackUserIdResolver),
-                removedParticipants: await normalizeUserPayloads(notification.removedReviewers, slackUserIdResolver)
+                addedParticipants: await normalizeUserPayloads(notification.addedReviewers, userIdResolver),
+                removedParticipants: await normalizeUserPayloads(notification.removedReviewers, userIdResolver)
             };
         case "pr:comment:added":
         case "pr:comment:edited":
         case "pr:comment:deleted":
             return <PullRequestCommentActionNotification>{
-                ...(await normalizePayloadGenericPart(notification, slackUserIdResolver)),
+                ...(await normalizePayloadGenericPart(notification, userIdResolver)),
                 eventKey,
-                commentParentId: notification.commentParentId,
+                replyToCommentId: notification.commentParentId,
                 comment: {
                     id: notification.comment.id,
+                    replyToCommentId: notification.commentParentId,
                     text: notification.comment.text,
                     severity: notification.comment.severity,
                     author: {
                         name: notification.comment.author.displayName,
-                        slackUserId: await slackUserIdResolver.getUserId(notification.comment.author.emailAddress)
+                        slackUserId: await userIdResolver.getUserId(notification.comment.author.emailAddress)
                     },
                     resolvedAt: notification.comment.resolvedDate ? new Date(notification.comment.resolvedDate) : null,
                     threadResolvedAt: notification.comment.threadResolvedDate ? new Date(notification.comment.threadResolvedDate) : null,

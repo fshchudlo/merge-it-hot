@@ -11,8 +11,8 @@ import {
 } from "../../../use-cases/slack-api-ports";
 import { SlackWebClientChannel } from "./SlackWebClientChannel";
 
-function getCommentCacheKey(channelId: string, bitbucketCommentId: number | string) {
-    return `${channelId}-${bitbucketCommentId}`;
+function getCommentCacheKey(channelId: string, reviewCommentId: number | string) {
+    return `${channelId}-${reviewCommentId}`;
 }
 
 
@@ -64,13 +64,13 @@ export class SlackChannelCachedDecorator implements SlackTargetedChannel, SlackB
         return response;
     }
 
-    async findLatestPullRequestCommentSnapshot(bitbucketCommentId: number | string): Promise<PullRequestCommentSnapshot | null> {
-        const cacheKey = getCommentCacheKey(this.channel.channelInfo.id, bitbucketCommentId);
+    async findLatestPullRequestCommentSnapshot(reviewCommentId: number | string): Promise<PullRequestCommentSnapshot | null> {
+        const cacheKey = getCommentCacheKey(this.channel.channelInfo.id, reviewCommentId);
         const cachedCommentInfo = COMMENTS_CACHE.get(cacheKey);
         if (cachedCommentInfo) {
             return Promise.resolve(cachedCommentInfo);
         }
-        const commentSnapshot = await this.channel.findLatestPullRequestCommentSnapshot(bitbucketCommentId);
+        const commentSnapshot = await this.channel.findLatestPullRequestCommentSnapshot(reviewCommentId);
 
         if (commentSnapshot) {
             COMMENTS_CACHE.set(cacheKey, commentSnapshot);

@@ -1,11 +1,11 @@
-import { normalizeGithubPayload } from "../normalizeGithubPayload";
+import { normalizeGitHubPayload } from "../normalizeGitHubPayload";
 
-describe("normalizeGithubPayload.tests", () => {
+describe("normalizeGitHubPayload.tests", () => {
     it("Should throw Error on unknown action type", async () => {
         expect.assertions(1);
 
         try {
-            await normalizeGithubPayload({
+            await normalizeGitHubPayload({
                 action: "unknown action"
             } as any, null, null);
         } catch (error) {

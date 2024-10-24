@@ -1,18 +1,19 @@
 {
   "action": "created",
   "sender": {
-    "login": "{{FirstReviewerName}}",
+    "login": "{{PRAuthorName}}",
     "type": "User"
   },
   "comment": {
-    "html_url": "https://github.com/{{OrganizationName}}/{{RepositoryName}}/pull/{{PullRequestId}}#discussion_r1812552428",
-    "id": 1812552428,
+    "html_url": "https://github.com/{{OrganizationName}}/{{RepositoryName}}/pull/{{PullRequestId}}#discussion_r1812553160",
+    "id": 1812553160,
     "path": "file.java",
     "user": {
-      "login": "{{FirstReviewerName}}",
+      "login": "{{PRAuthorName}}",
       "type": "User"
     },
-    "body": "This is test comment"
+    "body": "This is the test reply",
+    "in_reply_to_id": 1812552428
   },
   "pull_request": {
     "html_url": "https://github.com/{{OrganizationName}}/{{RepositoryName}}/pull/{{PullRequestId}}",

@@ -1,23 +1,23 @@
 import { NextFunction, Request, Response } from "express";
 import { SlackChannelProvisioner } from "../../../adapters/slack-api/SlackChannelProvisioner";
-import { normalizeGithubPayload } from "./payload-normalization/normalizeGithubPayload";
+import { normalizeGitHubPayload } from "./payload-normalization/normalizeGitHubPayload";
 import { AppConfig } from "../../../app.config";
 import { PullRequestNotification } from "../../../use-cases/contracts";
 import handlePullRequestEvent from "../../../use-cases/handlePullRequestEvent";
 import { SlackUserIdResolver } from "../ports/SlackUserIdResolver";
 import GitHubAPI from "../../../adapters/GitHubAPI";
-import { GithubNotification } from "./payload-normalization/GitHub.contracts";
+import { GitHubNotification } from "./payload-normalization/GitHub.contracts";
 
-export async function handleGithubWebhook(req: Request, res: Response, next: NextFunction, slackChannelFactory: SlackChannelProvisioner, slackUserIdResolver: SlackUserIdResolver) {
+export async function handleGitHubWebhook(req: Request, res: Response, next: NextFunction, slackChannelFactory: SlackChannelProvisioner, slackUserIdResolver: SlackUserIdResolver) {
     try {
-        const githubAPI = new GitHubAPI(AppConfig.tryGetGitHubReadToken((<GithubNotification>req.body)?.organization?.login));
+        const githubAPI = new GitHubAPI(AppConfig.tryGetGitHubReadToken((<GitHubNotification>req.body)?.organization?.login));
 
-        const payload = await normalizeGithubPayload(req.body, slackUserIdResolver, githubAPI);
+        const payload = await normalizeGitHubPayload(req.body, slackUserIdResolver, githubAPI);
         const broadcastChannelName = AppConfig.getOpenedPRBroadcastChannel(payload);
-        const broadcastChannel = broadcastChannelName ? await slackChannelFactory.getBroadcastChannel(broadcastChannelName) : null;
+        const broadcastChannel = broadcastChannelName ? await slackChannelFactory.getBroadcastChannel(broadcastChannelName, ":github:") : null;
 
 
-        const provisionResult = await slackChannelFactory.provisionChannelFor(payload, AppConfig.USE_PRIVATE_CHANNELS, AppConfig.DEFAULT_CHANNEL_PARTICIPANTS);
+        const provisionResult = await slackChannelFactory.provisionChannelFor(payload, ":github:", AppConfig.USE_PRIVATE_CHANNELS, AppConfig.DEFAULT_CHANNEL_PARTICIPANTS);
 
         if (!provisionResult.isSetUpProperly) {
             const payloadToReplay = <PullRequestNotification>{
