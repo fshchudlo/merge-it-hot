@@ -152,7 +152,7 @@
             "uid": "${DS-PROMETHEUS}"
           },
           "editorMode": "code",
-          "expr": "http_request_duration_seconds_sum{job=\"bitbucket_slack_connector\", route=\"/bitbucket-webhook\"}/http_request_duration_seconds_count{job=\"bitbucket_slack_connector\", route=\"/bitbucket-webhook\"}",
+          "expr": "http_request_duration_seconds_sum{job=\"code_review_herald\", route=\"/bitbucket-webhook\"}/http_request_duration_seconds_count{job=\"code_review_herald\", route=\"/bitbucket-webhook\"}",
           "format": "time_series",
           "hide": false,
           "instant": false,
@@ -167,7 +167,7 @@
             "uid": "${DS-PROMETHEUS}"
           },
           "editorMode": "code",
-          "expr": "http_request_duration_seconds_sum{job=\"bitbucket_slack_connector\", route=\"/slack-channel\", status_code=\"200\"}/http_request_duration_seconds_count{job=\"bitbucket_slack_connector\", route=\"/slack-channel\", status_code=\"200\"}",
+          "expr": "http_request_duration_seconds_sum{job=\"code_review_herald\", route=\"/slack-channel\", status_code=\"200\"}/http_request_duration_seconds_count{job=\"code_review_herald\", route=\"/slack-channel\", status_code=\"200\"}",
           "format": "time_series",
           "hide": false,
           "instant": false,
@@ -264,7 +264,7 @@
             "uid": "${DS-PROMETHEUS}"
           },
           "editorMode": "code",
-          "expr": "http_request_duration_seconds_bucket{job=\"bitbucket_slack_connector\", route=\"/bitbucket-webhook\"}",
+          "expr": "http_request_duration_seconds_bucket{job=\"code_review_herald\", route=\"/bitbucket-webhook\"}",
           "format": "heatmap",
           "hide": false,
           "instant": false,
@@ -361,7 +361,7 @@
             "uid": "${DS-PROMETHEUS}"
           },
           "editorMode": "code",
-          "expr": "http_request_duration_seconds_bucket{job=\"bitbucket_slack_connector\", route=\"/slack-channel\"}",
+          "expr": "http_request_duration_seconds_bucket{job=\"code_review_herald\", route=\"/slack-channel\"}",
           "format": "heatmap",
           "hide": false,
           "instant": false,
@@ -450,7 +450,7 @@
             "uid": "${DS-PROMETHEUS}"
           },
           "editorMode": "code",
-          "expr": "sum(increase(http_request_duration_seconds_bucket{job=\"bitbucket_slack_connector\", route=\"/bitbucket-webhook\"}[$__interval])) by (le)",
+          "expr": "sum(increase(http_request_duration_seconds_bucket{job=\"code_review_herald\", route=\"/bitbucket-webhook\"}[$__interval])) by (le)",
           "format": "heatmap",
           "hide": false,
           "instant": false,
@@ -538,7 +538,7 @@
             "uid": "${DS-PROMETHEUS}"
           },
           "editorMode": "code",
-          "expr": "sum(increase(http_request_duration_seconds_bucket{job=\"bitbucket_slack_connector\", route=\"/slack-channel\"}[$__interval])) by (le)",
+          "expr": "sum(increase(http_request_duration_seconds_bucket{job=\"code_review_herald\", route=\"/slack-channel\"}[$__interval])) by (le)",
           "format": "heatmap",
           "hide": false,
           "instant": false,
@@ -682,7 +682,7 @@
             "uid": "${DS-PROMETHEUS}"
           },
           "editorMode": "code",
-          "expr": "channels_cache_utilized_size{job=\"bitbucket_slack_connector\"}",
+          "expr": "channels_cache_utilized_size{job=\"code_review_herald\"}",
           "format": "time_series",
           "hide": false,
           "instant": false,
@@ -697,7 +697,7 @@
             "uid": "${DS-PROMETHEUS}"
           },
           "editorMode": "code",
-          "expr": "channels_cache_hits{job=\"bitbucket_slack_connector\"}",
+          "expr": "channels_cache_hits{job=\"code_review_herald\"}",
           "format": "time_series",
           "instant": false,
           "interval": "",
@@ -711,7 +711,7 @@
             "uid": "${DS-PROMETHEUS}"
           },
           "editorMode": "code",
-          "expr": "channels_cache_misses{job=\"bitbucket_slack_connector\"}",
+          "expr": "channels_cache_misses{job=\"code_review_herald\"}",
           "format": "time_series",
           "hide": false,
           "instant": false,
@@ -855,7 +855,7 @@
             "uid": "${DS-PROMETHEUS}"
           },
           "editorMode": "code",
-          "expr": "comments_cache_utilized_size{job=\"bitbucket_slack_connector\"}",
+          "expr": "comments_cache_utilized_size{job=\"code_review_herald\"}",
           "format": "time_series",
           "hide": false,
           "instant": false,
@@ -870,7 +870,7 @@
             "uid": "${DS-PROMETHEUS}"
           },
           "editorMode": "code",
-          "expr": "comments_cache_hits{job=\"bitbucket_slack_connector\"}",
+          "expr": "comments_cache_hits{job=\"code_review_herald\"}",
           "format": "time_series",
           "instant": false,
           "interval": "",
@@ -884,7 +884,7 @@
             "uid": "${DS-PROMETHEUS}"
           },
           "editorMode": "code",
-          "expr": "comments_cache_misses{job=\"bitbucket_slack_connector\"}",
+          "expr": "comments_cache_misses{job=\"code_review_herald\"}",
           "format": "time_series",
           "hide": false,
           "instant": false,

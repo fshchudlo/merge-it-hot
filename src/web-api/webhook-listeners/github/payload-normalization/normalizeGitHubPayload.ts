@@ -1,4 +1,5 @@
 import {
+    PullRequestCommentActionNotification,
     PullRequestFromBranchUpdatedNotification,
     PullRequestGenericNotification, PullRequestModifiedNotification,
     PullRequestNotification,
@@ -7,9 +8,9 @@ import {
 } from "../../../../use-cases/contracts";
 import { SlackUserIdResolver } from "../../ports/SlackUserIdResolver";
 import GitHubAPI from "../../../../adapters/GitHubAPI";
-import { GithubNotification, GitHubPullRequestReviewState } from "./GitHub.contracts";
+import { GitHubNotification, GitHubPullRequestReviewState } from "./GitHub.contracts";
 
-export async function normalizeGithubPayload(notification: GithubNotification, userIdResolver: SlackUserIdResolver, githubAPI: GitHubAPI): Promise<PullRequestNotification> {
+export async function normalizeGitHubPayload(notification: GitHubNotification, userIdResolver: SlackUserIdResolver, githubAPI: GitHubAPI): Promise<PullRequestNotification> {
     const eventKey = notification.action;
     switch (eventKey) {
         case "opened":
@@ -86,15 +87,34 @@ export async function normalizeGithubPayload(notification: GithubNotification, u
                 eventKey: "pr:review:submitted",
                 review: {
                     comment: notification.review.body || null,
-                    state: mapGithubReviewState(notification.review.state)
+                    state: mapGitHubReviewState(notification.review.state)
                 }
             } as PullRequestReviewSubmittedNotification;
+        case "created":
+            return {
+                ...(await normalizePayloadGenericPart(notification, userIdResolver)),
+                "eventKey": "pr:comment:added",
+                comment: {
+                    id: notification.comment.id,
+                    replyToCommentId: notification.comment.in_reply_to_id,
+                    text: notification.comment.body,
+                    severity: "NORMAL",
+                    author: {
+                        name: notification.comment.user.login,
+                        slackUserId: await getSlackUserId(userIdResolver, notification.comment.user.login)
+                    },
+                    resolvedAt: null,
+                    threadResolvedAt: null,
+                    link: notification.comment.html_url
+                },
+                previousComment: null
+            } as PullRequestCommentActionNotification;
         default:
             throw new Error(`"${eventKey}" action key is unknown.`);
     }
 }
 
-function mapGithubReviewState(state: GitHubPullRequestReviewState): PullRequestReviewState {
+function mapGitHubReviewState(state: GitHubPullRequestReviewState): PullRequestReviewState {
     switch (state) {
         case "approved":
             return "APPROVED";
@@ -107,7 +127,7 @@ function mapGithubReviewState(state: GitHubPullRequestReviewState): PullRequestR
     }
 }
 
-async function normalizePayloadGenericPart(payload: GithubNotification, userIdResolver: SlackUserIdResolver) {
+async function normalizePayloadGenericPart(payload: GitHubNotification, userIdResolver: SlackUserIdResolver) {
     const normalizedReviewersPayload = await Promise.all(
         payload.pull_request.requested_reviewers.map(async reviewer => {
             return {
@@ -172,7 +192,7 @@ function formatUsername(login: string) {
 /*
 * Gets the user login in the format "john-doe_company name" and returns "john.doe@companyname.com"
 * */
-function getUserEmailFromGithubLogin(login: string): string {
+function getUserEmailFromGitHubLogin(login: string): string {
     const [namePart, companyName] = login.split("_");
 
     const formattedName = namePart.replace("-", ".");
@@ -181,7 +201,7 @@ function getUserEmailFromGithubLogin(login: string): string {
 }
 
 async function getSlackUserId(userIdResolver: SlackUserIdResolver, login: string): Promise<string> {
-    const userId = await userIdResolver.getUserId(getUserEmailFromGithubLogin(login));
+    const userId = await userIdResolver.getUserId(getUserEmailFromGitHubLogin(login));
     if (!userId) {
         console.warn(`Could not find Slack user for the login ${login}`);
     }

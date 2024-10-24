@@ -2,7 +2,7 @@ import SlackChannelSnapshottingMock from "./test-helpers/SlackChannelSnapshottin
 import TestPayloadBuilder from "./test-helpers/TestPayloadBuilder";
 import handlePullRequestEvent from "../handlePullRequestEvent";
 
-describe("handleBitbucketWebhook", () => {
+describe("Participants updated use-case", () => {
     it("Should update channel participants on reviewers list update", async () => {
         const channelMock = new SlackChannelSnapshottingMock();
 

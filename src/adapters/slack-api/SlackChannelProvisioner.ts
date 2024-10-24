@@ -16,20 +16,21 @@ export class SlackChannelProvisioner {
         this.client = client;
     }
 
-    async provisionChannelFor(payload: PullRequestNotification, usePrivateChannels: boolean, defaultChannelParticipants: string[]): Promise<ProvisionResult> {
+    async provisionChannelFor(payload: PullRequestNotification, iconEmoji: BotEconEmoji, usePrivateChannels: boolean, defaultChannelParticipants: string[]): Promise<ProvisionResult> {
         const channelName = buildChannelName(payload.pullRequest);
         if (payload.eventKey == "pr:opened") {
             const newChannel = await this.createNewChannel({
                 name: channelName,
                 isPrivate: usePrivateChannels,
-                defaultParticipants: defaultChannelParticipants
+                defaultParticipants: defaultChannelParticipants,
+                iconEmoji
             });
             return {
                 channel: newChannel,
                 isSetUpProperly: true
             };
         }
-        const existingChannel = await this.fromExistingChannel(channelName);
+        const existingChannel = await this.fromExistingChannel(channelName, iconEmoji);
         if (existingChannel != null) {
             return {
                 channel: existingChannel,
@@ -41,13 +42,14 @@ export class SlackChannelProvisioner {
         const createdChannel = await this.createNewChannel({
             name: channelName,
             isPrivate: usePrivateChannels,
-            defaultParticipants: defaultChannelParticipants
+            defaultParticipants: defaultChannelParticipants,
+            iconEmoji
         });
         return { channel: createdChannel, isSetUpProperly: false };
     }
 
-    async getBroadcastChannel(channelName: string): Promise<SlackBroadcastChannel | null> {
-        return this.fromExistingChannel(channelName);
+    async getBroadcastChannel(channelName: string, iconEmoji: BotEconEmoji): Promise<SlackBroadcastChannel | null> {
+        return this.fromExistingChannel(channelName, iconEmoji);
     }
 
     async getChannelInfo(channelName: string): Promise<SlackChannelInfo | null> {
@@ -68,14 +70,14 @@ export class SlackChannelProvisioner {
         return channelInfo;
     }
 
-    private async fromExistingChannel(channelName: string): Promise<SlackChannelCachedDecorator | null> {
+    private async fromExistingChannel(channelName: string, iconEmoji: string): Promise<SlackChannelCachedDecorator | null> {
         const channelInfo = await this.getChannelInfo(channelName);
-        return channelInfo ? new SlackChannelCachedDecorator(new SlackWebClientChannel(this.client, channelInfo)) : null;
+        return channelInfo ? new SlackChannelCachedDecorator(new SlackWebClientChannel(this.client, channelInfo, iconEmoji)) : null;
     }
 
     private async createNewChannel(options: CreateChannelArguments): Promise<SlackTargetedChannel> {
         const channelInfo = await this.createNewChannelInSlack(options);
-        const channel = new SlackWebClientChannel(this.client, channelInfo);
+        const channel = new SlackWebClientChannel(this.client, channelInfo, options.iconEmoji);
         if (options.defaultParticipants?.length > 0) {
             await channel.inviteToChannel({ users: options.defaultParticipants, force: true });
         }
@@ -116,7 +118,7 @@ export class SlackChannelProvisioner {
             console.log(`Waiting for channel creation for name ${options.name}`);
             return awaitingCreateChannelRequests.get(options.name);
         }
-         
+
         const createChannelPromise: Promise<SlackChannelInfo> = new Promise(async (resolve, reject) => {
             try {
                 const response = await this.client.conversations.create({
@@ -150,4 +152,6 @@ export type CreateChannelArguments = {
     name: string;
     isPrivate: boolean;
     defaultParticipants: string[];
+    iconEmoji: string;
 }
+export type BotEconEmoji = ":bitbucket:" | ":github:";

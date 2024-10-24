@@ -2,7 +2,7 @@ import SlackChannelSnapshottingMock from "./test-helpers/SlackChannelSnapshottin
 import TestPayloadBuilder from "./test-helpers/TestPayloadBuilder";
 import handlePullRequestEvent from "../handlePullRequestEvent";
 
-describe("handleBitbucketWebhook", () => {
+describe("PR opened use-case", () => {
     it("Should add bookmark and invite author and reviewers on PR opened", async () => {
         const channelMock = new SlackChannelSnapshottingMock();
 

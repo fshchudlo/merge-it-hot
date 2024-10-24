@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`handleBitbucketWebhook Should not send message if PR doesn't contain visible changes 1`] = `
+exports[`PR modified use-case Should not send message if PR doesn't contain visible changes 1`] = `
 {
   "addedBookmarks": [],
   "addedReactions": [],
@@ -13,7 +13,7 @@ exports[`handleBitbucketWebhook Should not send message if PR doesn't contain vi
 }
 `;
 
-exports[`handleBitbucketWebhook Should send message when PR modified 1`] = `
+exports[`PR modified use-case Should send message when PR modified 1`] = `
 {
   "addedBookmarks": [],
   "addedReactions": [],

@@ -2,7 +2,7 @@ import SlackChannelSnapshottingMock from "./test-helpers/SlackChannelSnapshottin
 import TestPayloadBuilder from "./test-helpers/TestPayloadBuilder";
 import handlePullRequestEvent from "../handlePullRequestEvent";
 
-describe("handleBitbucketWebhook", () => {
+describe("PR modified use-case", () => {
     it("Should send message when PR modified", async () => {
         const channelMock = new SlackChannelSnapshottingMock();
 

@@ -74,10 +74,10 @@ export default class SlackChannelSnapshottingMock implements SlackTargetedChanne
         return Promise.resolve({ ok: true, channelId: this.channelInfo.id, messageId: messageId });
     }
 
-    findLatestPullRequestCommentSnapshot(bitbucketCommentId: number | string): Promise<PullRequestCommentSnapshot | null> {
-        this.snapshot.searchedCommentSnapshots.push({ channelId: this.channelInfo.id, bitbucketCommentId });
+    findLatestPullRequestCommentSnapshot(reviewCommentId: number | string): Promise<PullRequestCommentSnapshot | null> {
+        this.snapshot.searchedCommentSnapshots.push({ channelId: this.channelInfo.id, reviewCommentId });
 
-        const snapshot = (<any>this.snapshot.sentMessages).findLast((m: SendMessageArguments) => m.metadata?.eventType === SNAPSHOT_COMMENT_STATE_EVENT_TYPE && m.metadata?.eventPayload?.commentId === bitbucketCommentId.toString());
+        const snapshot = (<any>this.snapshot.sentMessages).findLast((m: SendMessageArguments) => m.metadata?.eventType === SNAPSHOT_COMMENT_STATE_EVENT_TYPE && m.metadata?.eventPayload?.commentId === reviewCommentId.toString());
 
         if (snapshot) {
             const metadata = <PullrequestCommentSnapshotInSlackMetadata>snapshot.metadata?.eventPayload;

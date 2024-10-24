@@ -22,6 +22,30 @@ Content-Type: application/json
     });
 %}
 
+### Add comment
+POST {{EndpointHost}}/github-webhook
+Content-Type: application/json
+
+< ./test-payloads/PR-comment-created-test-payload.json
+
+> {%
+    client.test("Adding comment to the open Pull request should be successful", function() {
+        client.assert(response.status === 200);
+    });
+%}
+
+### Reply to comment
+POST {{EndpointHost}}/github-webhook
+Content-Type: application/json
+
+< ./test-payloads/PR-comment-replied-test-payload.json
+
+> {%
+    client.test("Replying to the comment should be successful", function() {
+        client.assert(response.status === 200);
+    });
+%}
+
 ### Remove reviewer
 POST {{EndpointHost}}/github-webhook
 Content-Type: application/json

@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`handleBitbucketWebhook Should return generic message if initial comment was not found 1`] = `
+exports[`Comment edited use-case Should return generic message if initial comment was not found 1`] = `
 {
   "addedBookmarks": [],
   "addedReactions": [],
@@ -9,8 +9,8 @@ exports[`handleBitbucketWebhook Should return generic message if initial comment
   "kicksFromChannels": [],
   "searchedCommentSnapshots": [
     {
-      "bitbucketCommentId": 1,
       "channelId": "12345",
+      "reviewCommentId": 1,
     },
   ],
   "searchedPrOpenedBroadcastMessages": [],
@@ -40,7 +40,7 @@ exports[`handleBitbucketWebhook Should return generic message if initial comment
           "taskResolvedDate": undefined,
           "threadResolvedDate": undefined,
         },
-        "eventType": "bitbucket_comment_snapshot_saved",
+        "eventType": "review_comment_snapshot_saved",
       },
       "replyBroadcast": undefined,
       "text": ":writing_hand: Test Reviewer 1 <https://git.test.com/projects/TEST-PROJ/repos/test-repository/pull-requests/1/overview?commentId=1|edited task>:",
@@ -50,7 +50,7 @@ exports[`handleBitbucketWebhook Should return generic message if initial comment
 }
 `;
 
-exports[`handleBitbucketWebhook Should send message on PR comment edit 1`] = `
+exports[`Comment edited use-case Should send message on PR comment edit 1`] = `
 {
   "addedBookmarks": [],
   "addedReactions": [],
@@ -59,8 +59,8 @@ exports[`handleBitbucketWebhook Should send message on PR comment edit 1`] = `
   "kicksFromChannels": [],
   "searchedCommentSnapshots": [
     {
-      "bitbucketCommentId": 1,
       "channelId": "12345",
+      "reviewCommentId": 1,
     },
   ],
   "searchedPrOpenedBroadcastMessages": [],
@@ -90,7 +90,7 @@ exports[`handleBitbucketWebhook Should send message on PR comment edit 1`] = `
           "taskResolvedDate": undefined,
           "threadResolvedDate": undefined,
         },
-        "eventType": "bitbucket_comment_snapshot_saved",
+        "eventType": "review_comment_snapshot_saved",
       },
       "replyBroadcast": undefined,
       "text": ":loudspeaker: Test Reviewer 1 <https://git.test.com/projects/TEST-PROJ/repos/test-repository/pull-requests/1/overview?commentId=1|added comment>:",
@@ -121,7 +121,7 @@ exports[`handleBitbucketWebhook Should send message on PR comment edit 1`] = `
           "taskResolvedDate": undefined,
           "threadResolvedDate": undefined,
         },
-        "eventType": "bitbucket_comment_snapshot_saved",
+        "eventType": "review_comment_snapshot_saved",
       },
       "replyBroadcast": true,
       "text": ":writing_hand: Test Reviewer 1 <https://git.test.com/projects/TEST-PROJ/repos/test-repository/pull-requests/1/overview?commentId=1|edited comment>:",
@@ -131,7 +131,7 @@ exports[`handleBitbucketWebhook Should send message on PR comment edit 1`] = `
 }
 `;
 
-exports[`handleBitbucketWebhook Should send message on comment conversion to the task 1`] = `
+exports[`Comment edited use-case Should send message on comment conversion to the task 1`] = `
 {
   "addedBookmarks": [],
   "addedReactions": [],
@@ -140,8 +140,8 @@ exports[`handleBitbucketWebhook Should send message on comment conversion to the
   "kicksFromChannels": [],
   "searchedCommentSnapshots": [
     {
-      "bitbucketCommentId": 1,
       "channelId": "12345",
+      "reviewCommentId": 1,
     },
   ],
   "searchedPrOpenedBroadcastMessages": [],
@@ -171,7 +171,7 @@ exports[`handleBitbucketWebhook Should send message on comment conversion to the
           "taskResolvedDate": undefined,
           "threadResolvedDate": undefined,
         },
-        "eventType": "bitbucket_comment_snapshot_saved",
+        "eventType": "review_comment_snapshot_saved",
       },
       "replyBroadcast": undefined,
       "text": ":loudspeaker: Test Reviewer 1 <https://git.test.com/projects/TEST-PROJ/repos/test-repository/pull-requests/1/overview?commentId=1|added comment>:",
@@ -202,7 +202,7 @@ exports[`handleBitbucketWebhook Should send message on comment conversion to the
           "taskResolvedDate": undefined,
           "threadResolvedDate": undefined,
         },
-        "eventType": "bitbucket_comment_snapshot_saved",
+        "eventType": "review_comment_snapshot_saved",
       },
       "replyBroadcast": true,
       "text": ":pushpin: Test Reviewer 1 <https://git.test.com/projects/TEST-PROJ/repos/test-repository/pull-requests/1/overview?commentId=1|converted comment to the task>:",
@@ -212,7 +212,7 @@ exports[`handleBitbucketWebhook Should send message on comment conversion to the
 }
 `;
 
-exports[`handleBitbucketWebhook Should send message on comment resolving and reopening 1`] = `
+exports[`Comment edited use-case Should send message on comment resolving and reopening 1`] = `
 {
   "addedBookmarks": [],
   "addedReactions": [],
@@ -221,12 +221,12 @@ exports[`handleBitbucketWebhook Should send message on comment resolving and reo
   "kicksFromChannels": [],
   "searchedCommentSnapshots": [
     {
-      "bitbucketCommentId": 1,
       "channelId": "12345",
+      "reviewCommentId": 1,
     },
     {
-      "bitbucketCommentId": 1,
       "channelId": "12345",
+      "reviewCommentId": 1,
     },
   ],
   "searchedPrOpenedBroadcastMessages": [],
@@ -256,7 +256,7 @@ exports[`handleBitbucketWebhook Should send message on comment resolving and reo
           "taskResolvedDate": undefined,
           "threadResolvedDate": undefined,
         },
-        "eventType": "bitbucket_comment_snapshot_saved",
+        "eventType": "review_comment_snapshot_saved",
       },
       "replyBroadcast": undefined,
       "text": ":loudspeaker: Test Reviewer 1 <https://git.test.com/projects/TEST-PROJ/repos/test-repository/pull-requests/1/overview?commentId=1|added comment>:",
@@ -287,7 +287,7 @@ exports[`handleBitbucketWebhook Should send message on comment resolving and reo
           "taskResolvedDate": undefined,
           "threadResolvedDate": 1714381184802,
         },
-        "eventType": "bitbucket_comment_snapshot_saved",
+        "eventType": "review_comment_snapshot_saved",
       },
       "replyBroadcast": true,
       "text": ":white_check_mark: Test Reviewer 1 <https://git.test.com/projects/TEST-PROJ/repos/test-repository/pull-requests/1/overview?commentId=1|resolved comment>:",
@@ -318,7 +318,7 @@ exports[`handleBitbucketWebhook Should send message on comment resolving and reo
           "taskResolvedDate": undefined,
           "threadResolvedDate": undefined,
         },
-        "eventType": "bitbucket_comment_snapshot_saved",
+        "eventType": "review_comment_snapshot_saved",
       },
       "replyBroadcast": true,
       "text": ":repeat: Test Reviewer 1 <https://git.test.com/projects/TEST-PROJ/repos/test-repository/pull-requests/1/overview?commentId=1|reopened comment>:",
@@ -328,7 +328,7 @@ exports[`handleBitbucketWebhook Should send message on comment resolving and reo
 }
 `;
 
-exports[`handleBitbucketWebhook Should send message on task conversion to the comment 1`] = `
+exports[`Comment edited use-case Should send message on task conversion to the comment 1`] = `
 {
   "addedBookmarks": [],
   "addedReactions": [],
@@ -337,8 +337,8 @@ exports[`handleBitbucketWebhook Should send message on task conversion to the co
   "kicksFromChannels": [],
   "searchedCommentSnapshots": [
     {
-      "bitbucketCommentId": 1,
       "channelId": "12345",
+      "reviewCommentId": 1,
     },
   ],
   "searchedPrOpenedBroadcastMessages": [],
@@ -368,7 +368,7 @@ exports[`handleBitbucketWebhook Should send message on task conversion to the co
           "taskResolvedDate": undefined,
           "threadResolvedDate": undefined,
         },
-        "eventType": "bitbucket_comment_snapshot_saved",
+        "eventType": "review_comment_snapshot_saved",
       },
       "replyBroadcast": undefined,
       "text": ":loudspeaker: Test Reviewer 1 <https://git.test.com/projects/TEST-PROJ/repos/test-repository/pull-requests/1/overview?commentId=1|added task>:",
@@ -399,7 +399,7 @@ exports[`handleBitbucketWebhook Should send message on task conversion to the co
           "taskResolvedDate": undefined,
           "threadResolvedDate": undefined,
         },
-        "eventType": "bitbucket_comment_snapshot_saved",
+        "eventType": "review_comment_snapshot_saved",
       },
       "replyBroadcast": true,
       "text": ":writing_hand: Test Reviewer 1 <https://git.test.com/projects/TEST-PROJ/repos/test-repository/pull-requests/1/overview?commentId=1|converted task to the comment>:",
@@ -409,7 +409,7 @@ exports[`handleBitbucketWebhook Should send message on task conversion to the co
 }
 `;
 
-exports[`handleBitbucketWebhook Should send message on task resolving and reopening 1`] = `
+exports[`Comment edited use-case Should send message on task resolving and reopening 1`] = `
 {
   "addedBookmarks": [],
   "addedReactions": [],
@@ -418,12 +418,12 @@ exports[`handleBitbucketWebhook Should send message on task resolving and reopen
   "kicksFromChannels": [],
   "searchedCommentSnapshots": [
     {
-      "bitbucketCommentId": 1,
       "channelId": "12345",
+      "reviewCommentId": 1,
     },
     {
-      "bitbucketCommentId": 1,
       "channelId": "12345",
+      "reviewCommentId": 1,
     },
   ],
   "searchedPrOpenedBroadcastMessages": [],
@@ -453,7 +453,7 @@ exports[`handleBitbucketWebhook Should send message on task resolving and reopen
           "taskResolvedDate": undefined,
           "threadResolvedDate": undefined,
         },
-        "eventType": "bitbucket_comment_snapshot_saved",
+        "eventType": "review_comment_snapshot_saved",
       },
       "replyBroadcast": undefined,
       "text": ":loudspeaker: Test Reviewer 1 <https://git.test.com/projects/TEST-PROJ/repos/test-repository/pull-requests/1/overview?commentId=1|added task>:",
@@ -484,7 +484,7 @@ exports[`handleBitbucketWebhook Should send message on task resolving and reopen
           "taskResolvedDate": 1714381184802,
           "threadResolvedDate": undefined,
         },
-        "eventType": "bitbucket_comment_snapshot_saved",
+        "eventType": "review_comment_snapshot_saved",
       },
       "replyBroadcast": true,
       "text": ":white_check_mark: Test Reviewer 1 <https://git.test.com/projects/TEST-PROJ/repos/test-repository/pull-requests/1/overview?commentId=1|resolved task>:",
@@ -515,7 +515,7 @@ exports[`handleBitbucketWebhook Should send message on task resolving and reopen
           "taskResolvedDate": undefined,
           "threadResolvedDate": undefined,
         },
-        "eventType": "bitbucket_comment_snapshot_saved",
+        "eventType": "review_comment_snapshot_saved",
       },
       "replyBroadcast": true,
       "text": ":repeat: Test Reviewer 1 <https://git.test.com/projects/TEST-PROJ/repos/test-repository/pull-requests/1/overview?commentId=1|reopened task>:",

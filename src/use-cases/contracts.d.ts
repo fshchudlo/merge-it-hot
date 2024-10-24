@@ -25,7 +25,6 @@ export type PullRequestReviewSubmittedNotification = PullRequestNotificationBasi
 
 export type PullRequestCommentActionNotification = PullRequestNotificationBasicPayload & {
     readonly eventKey: "pr:comment:added" | "pr:comment:deleted" | "pr:comment:edited";
-    readonly commentParentId?: number;
     readonly previousComment?: string;
     readonly comment: PullRequestCommentPayload;
 };
@@ -62,6 +61,7 @@ export type BranchPayload = {
 };
 export type PullRequestCommentPayload = {
     readonly id: number;
+    readonly replyToCommentId?: number;
     readonly text: string;
     readonly author: UserPayload;
     readonly severity: CommentSeverity;
@@ -89,3 +89,4 @@ export type ReviewerPayload = {
 }
 export type ReviewerReviewStatus = "UNAPPROVED" | "NEEDS_WORK" | "APPROVED";
 export type PullRequestReviewState = "COMMENTED" | "APPROVED" | "CHANGES_REQUESTED" | "DISMISSED";
+export type CommentSeverity = "NORMAL" | "BLOCKER";

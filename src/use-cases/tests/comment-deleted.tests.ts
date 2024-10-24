@@ -2,7 +2,7 @@ import SlackChannelSnapshottingMock from "./test-helpers/SlackChannelSnapshottin
 import TestPayloadBuilder from "./test-helpers/TestPayloadBuilder";
 import handlePullRequestEvent from "../handlePullRequestEvent";
 
-describe("handleBitbucketWebhook", () => {
+describe("Comment deleted use-case", () => {
     it("Should send message on PR comment deletion", async () => {
         const channelMock = new SlackChannelSnapshottingMock();
 

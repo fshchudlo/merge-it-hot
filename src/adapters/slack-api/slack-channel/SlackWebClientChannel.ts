@@ -22,7 +22,7 @@ export class SlackWebClientChannel implements SlackTargetedChannel, SlackBroadca
     private readonly iconEmoji: string;
     readonly channelInfo: SlackChannelInfo;
 
-    constructor(client: slack.WebClient, channelInfo: SlackChannelInfo = null, iconEmoji = ":bitbucket:") {
+    constructor(client: slack.WebClient, channelInfo: SlackChannelInfo = null, iconEmoji: string) {
         this.client = client;
         this.channelInfo = channelInfo;
         this.iconEmoji = iconEmoji;
@@ -89,10 +89,10 @@ export class SlackWebClientChannel implements SlackTargetedChannel, SlackBroadca
         };
     }
 
-    async findLatestPullRequestCommentSnapshot(bitbucketCommentId: number | string): Promise<PullRequestCommentSnapshot | null> {
+    async findLatestPullRequestCommentSnapshot(reviewCommentId: number | string): Promise<PullRequestCommentSnapshot | null> {
         const matchPredicate = (message: MessageElement) => {
             const eventPayload = message.metadata?.event_type === SNAPSHOT_COMMENT_STATE_EVENT_TYPE ? <PullrequestCommentSnapshotInSlackMetadata>message.metadata?.event_payload : null;
-            return eventPayload && eventPayload?.commentId === bitbucketCommentId.toString();
+            return eventPayload && eventPayload?.commentId === reviewCommentId.toString();
         };
         const message = await this.findMessageInChannelHistory(this.channelInfo.id, matchPredicate);
 

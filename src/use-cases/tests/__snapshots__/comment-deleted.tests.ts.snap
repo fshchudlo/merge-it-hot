@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`handleBitbucketWebhook Should send message on PR comment deletion 1`] = `
+exports[`Comment deleted use-case Should send message on PR comment deletion 1`] = `
 {
   "addedBookmarks": [],
   "addedReactions": [],
@@ -9,8 +9,8 @@ exports[`handleBitbucketWebhook Should send message on PR comment deletion 1`] =
   "kicksFromChannels": [],
   "searchedCommentSnapshots": [
     {
-      "bitbucketCommentId": 1,
       "channelId": "12345",
+      "reviewCommentId": 1,
     },
   ],
   "searchedPrOpenedBroadcastMessages": [],
@@ -40,7 +40,7 @@ exports[`handleBitbucketWebhook Should send message on PR comment deletion 1`] =
           "taskResolvedDate": undefined,
           "threadResolvedDate": undefined,
         },
-        "eventType": "bitbucket_comment_snapshot_saved",
+        "eventType": "review_comment_snapshot_saved",
       },
       "replyBroadcast": undefined,
       "text": ":broom: Test Reviewer 1 deleted comment:",

@@ -10,7 +10,7 @@ export class CommentAddedHandler implements WebhookPayloadHandler {
     }
 
     async handle(payload: PullRequestCommentActionNotification, slackChannel: SlackTargetedChannel) {
-        const parentCommentSnapshot = payload.commentParentId ? await slackChannel.findLatestPullRequestCommentSnapshot(payload.commentParentId) : null;
+        const parentCommentSnapshot = payload.comment.replyToCommentId ? await slackChannel.findLatestPullRequestCommentSnapshot(payload.comment.replyToCommentId) : null;
         const message = buildSlackMessage(payload, parentCommentSnapshot);
         await slackChannel.sendMessage(message);
     }

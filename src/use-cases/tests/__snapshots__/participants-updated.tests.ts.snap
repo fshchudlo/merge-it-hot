@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`handleBitbucketWebhook Should update channel participants on reviewers list update 1`] = `
+exports[`Participants updated use-case Should update channel participants on reviewers list update 1`] = `
 {
   "addedBookmarks": [],
   "addedReactions": [],

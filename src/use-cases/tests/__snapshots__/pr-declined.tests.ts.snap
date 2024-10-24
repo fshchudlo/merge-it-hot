@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`handleBitbucketWebhook Should send completion message and close the channel on PR declining 1`] = `
+exports[`PR declined use-case Should send completion message and close the channel on PR declining 1`] = `
 {
   "addedBookmarks": [],
   "addedReactions": [],
@@ -19,7 +19,7 @@ exports[`handleBitbucketWebhook Should send completion message and close the cha
 }
 `;
 
-exports[`handleBitbucketWebhook Should send notification to the broadcast channel, if it is specified 1`] = `
+exports[`PR declined use-case Should send notification to the broadcast channel, if it is specified 1`] = `
 {
   "addedBookmarks": [
     {
