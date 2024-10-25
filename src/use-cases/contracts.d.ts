@@ -32,7 +32,7 @@ export type PullRequestModifiedNotification = PullRequestNotificationBasicPayloa
     readonly eventKey: "pr:modified";
     readonly previousTitle: string;
     readonly previousDescription: string | null;
-    readonly previousTargetBranch: {
+    readonly previousTargetBranch?: {
         readonly branchName: string;
         readonly latestCommit: string
     }

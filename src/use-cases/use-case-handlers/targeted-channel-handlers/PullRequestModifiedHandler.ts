@@ -32,7 +32,7 @@ function getPRChangesDescription(payload: PullRequestModifiedNotification) {
     };
     const pullRequest = payload.pullRequest;
 
-    if (pullRequest.targetBranch.branchName != payload.previousTargetBranch.branchName) {
+    if (pullRequest.targetBranch.branchName != payload.previousTargetBranch?.branchName) {
         addDivider();
         changesDescription.push(section(`Target is changed to \`${pullRequest.targetBranch.branchName}\``));
     }
