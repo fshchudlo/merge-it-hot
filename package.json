@@ -1,5 +1,5 @@
 {
-  "name": "code-review-herald",
+  "name": "merge-it-hot",
   "version": "1.0.0",
   "description": "An application for reflecting GitHub/Bitbucket Pull Requests events to the Slack channels for PR author and all of participants.",
   "main": "src/app.ts",
