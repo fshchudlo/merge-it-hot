@@ -1,5 +1,4 @@
-import { InMemoryCache } from "./cache/InMemoryCache";
-
 import { PullRequestCommentSnapshot } from "../../use-cases/slack-api-ports";
+import { CacheMetricsWrapper } from "./cache/CacheMetricsWrapper";
 
-export const COMMENTS_CACHE = new InMemoryCache<PullRequestCommentSnapshot>("comments");
+export const COMMENTS_CACHE = new CacheMetricsWrapper<PullRequestCommentSnapshot>("comments");

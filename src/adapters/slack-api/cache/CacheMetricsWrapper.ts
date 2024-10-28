@@ -1,14 +1,17 @@
 import client, { Counter, Gauge } from "prom-client";
 import { createCache } from "cache-manager";
+import Keyv from "keyv";
 
 export class CacheMetricsWrapper<T> {
     private readonly cache: ReturnType<typeof createCache>;
     private readonly utilizedCacheSizeGauge: Gauge;
     private readonly cacheHitsCounter: Counter;
     private readonly cacheMissesCounter: Counter;
+    private readonly store: Keyv<any, Record<string, T>>;
 
     constructor(metricsNamePrefix: string) {
-        this.cache = createCache();
+        this.store = new Keyv();
+        this.cache = createCache({ stores: [this.store] });
         this.cacheHitsCounter = new client.Counter({
             name: `${metricsNamePrefix}_cache_hits`,
             help: "Successful cache hits counter"
@@ -42,5 +45,15 @@ export class CacheMetricsWrapper<T> {
     async clear(): Promise<void> {
         await this.cache.clear();
         this.utilizedCacheSizeGauge.set(0);
+    }
+
+    async deleteWhere(keyPredicate: (k: string) => boolean) {
+        for (const key of (<any>this.store.opts.store).keys()) {
+            const clearKey = key.replace((<any>this.store.opts.store).namespace + ":", "");
+            if (keyPredicate(clearKey)) {
+                await this.cache.del(clearKey);
+                this.utilizedCacheSizeGauge.dec();
+            }
+        }
     }
 }

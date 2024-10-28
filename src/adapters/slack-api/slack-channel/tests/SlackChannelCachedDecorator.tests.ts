@@ -29,7 +29,7 @@ describe("SlackChannelCachedDecorator", () => {
     beforeEach(async () => {
         systemUnderTest = new SlackChannelCachedDecorator(decoratedChannelMock as any);
         await CHANNELS_CACHE.clear();
-        COMMENTS_CACHE.deleteWhere(() => true);
+        await COMMENTS_CACHE.clear();
     });
 
     afterEach(() => {
@@ -83,7 +83,7 @@ describe("SlackChannelCachedDecorator", () => {
 
         expect(decoratedChannelMock.findLatestPullRequestCommentSnapshot).toHaveBeenCalledWith(commentSnapshot.commentId);
         expect(result).toEqual(commentSnapshot);
-        expect(COMMENTS_CACHE.get("channelId-1")).toEqual(commentSnapshot);
+        expect(await COMMENTS_CACHE.get("channelId-1")).toEqual(commentSnapshot);
     });
 
     it("should delete comment snapshots from cache when archiving a channel", async () => {
@@ -96,13 +96,13 @@ describe("SlackChannelCachedDecorator", () => {
 
         await systemUnderTest.findLatestPullRequestCommentSnapshot(commentSnapshot.commentId);
 
-        expect(COMMENTS_CACHE.get("channelId-1")).toEqual(commentSnapshot);
+        expect(await COMMENTS_CACHE.get("channelId-1")).toEqual(commentSnapshot);
 
         (<jest.Mock>decoratedChannelMock.closeChannel).mockResolvedValue({});
 
         await systemUnderTest.closeChannel();
 
-        expect(COMMENTS_CACHE.get("channelId-1")).toBeUndefined();
+        expect(await COMMENTS_CACHE.get("channelId-1")).toBeNull();
 
     });
 });
