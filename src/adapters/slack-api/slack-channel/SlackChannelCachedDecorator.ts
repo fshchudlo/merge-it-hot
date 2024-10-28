@@ -30,7 +30,7 @@ export class SlackChannelCachedDecorator implements SlackTargetedChannel, SlackB
 
     async closeChannel(): Promise<void> {
         await this.channel.closeChannel();
-        CHANNELS_CACHE.deleteWhere((k, v) => v.id == this.channel.channelInfo.id);
+        await CHANNELS_CACHE.delete(this.channel.channelInfo.name);
         COMMENTS_CACHE.deleteWhere((k) => k.startsWith(getCommentCacheKey(this.channel.channelInfo.id, "")));
     }
 

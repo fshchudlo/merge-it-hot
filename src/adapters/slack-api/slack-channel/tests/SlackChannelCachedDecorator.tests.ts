@@ -26,9 +26,9 @@ const decoratedChannelMock = {
 describe("SlackChannelCachedDecorator", () => {
     let systemUnderTest: SlackChannelCachedDecorator;
 
-    beforeEach(() => {
+    beforeEach(async () => {
         systemUnderTest = new SlackChannelCachedDecorator(decoratedChannelMock as any);
-        CHANNELS_CACHE.deleteWhere(() => true);
+        await CHANNELS_CACHE.clear();
         COMMENTS_CACHE.deleteWhere(() => true);
     });
 
@@ -40,11 +40,11 @@ describe("SlackChannelCachedDecorator", () => {
     it("should delete channel info from cache when closing a channel", async () => {
         (<jest.Mock>decoratedChannelMock.closeChannel).mockResolvedValue({});
 
-        CHANNELS_CACHE.set(decoratedChannelMock.channelInfo.name, decoratedChannelMock.channelInfo);
-        expect(CHANNELS_CACHE.get(decoratedChannelMock.channelInfo.name)).not.toBeUndefined();
+        await CHANNELS_CACHE.set(decoratedChannelMock.channelInfo.name, decoratedChannelMock.channelInfo);
+        expect(await CHANNELS_CACHE.get(decoratedChannelMock.channelInfo.name)).toEqual(decoratedChannelMock.channelInfo);
 
         await systemUnderTest.closeChannel();
-        expect(CHANNELS_CACHE.get(decoratedChannelMock.channelInfo.name)).toBeUndefined();
+        expect(await CHANNELS_CACHE.get(decoratedChannelMock.channelInfo.name)).toBeNull();
     });
 
     it("should cache comment info when sending a message", async () => {

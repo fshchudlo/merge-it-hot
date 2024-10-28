@@ -1,4 +1,4 @@
-import { InMemoryCache } from "./cache/InMemoryCache";
 import { SlackChannelInfo } from "./SlackChannelProvisioner";
+import { CacheMetricsWrapper } from "./cache/CacheMetricsWrapper";
 
-export const CHANNELS_CACHE = new InMemoryCache<SlackChannelInfo>("channels");
+export const CHANNELS_CACHE = new CacheMetricsWrapper<SlackChannelInfo>("channels");
