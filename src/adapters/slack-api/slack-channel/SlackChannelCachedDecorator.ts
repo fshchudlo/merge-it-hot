@@ -31,7 +31,7 @@ export class SlackChannelCachedDecorator implements SlackTargetedChannel, SlackB
     async closeChannel(): Promise<void> {
         await this.channel.closeChannel();
         await CHANNELS_CACHE.delete(this.channel.channelInfo.name);
-        COMMENTS_CACHE.deleteWhere((k) => k.startsWith(getCommentCacheKey(this.channel.channelInfo.id, "")));
+        await COMMENTS_CACHE.deleteWhere((k) => k.startsWith(getCommentCacheKey(this.channel.channelInfo.id, "")));
     }
 
     addReaction(messageId: string, reaction: string): Promise<void> {
@@ -59,21 +59,21 @@ export class SlackChannelCachedDecorator implements SlackTargetedChannel, SlackB
                 slackMessageId: response.messageId,
                 slackThreadId: response.threadId
             };
-            COMMENTS_CACHE.set(getCommentCacheKey(this.channel.channelInfo.id, commentSnapshot.commentId), commentSnapshot);
+            await COMMENTS_CACHE.set(getCommentCacheKey(this.channel.channelInfo.id, commentSnapshot.commentId), commentSnapshot);
         }
         return response;
     }
 
     async findLatestPullRequestCommentSnapshot(reviewCommentId: number | string): Promise<PullRequestCommentSnapshot | null> {
         const cacheKey = getCommentCacheKey(this.channel.channelInfo.id, reviewCommentId);
-        const cachedCommentInfo = COMMENTS_CACHE.get(cacheKey);
+        const cachedCommentInfo = await COMMENTS_CACHE.get(cacheKey);
         if (cachedCommentInfo) {
             return Promise.resolve(cachedCommentInfo);
         }
         const commentSnapshot = await this.channel.findLatestPullRequestCommentSnapshot(reviewCommentId);
 
         if (commentSnapshot) {
-            COMMENTS_CACHE.set(cacheKey, commentSnapshot);
+            await COMMENTS_CACHE.set(cacheKey, commentSnapshot);
         }
         return commentSnapshot;
     }
