@@ -9,7 +9,7 @@ import {
     PullRequestReviewSubmittedNotification,
     UserPayload
 } from "../../../use-cases/contracts";
-import { SlackUserIdResolver } from "../ports/SlackUserIdResolver";
+import { SlackUserIdResolver } from "../SlackUserIdResolver";
 import { BitbucketNotification, BitbucketUserPayload } from "./Bitbucket.contracts";
 
 export async function transformRequestPayloadToEvent(notification: BitbucketNotification, bitbucketAPI: BitbucketAPI, userIdResolver: SlackUserIdResolver): Promise<PullRequestNotification> {

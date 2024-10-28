@@ -6,7 +6,7 @@ import {
     PullRequestParticipantsUpdatedNotification, PullRequestReviewState, PullRequestReviewSubmittedNotification,
     ReviewerPayload, UserPayload
 } from "../../../use-cases/contracts";
-import { SlackUserIdResolver } from "../ports/SlackUserIdResolver";
+import { SlackUserIdResolver } from "../SlackUserIdResolver";
 import GitHubAPI from "../../../adapters/GitHubAPI";
 import {
     GitHubNotification,

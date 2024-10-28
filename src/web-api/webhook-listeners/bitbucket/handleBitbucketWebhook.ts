@@ -5,7 +5,7 @@ import { NextFunction, Request, Response } from "express";
 import { transformRequestPayloadToEvent } from "./transformRequestPayloadToEvent";
 import { SlackChannelProvisioner } from "../../../adapters/slack-api/SlackChannelProvisioner";
 import { PullRequestGenericNotification } from "../../../use-cases/contracts";
-import { SlackUserIdResolver } from "../ports/SlackUserIdResolver";
+import { SlackUserIdResolver } from "../SlackUserIdResolver";
 
 const bitbucketAPI = new BitbucketAPI(AppConfig.BITBUCKET_BASE_URL, AppConfig.BITBUCKET_READ_API_TOKEN);
 
