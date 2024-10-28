@@ -65,63 +65,14 @@ exports[`PR opened use-case Should add bookmark and invite author and reviewers 
 
 exports[`PR opened use-case Should send notification to the broadcast channel, if it is specified 1`] = `
 {
-  "addedBookmarks": [
-    {
-      "emoji": ":git:",
-      "link": "https://git.test.com/projects/TEST-PROJ/repos/test-repository/pull-requests/1/overview",
-      "title": "Review Pull Request",
-    },
-  ],
+  "addedBookmarks": [],
   "addedReactions": [],
   "closeChannelCalls": [],
-  "invitesToChannels": [
-    {
-      "force": true,
-      "users": [
-        "000000",
-        "111111",
-        "222222",
-      ],
-    },
-  ],
+  "invitesToChannels": [],
   "kicksFromChannels": [],
   "searchedCommentSnapshots": [],
   "searchedPrOpenedBroadcastMessages": [],
   "sentMessages": [
-    {
-      "blocks": [
-        {
-          "text": {
-            "text": "Test Author opened <https://git.test.com/projects/TEST-PROJ/repos/test-repository/pull-requests/1/overview|pull request>",
-            "type": "mrkdwn",
-          },
-          "type": "section",
-        },
-        {
-          "type": "divider",
-        },
-        {
-          "elements": [
-            {
-              "text": "Test pull request description",
-              "type": "mrkdwn",
-            },
-          ],
-          "type": "context",
-        },
-        {
-          "type": "divider",
-        },
-        {
-          "text": {
-            "text": "Please <https://git.test.com/projects/TEST-PROJ/repos/test-repository/pull-requests/1/overview|review the PR>",
-            "type": "mrkdwn",
-          },
-          "type": "section",
-        },
-      ],
-      "text": "Test Author opened <https://git.test.com/projects/TEST-PROJ/repos/test-repository/pull-requests/1/overview|pull request>",
-    },
     {
       "blocks": [
         {

@@ -2,12 +2,13 @@ import SlackChannelSnapshottingMock from "./test-helpers/SlackChannelSnapshottin
 import TestPayloadBuilder from "./test-helpers/TestPayloadBuilder";
 import handlePullRequestEvent from "../handlePullRequestEvent";
 
-describe("PR declined use-case", () => {
-    it("Should send completion message and close the channel on PR declining", async () => {
+describe("PR is ready for review use-case", () => {
+    it("Should send notification when PR is marked as ready for review", async () => {
         const channelMock = new SlackChannelSnapshottingMock();
 
 
-        await handlePullRequestEvent(TestPayloadBuilder.pullRequestDeclined(), channelMock);
+        await handlePullRequestEvent(TestPayloadBuilder.pullRequestDraftOpened(), channelMock);
+        await handlePullRequestEvent(TestPayloadBuilder.pullRequestIsReadyForReview(), channelMock);
 
 
         expect(channelMock.snapshot).toMatchSnapshot();
@@ -17,11 +18,11 @@ describe("PR declined use-case", () => {
         const channelMock = new SlackChannelSnapshottingMock();
         const broadcastChannelMock = new SlackChannelSnapshottingMock();
 
-        await handlePullRequestEvent(TestPayloadBuilder.pullRequestOpened(), channelMock, broadcastChannelMock);
-
-        await handlePullRequestEvent(TestPayloadBuilder.pullRequestDeclined(), channelMock, broadcastChannelMock);
+        await handlePullRequestEvent(TestPayloadBuilder.pullRequestDraftOpened(), channelMock, broadcastChannelMock);
+        await handlePullRequestEvent(TestPayloadBuilder.pullRequestIsReadyForReview(), channelMock, broadcastChannelMock);
 
 
         expect(broadcastChannelMock.snapshot).toMatchSnapshot();
     });
+
 });

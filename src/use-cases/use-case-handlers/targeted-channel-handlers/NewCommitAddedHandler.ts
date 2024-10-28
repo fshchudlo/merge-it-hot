@@ -1,5 +1,5 @@
 import { link, quote, section } from "../utils/slack-building-blocks";
-import { formatUserName, markdownToSlackMarkup, reviewPRAction } from "../utils";
+import { markdownToSlackMarkup, reviewPRAction } from "../utils";
 import { PullRequestFromBranchUpdatedNotification } from "../../contracts";
 import { WebhookPayloadHandler } from "../WebhookPayloadHandler";
 import { SendMessageArguments, SlackTargetedChannel } from "../../slack-api-ports";
@@ -15,7 +15,7 @@ export class NewCommitAddedHandler implements WebhookPayloadHandler {
 }
 
 function buildSlackMessage(payload: PullRequestFromBranchUpdatedNotification): SendMessageArguments {
-    const messageTitle = `:new: ${formatUserName(payload.actor)} added ${link(payload.latestCommitViewUrl, "new commit")}.`;
+    const messageTitle = `:new: ${payload.actor.name} added ${link(payload.latestCommitViewUrl, "new commit")}.`;
 
     const commentSection = payload.latestCommitMessage ? section(`Commit message: \n${quote(markdownToSlackMarkup(payload.latestCommitMessage))}`) : null;
     return {

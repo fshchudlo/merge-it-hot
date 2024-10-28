@@ -13,13 +13,15 @@ describe("PR merged use-case", () => {
 
     it("Should send notification to the broadcast channel, if it is specified", async () => {
         const channelMock = new SlackChannelSnapshottingMock();
-        await handlePullRequestEvent(TestPayloadBuilder.pullRequestOpened(), channelMock, channelMock);
+        const broadcastChannelMock = new SlackChannelSnapshottingMock();
+
+        await handlePullRequestEvent(TestPayloadBuilder.pullRequestOpened(), channelMock, broadcastChannelMock);
 
 
-        await handlePullRequestEvent(TestPayloadBuilder.pullRequestMerged(), channelMock, channelMock);
+        await handlePullRequestEvent(TestPayloadBuilder.pullRequestMerged(), channelMock, broadcastChannelMock);
 
 
-        expect(channelMock.snapshot).toMatchSnapshot();
+        expect(broadcastChannelMock.snapshot).toMatchSnapshot();
     });
 
 });

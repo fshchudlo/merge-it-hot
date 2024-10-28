@@ -21,13 +21,7 @@ exports[`PR deleted use-case Should send completion message and close the channe
 
 exports[`PR deleted use-case Should send notification to the broadcast channel, if it is specified 1`] = `
 {
-  "addedBookmarks": [
-    {
-      "emoji": ":git:",
-      "link": "https://git.test.com/projects/TEST-PROJ/repos/test-repository/pull-requests/1/overview",
-      "title": "Review Pull Request",
-    },
-  ],
+  "addedBookmarks": [],
   "addedReactions": [
     {
       "channelId": "12345",
@@ -35,19 +29,8 @@ exports[`PR deleted use-case Should send notification to the broadcast channel, 
       "reaction": "no_entry_sign",
     },
   ],
-  "closeChannelCalls": [
-    "12345",
-  ],
-  "invitesToChannels": [
-    {
-      "force": true,
-      "users": [
-        "000000",
-        "111111",
-        "222222",
-      ],
-    },
-  ],
+  "closeChannelCalls": [],
+  "invitesToChannels": [],
   "kicksFromChannels": [],
   "searchedCommentSnapshots": [],
   "searchedPrOpenedBroadcastMessages": [
@@ -62,40 +45,6 @@ exports[`PR deleted use-case Should send notification to the broadcast channel, 
     },
   ],
   "sentMessages": [
-    {
-      "blocks": [
-        {
-          "text": {
-            "text": "Test Author opened <https://git.test.com/projects/TEST-PROJ/repos/test-repository/pull-requests/1/overview|pull request>",
-            "type": "mrkdwn",
-          },
-          "type": "section",
-        },
-        {
-          "type": "divider",
-        },
-        {
-          "elements": [
-            {
-              "text": "Test pull request description",
-              "type": "mrkdwn",
-            },
-          ],
-          "type": "context",
-        },
-        {
-          "type": "divider",
-        },
-        {
-          "text": {
-            "text": "Please <https://git.test.com/projects/TEST-PROJ/repos/test-repository/pull-requests/1/overview|review the PR>",
-            "type": "mrkdwn",
-          },
-          "type": "section",
-        },
-      ],
-      "text": "Test Author opened <https://git.test.com/projects/TEST-PROJ/repos/test-repository/pull-requests/1/overview|pull request>",
-    },
     {
       "blocks": [
         {
@@ -140,9 +89,6 @@ exports[`PR deleted use-case Should send notification to the broadcast channel, 
         "eventType": "pull_request_opened",
       },
       "text": ":snowboarder: Test Author opened pull request "Test pull request title".",
-    },
-    {
-      "text": ":no_entry_sign: Pull request was deleted by Test Author.",
     },
     {
       "text": ":no_entry_sign: Pull request was deleted by Test Author.",
