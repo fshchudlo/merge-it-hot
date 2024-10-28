@@ -7,8 +7,6 @@ import { SlackChannelCachedDecorator } from "./slack-channel/SlackChannelCachedD
 
 import { SlackBroadcastChannel, SlackTargetedChannel } from "../../use-cases/slack-api-ports";
 
-const awaitingCreateChannelRequests = new Map<string, Promise<SlackChannelInfo>>();
-
 export class SlackChannelProvisioner {
     private readonly client: slack.WebClient;
 
@@ -53,10 +51,6 @@ export class SlackChannelProvisioner {
     }
 
     async getChannelInfo(channelName: string): Promise<SlackChannelInfo | null> {
-        if (awaitingCreateChannelRequests.has(channelName)) {
-            return awaitingCreateChannelRequests.get(channelName);
-        }
-
         const cachedChannelInfo = await CHANNELS_CACHE.get(channelName);
         if (cachedChannelInfo) {
             return Promise.resolve(cachedChannelInfo);
@@ -76,12 +70,21 @@ export class SlackChannelProvisioner {
     }
 
     private async createNewChannel(options: CreateChannelArguments): Promise<SlackTargetedChannel> {
-        const channelInfo = await this.createNewChannelInSlack(options);
+        const channelInfo = await CHANNELS_CACHE.wrap(options.name, async () => {
+            const response = await this.client.conversations.create({
+                name: options.name,
+                is_private: options.isPrivate
+            });
+            return {
+                id: response.channel.id,
+                name: response.channel.name
+            };
+        });
+
         const channel = new SlackWebClientChannel(this.client, channelInfo, options.iconEmoji);
         if (options.defaultParticipants?.length > 0) {
             await channel.inviteToChannel({ users: options.defaultParticipants, force: true });
         }
-        await CHANNELS_CACHE.set(options.name, channel.channelInfo);
         return new SlackChannelCachedDecorator(channel);
     }
 
@@ -111,32 +114,6 @@ export class SlackChannelProvisioner {
             }
             throw error;
         }
-    }
-
-    private createNewChannelInSlack(options: CreateChannelArguments): Promise<SlackChannelInfo> {
-        if (awaitingCreateChannelRequests.has(options.name)) {
-            console.log(`Waiting for channel creation for name ${options.name}`);
-            return awaitingCreateChannelRequests.get(options.name);
-        }
-
-        const createChannelPromise: Promise<SlackChannelInfo> = new Promise(async (resolve, reject) => {
-            try {
-                const response = await this.client.conversations.create({
-                    name: options.name,
-                    is_private: options.isPrivate
-                });
-                resolve({
-                    id: response.channel.id,
-                    name: response.channel.name
-                });
-            } catch (error) {
-                reject(error);
-            } finally {
-                awaitingCreateChannelRequests.delete(options.name);
-            }
-        });
-        awaitingCreateChannelRequests.set(options.name, createChannelPromise);
-        return createChannelPromise;
     }
 }
 

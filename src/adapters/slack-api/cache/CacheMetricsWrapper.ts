@@ -31,6 +31,12 @@ export class CacheMetricsWrapper<T> {
         this.utilizedCacheSizeGauge.inc();
     }
 
+    async wrap(key: string, func: () => T | Promise<T>): Promise<T | null> {
+        const value = await this.cache.wrap(key, func);
+        this.utilizedCacheSizeGauge.inc();
+        return value;
+    }
+
     async get(key: string): Promise<T | null> {
         const value = await this.cache.get<T>(key);
         value ? this.cacheHitsCounter.inc() : this.cacheMissesCounter.inc();
