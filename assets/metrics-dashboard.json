@@ -1,8 +1,8 @@
 {
   "__inputs": [
     {
-      "name": "DS-PROMETHEUS",
-      "label": "DS-prometheus",
+      "name": "DS_PROM",
+      "label": "prom",
       "description": "",
       "type": "datasource",
       "pluginId": "prometheus",
@@ -80,7 +80,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS-PROMETHEUS}"
+        "uid": "${DS_PROM}"
       },
       "fieldConfig": {
         "defaults": {
@@ -156,7 +156,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS-PROMETHEUS}"
+            "uid": "${DS_PROM}"
           },
           "editorMode": "code",
           "expr": "http_request_duration_seconds_sum{job=\"$endpoint_job_name_in_prometheus\", route=\"/bitbucket-webhook\"}/http_request_duration_seconds_count{job=\"$endpoint_job_name_in_prometheus\", route=\"/bitbucket-webhook\"}",
@@ -171,7 +171,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS-PROMETHEUS}"
+            "uid": "${DS_PROM}"
           },
           "editorMode": "code",
           "expr": "http_request_duration_seconds_sum{job=\"$endpoint_job_name_in_prometheus\", route=\"/github-webhook\"}/http_request_duration_seconds_count{job=\"$endpoint_job_name_in_prometheus\", route=\"/github-webhook\"}",
@@ -186,7 +186,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS-PROMETHEUS}"
+            "uid": "${DS_PROM}"
           },
           "editorMode": "code",
           "expr": "http_request_duration_seconds_sum{job=\"$endpoint_job_name_in_prometheus\", route=\"/slack-channel\", status_code=\"200\"}/http_request_duration_seconds_count{job=\"$endpoint_job_name_in_prometheus\", route=\"/slack-channel\", status_code=\"200\"}",
@@ -205,7 +205,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS-PROMETHEUS}"
+        "uid": "${DS_PROM}"
       },
       "fieldConfig": {
         "defaults": {
@@ -283,7 +283,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS-PROMETHEUS}"
+            "uid": "${DS_PROM}"
           },
           "editorMode": "code",
           "expr": "http_request_duration_seconds_bucket{job=\"$endpoint_job_name_in_prometheus\", route=\"/github-webhook\"}",
@@ -302,7 +302,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS-PROMETHEUS}"
+        "uid": "${DS_PROM}"
       },
       "fieldConfig": {
         "defaults": {
@@ -372,7 +372,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS-PROMETHEUS}"
+            "uid": "${DS_PROM}"
           },
           "editorMode": "code",
           "expr": "sum(increase(http_request_duration_seconds_bucket{job=\"$endpoint_job_name_in_prometheus\", route=\"/github-webhook\"}[$__interval])) by (le)",
@@ -391,7 +391,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS-PROMETHEUS}"
+        "uid": "${DS_PROM}"
       },
       "fieldConfig": {
         "defaults": {
@@ -469,7 +469,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS-PROMETHEUS}"
+            "uid": "${DS_PROM}"
           },
           "editorMode": "code",
           "expr": "http_request_duration_seconds_bucket{job=\"$endpoint_job_name_in_prometheus\", route=\"/slack-channel\"}",
@@ -488,7 +488,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS-PROMETHEUS}"
+        "uid": "${DS_PROM}"
       },
       "fieldConfig": {
         "defaults": {
@@ -557,7 +557,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS-PROMETHEUS}"
+            "uid": "${DS_PROM}"
           },
           "editorMode": "code",
           "expr": "sum(increase(http_request_duration_seconds_bucket{job=\"$endpoint_job_name_in_prometheus\", route=\"/slack-channel\"}[$__interval])) by (le)",
@@ -576,7 +576,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS-PROMETHEUS}"
+        "uid": "${DS_PROM}"
       },
       "fieldConfig": {
         "defaults": {
@@ -654,7 +654,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS-PROMETHEUS}"
+            "uid": "${DS_PROM}"
           },
           "editorMode": "code",
           "expr": "http_request_duration_seconds_bucket{job=\"$endpoint_job_name_in_prometheus\", route=\"/bitbucket-webhook\"}",
@@ -673,7 +673,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS-PROMETHEUS}"
+        "uid": "${DS_PROM}"
       },
       "fieldConfig": {
         "defaults": {
@@ -743,7 +743,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS-PROMETHEUS}"
+            "uid": "${DS_PROM}"
           },
           "editorMode": "code",
           "expr": "sum(increase(http_request_duration_seconds_bucket{job=\"$endpoint_job_name_in_prometheus\", route=\"/bitbucket-webhook\"}[$__interval])) by (le)",
@@ -762,7 +762,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS-PROMETHEUS}"
+        "uid": "${DS_PROM}"
       },
       "fieldConfig": {
         "defaults": {
@@ -860,6 +860,30 @@
                 }
               }
             ]
+          },
+          {
+            "__systemRef": "hideSeriesFrom",
+            "matcher": {
+              "id": "byNames",
+              "options": {
+                "mode": "exclude",
+                "names": [
+                  "Cache misses"
+                ],
+                "prefix": "All except:",
+                "readOnly": true
+              }
+            },
+            "properties": [
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": true
+                }
+              }
+            ]
           }
         ]
       },
@@ -887,10 +911,10 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS-PROMETHEUS}"
+            "uid": "${DS_PROM}"
           },
           "editorMode": "code",
-          "expr": "channels_cache_utilized_size{job=\"$endpoint_job_name_in_prometheus\"}",
+          "expr": "sum(channels_cache_utilized_size{job=\"$endpoint_job_name_in_prometheus\"}) by(job)",
           "format": "time_series",
           "hide": false,
           "instant": false,
@@ -902,10 +926,10 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS-PROMETHEUS}"
+            "uid": "${DS_PROM}"
           },
           "editorMode": "code",
-          "expr": "channels_cache_hits{job=\"$endpoint_job_name_in_prometheus\"}",
+          "expr": "sum(channels_cache_hits{job=\"$endpoint_job_name_in_prometheus\"}) by(job)",
           "format": "time_series",
           "instant": false,
           "interval": "",
@@ -916,10 +940,10 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS-PROMETHEUS}"
+            "uid": "${DS_PROM}"
           },
           "editorMode": "code",
-          "expr": "channels_cache_misses{job=\"$endpoint_job_name_in_prometheus\"}",
+          "expr": "sum(channels_cache_misses{job=\"$endpoint_job_name_in_prometheus\"}) by(job)",
           "format": "time_series",
           "hide": false,
           "instant": false,
@@ -935,7 +959,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS-PROMETHEUS}"
+        "uid": "${DS_PROM}"
       },
       "fieldConfig": {
         "defaults": {
@@ -1060,10 +1084,10 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS-PROMETHEUS}"
+            "uid": "${DS_PROM}"
           },
           "editorMode": "code",
-          "expr": "comments_cache_utilized_size{job=\"$endpoint_job_name_in_prometheus\"}",
+          "expr": "sum(comments_cache_utilized_size{job=\"$endpoint_job_name_in_prometheus\"}) by(job)",
           "format": "time_series",
           "hide": false,
           "instant": false,
@@ -1075,10 +1099,10 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS-PROMETHEUS}"
+            "uid": "${DS_PROM}"
           },
           "editorMode": "code",
-          "expr": "comments_cache_hits{job=\"$endpoint_job_name_in_prometheus\"}",
+          "expr": "sum(comments_cache_hits{job=\"$endpoint_job_name_in_prometheus\"}) by(job)",
           "format": "time_series",
           "instant": false,
           "interval": "",
@@ -1089,10 +1113,10 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS-PROMETHEUS}"
+            "uid": "${DS_PROM}"
           },
           "editorMode": "code",
-          "expr": "comments_cache_misses{job=\"$endpoint_job_name_in_prometheus\"}",
+          "expr": "sum(comments_cache_misses{job=\"$endpoint_job_name_in_prometheus\"}) by(job)",
           "format": "time_series",
           "hide": false,
           "instant": false,
@@ -1108,7 +1132,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS-PROMETHEUS}"
+        "uid": "${DS_PROM}"
       },
       "fieldConfig": {
         "defaults": {
@@ -1233,10 +1257,10 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS-PROMETHEUS}"
+            "uid": "${DS_PROM}"
           },
           "editorMode": "code",
-          "expr": "users_cache_utilized_size{job=\"$endpoint_job_name_in_prometheus\"}",
+          "expr": "sum(userids_cache_utilized_size{job=\"$endpoint_job_name_in_prometheus\"}) by(job)",
           "format": "time_series",
           "hide": false,
           "instant": false,
@@ -1248,10 +1272,10 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS-PROMETHEUS}"
+            "uid": "${DS_PROM}"
           },
           "editorMode": "code",
-          "expr": "users_cache_hits{job=\"$endpoint_job_name_in_prometheus\"}",
+          "expr": "sum(userids_cache_hits{job=\"$endpoint_job_name_in_prometheus\"}) by(job)",
           "format": "time_series",
           "instant": false,
           "interval": "",
@@ -1262,10 +1286,10 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS-PROMETHEUS}"
+            "uid": "${DS_PROM}"
           },
           "editorMode": "code",
-          "expr": "users_cache_misses{job=\"$endpoint_job_name_in_prometheus\"}",
+          "expr": "sum(userids_cache_misses{job=\"$endpoint_job_name_in_prometheus\"}) by(job)",
           "format": "time_series",
           "hide": false,
           "instant": false,
@@ -1275,7 +1299,7 @@
           "refId": "Cache misses"
         }
       ],
-      "title": "Users cache stats",
+      "title": "User Ids cache stats",
       "type": "timeseries"
     }
   ],
@@ -1312,6 +1336,6 @@
   "timezone": "browser",
   "title": "Merge-it-hot metrics",
   "uid": "cdjomj457t340a",
-  "version": 36,
+  "version": 1,
   "weekStart": ""
 }
