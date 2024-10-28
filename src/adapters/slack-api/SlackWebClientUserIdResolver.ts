@@ -1,6 +1,6 @@
 import * as slack from "@slack/web-api";
 import { USERIDS_CACHE } from "./USERIDS_CACHE";
-import { SlackUserIdResolver } from "../../web-api/webhook-listeners/ports/SlackUserIdResolver";
+import { SlackUserIdResolver } from "../../web-api/webhook-listeners/SlackUserIdResolver";
 
 export class SlackWebClientUserIdResolver implements SlackUserIdResolver {
     private readonly client: slack.WebClient;

@@ -4,7 +4,7 @@ import { transformRequestPayloadToEvent } from "./transformRequestPayloadToEvent
 import { AppConfig } from "../../../app.config";
 import { PullRequestNotification } from "../../../use-cases/contracts";
 import handlePullRequestEvent from "../../../use-cases/handlePullRequestEvent";
-import { SlackUserIdResolver } from "../ports/SlackUserIdResolver";
+import { SlackUserIdResolver } from "../SlackUserIdResolver";
 import GitHubAPI from "../../../adapters/GitHubAPI";
 import { GitHubNotification } from "./GitHub.contracts";
 
