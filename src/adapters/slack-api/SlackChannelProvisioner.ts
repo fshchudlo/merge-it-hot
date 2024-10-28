@@ -57,7 +57,7 @@ export class SlackChannelProvisioner {
             return awaitingCreateChannelRequests.get(channelName);
         }
 
-        const cachedChannelInfo = CHANNELS_CACHE.get(channelName);
+        const cachedChannelInfo = await CHANNELS_CACHE.get(channelName);
         if (cachedChannelInfo) {
             return Promise.resolve(cachedChannelInfo);
         }
@@ -66,7 +66,7 @@ export class SlackChannelProvisioner {
         if (!channelInfo) {
             return null;
         }
-        CHANNELS_CACHE.set(channelName, channelInfo);
+        await CHANNELS_CACHE.set(channelName, channelInfo);
         return channelInfo;
     }
 
@@ -81,7 +81,7 @@ export class SlackChannelProvisioner {
         if (options.defaultParticipants?.length > 0) {
             await channel.inviteToChannel({ users: options.defaultParticipants, force: true });
         }
-        CHANNELS_CACHE.set(options.name, channel.channelInfo);
+        await CHANNELS_CACHE.set(options.name, channel.channelInfo);
         return new SlackChannelCachedDecorator(channel);
     }
 

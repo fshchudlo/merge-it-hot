@@ -10,7 +10,7 @@ export class SlackWebClientUserIdResolver implements SlackUserIdResolver {
     }
 
     async getUserId(email: string): Promise<string | null> {
-        const cachedUserId = USERIDS_CACHE.get(email);
+        const cachedUserId = await USERIDS_CACHE.get(email);
         if (cachedUserId) {
             return Promise.resolve(cachedUserId);
         }
@@ -20,7 +20,7 @@ export class SlackWebClientUserIdResolver implements SlackUserIdResolver {
         if (!userId) {
             return null;
         }
-        USERIDS_CACHE.set(email, userId);
+        await USERIDS_CACHE.set(email, userId);
         return userId;
     }
 }
