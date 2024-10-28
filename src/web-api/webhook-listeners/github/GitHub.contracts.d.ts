@@ -100,7 +100,7 @@ export type GitHubPullRequestPayload = {
     readonly merged_at: string | null;
     readonly merge_commit_sha: string | null;
     readonly assignee: string | null;
-    readonly assignees: string[];
+    readonly assignees: GitHubUserPayload[];
     readonly requested_reviewers: GitHubUserPayload[];
     readonly draft: boolean;
     readonly head: GitHubRefPayload;

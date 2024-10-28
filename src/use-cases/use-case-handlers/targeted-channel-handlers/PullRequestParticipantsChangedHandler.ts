@@ -14,7 +14,6 @@ export class PullRequestParticipantsChangedHandler implements WebhookPayloadHand
 
 async function updateChannelMembers(payload: PullRequestParticipantsUpdatedNotification, slackChannel: SlackTargetedChannel) {
     const userIdsToAdd = payload.addedParticipants.map(payload => payload.slackUserId);
-    const userIdsToRemove = payload.removedParticipants.map(payload => payload.slackUserId);
 
     if (userIdsToAdd.length > 0) {
         await slackChannel.inviteToChannel({
@@ -23,7 +22,14 @@ async function updateChannelMembers(payload: PullRequestParticipantsUpdatedNotif
         });
     }
 
-    await slackChannel.kickFromChannel({
-        users: userIdsToRemove
-    });
+    const activeParticipants = [payload.pullRequest.author.name, ...payload.pullRequest.reviewers.map(r => r.user.name), ...payload.pullRequest.assignees.map(r => r.name)];
+    const userIdsToRemove = payload.removedParticipants
+        .filter(p => !activeParticipants.includes(p.name))
+        .map(p => p.slackUserId);
+
+    if (userIdsToRemove.length > 0) {
+        await slackChannel.kickFromChannel({
+            users: userIdsToRemove
+        });
+    }
 }

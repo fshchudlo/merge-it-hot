@@ -1,4 +1,4 @@
-import BitbucketAPI from "../../../../adapters/BitbucketAPI";
+import BitbucketAPI from "../../../adapters/BitbucketAPI";
 import {
     PullRequestCommentActionNotification,
     PullRequestFromBranchUpdatedNotification,
@@ -8,11 +8,11 @@ import {
     PullRequestParticipantsUpdatedNotification, PullRequestReviewState,
     PullRequestReviewSubmittedNotification,
     UserPayload
-} from "../../../../use-cases/contracts";
-import { SlackUserIdResolver } from "../../ports/SlackUserIdResolver";
+} from "../../../use-cases/contracts";
+import { SlackUserIdResolver } from "../ports/SlackUserIdResolver";
 import { BitbucketNotification, BitbucketUserPayload } from "./Bitbucket.contracts";
 
-export async function normalizeBitbucketPayload(notification: BitbucketNotification, bitbucketAPI: BitbucketAPI, userIdResolver: SlackUserIdResolver): Promise<PullRequestNotification> {
+export async function transformRequestPayloadToEvent(notification: BitbucketNotification, bitbucketAPI: BitbucketAPI, userIdResolver: SlackUserIdResolver): Promise<PullRequestNotification> {
     const eventKey = notification.eventKey;
     switch (eventKey) {
         case "pr:opened":
