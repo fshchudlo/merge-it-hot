@@ -42,7 +42,7 @@
         "type": "User"
       }
     ],
-    "draft": false,
+    "draft": true,
     "head": {
       "ref": "feature/test",
       "sha": "9d172e3a50d5a1dfa947edcc1c17e436fe712234",

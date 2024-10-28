@@ -9,7 +9,7 @@ export type GitHubNotification =
 
 
 export type GitHubPullRequestBasicNotification = GitHubPullRequestNotificationBasicPayload & {
-    readonly action: "opened" | "closed" | "synchronize";
+    readonly action: "opened" | "closed" | "synchronize" | "ready_for_review";
 };
 
 export export type GitHubPullRequestReviewersUpdatedNotification = GitHubPullRequestNotificationBasicPayload & {

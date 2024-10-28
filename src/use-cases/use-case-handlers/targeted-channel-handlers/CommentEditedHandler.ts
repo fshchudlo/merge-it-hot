@@ -1,7 +1,7 @@
 import { PullRequestCommentActionNotification } from "../../contracts";
 import { getTaskOrCommentTitle, snapshotCommentState } from "../utils";
 import { link, quote, section } from "../utils/slack-building-blocks";
-import { formatUserName, markdownToSlackMarkup } from "../utils";
+import { markdownToSlackMarkup } from "../utils";
 import { WebhookPayloadHandler } from "../WebhookPayloadHandler";
 import { PullRequestCommentSnapshot, SendMessageArguments, SlackTargetedChannel } from "../../slack-api-ports";
 
@@ -20,7 +20,7 @@ export class CommentEditedHandler implements WebhookPayloadHandler {
 function buildSlackMessage(payload: PullRequestCommentActionNotification, commentSnapshot: PullRequestCommentSnapshot): SendMessageArguments {
     const userAction = getUserAction(payload, commentSnapshot);
 
-    const messageTitle = `${userAction.emoji} ${formatUserName(payload.actor)} ${link(payload.comment.link, userAction.title)}:`;
+    const messageTitle = `${userAction.emoji} ${payload.actor.name} ${link(payload.comment.link, userAction.title)}:`;
     const commentText = markdownToSlackMarkup(payload.comment.text);
 
     return {

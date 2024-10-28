@@ -1,5 +1,5 @@
-import { link, section, contextBlock } from "../utils/slack-building-blocks";
-import { formatUserName, snapshotPullRequestState } from "../utils";
+import { link, section, contextBlock, italic } from "../utils/slack-building-blocks";
+import { snapshotPullRequestState } from "../utils";
 import { PullRequestGenericNotification } from "../../contracts";
 import { SendMessageArguments, SlackBroadcastChannel } from "../../slack-api-ports";
 
@@ -8,10 +8,12 @@ export async function tryBroadcastMessageAboutOpenedPR(payload: PullRequestGener
 }
 
 function buildMessage(payload: PullRequestGenericNotification): SendMessageArguments {
-    const messageTitle = `:snowboarder: ${formatUserName(payload.actor)} opened pull request "${payload.pullRequest.title}".`;
+    const prStateName = payload.pullRequest.draft? `${italic("draft")} pull request` : "pull request";
+
+    const messageTitle = `:snowboarder: ${payload.actor.name} opened ${prStateName} "${payload.pullRequest.title}".`;
 
     const targetText = `Target: \`${payload.pullRequest.targetBranch.repositoryName}/${payload.pullRequest.targetBranch.branchName}\``;
-    const reviewers = payload.pullRequest.reviewers.map(r => formatUserName(r.user));
+    const reviewers = payload.pullRequest.reviewers.map(r => r.user.name);
     const reviewersContextBlock = reviewers.length == 0 ? null : contextBlock(`Assigned reviewers: ${reviewers.join(",")}.`);
 
     const invitationText = `You're welcome to ${link(payload.pullRequest.links.self, "join code review")}.`;

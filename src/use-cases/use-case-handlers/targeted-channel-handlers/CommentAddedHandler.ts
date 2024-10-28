@@ -1,4 +1,4 @@
-import { formatUserName, getTaskOrCommentTitle, markdownToSlackMarkup, snapshotCommentState } from "../utils";
+import { getTaskOrCommentTitle, markdownToSlackMarkup, snapshotCommentState } from "../utils";
 import { link, quote, section } from "../utils/slack-building-blocks";
 import { PullRequestCommentActionNotification } from "../../contracts";
 import { WebhookPayloadHandler } from "../WebhookPayloadHandler";
@@ -19,7 +19,7 @@ export class CommentAddedHandler implements WebhookPayloadHandler {
 function buildSlackMessage(payload: PullRequestCommentActionNotification, parentCommentSnapshot: PullRequestCommentSnapshot): SendMessageArguments {
     const action = parentCommentSnapshot ? "replied" : `added ${getTaskOrCommentTitle(payload)}`;
     const emoji = parentCommentSnapshot ? ":left_speech_bubble:" : `:loudspeaker:`;
-    const messageTitle = `${emoji} ${formatUserName(payload.actor)} ${link(payload.comment.link, action)}:`;
+    const messageTitle = `${emoji} ${payload.actor.name} ${link(payload.comment.link, action)}:`;
     const commentText = markdownToSlackMarkup(payload.comment.text);
 
     return {

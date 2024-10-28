@@ -1,5 +1,5 @@
 import { contextBlock, divider, section } from "../utils/slack-building-blocks";
-import { formatUserName, formatPullRequestDescription, reviewPRAction } from "../utils";
+import { formatPullRequestDescription, reviewPRAction } from "../utils";
 import { PullRequestModifiedNotification } from "../../contracts";
 import { WebhookPayloadHandler } from "../WebhookPayloadHandler";
 import { SlackTargetedChannel } from "../../slack-api-ports";
@@ -15,7 +15,7 @@ export class PullRequestModifiedHandler implements WebhookPayloadHandler {
             return;
         }
 
-        const messageTitle = `:writing_hand: ${formatUserName(payload.actor)} changed the pull request`;
+        const messageTitle = `:writing_hand: ${payload.actor.name} changed the pull request`;
         await slackChannel.sendMessage({
             text: messageTitle,
             blocks: [section(messageTitle), ...visibleChanges, divider(), reviewPRAction(payload.pullRequest)]

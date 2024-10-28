@@ -63,6 +63,26 @@ function getBasicPayload(): PullRequestGenericNotification {
 }
 
 export default class TestPayloadBuilder {
+    static pullRequestDraftOpened(): PullRequestNotification {
+        return {
+            ...getBasicPayload(),
+            pullRequest: {
+                ...getBasicPayload().pullRequest,
+                draft: true
+            },
+            eventKey: "pr:opened"
+        };
+    }
+    static pullRequestIsReadyForReview(): PullRequestNotification {
+        return {
+            ...getBasicPayload(),
+            pullRequest: {
+                ...getBasicPayload().pullRequest,
+                draft: false
+            },
+            eventKey: "pr:ready_for_review"
+        };
+    }
     static pullRequestOpened(): PullRequestNotification {
         return {
             ...getBasicPayload(),

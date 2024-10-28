@@ -1,26 +1,8 @@
 {
-  "action": "edited",
+  "action": "ready_for_review",
   "sender": {
     "login": "{{PRAuthorName}}",
     "type": "User"
-  },
-  "changes": {
-    "body": {
-      "from": "This is the test reply"
-    }
-  },
-  "comment": {
-    "html_url": "https://github.com/{{OrganizationName}}/{{RepositoryName}}/pull/{{PullRequestId}}#discussion_r1812553160",
-    "id": 1812553160,
-    "path": "file.java",
-    "user": {
-      "login": "{{PRAuthorName}}",
-      "type": "User"
-    },
-    "body": "This is the test reply. And now I edited it",
-    "in_reply_to_id": 1812552428,
-    "created_at": "2024-10-23T11:40:45Z",
-    "updated_at": "2024-10-23T11:40:46Z"
   },
   "pull_request": {
     "html_url": "https://github.com/{{OrganizationName}}/{{RepositoryName}}/pull/{{PullRequestId}}",
@@ -48,7 +30,7 @@
         "type": "User"
       }
     ],
-    "draft": true,
+    "draft": false,
     "head": {
       "ref": "feature/test",
       "sha": "9d172e3a50d5a1dfa947edcc1c17e436fe712234",

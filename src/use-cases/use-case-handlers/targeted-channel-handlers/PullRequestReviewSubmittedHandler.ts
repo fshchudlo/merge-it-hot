@@ -1,5 +1,5 @@
 import { contextBlock, divider, link, quote, section } from "../utils/slack-building-blocks";
-import { formatUserName, markdownToSlackMarkup } from "../utils";
+import { markdownToSlackMarkup } from "../utils";
 import { PullRequestNotification, PullRequestPayload, PullRequestReviewSubmittedNotification } from "../../contracts";
 import { WebhookPayloadHandler } from "../WebhookPayloadHandler";
 import { SendMessageArguments, SlackTargetedChannel } from "../../slack-api-ports";
@@ -29,13 +29,13 @@ function getReviewerActionDescription(payload: PullRequestReviewSubmittedNotific
     const commentPart = payload.review.comment ? ` with the message: \n${quote(markdownToSlackMarkup(payload.review.comment))}` : ".";
     switch (payload.review.state) {
         case "DISMISSED":
-            return `:traffic_light: ${formatUserName(payload.actor)} dismissed ${prLink}${commentPart}`;
+            return `:traffic_light: ${payload.actor.name} dismissed ${prLink}${commentPart}`;
         case "CHANGES_REQUESTED":
-            return `:traffic_light: ${formatUserName(payload.actor)} requested changes for the ${prLink}${commentPart}`;
+            return `:traffic_light: ${payload.actor.name} requested changes for the ${prLink}${commentPart}`;
         case "APPROVED":
-            return `:traffic_light: ${formatUserName(payload.actor)} approved ${prLink}${commentPart}`;
+            return `:traffic_light: ${payload.actor.name} approved ${prLink}${commentPart}`;
         case "COMMENTED":
-            return `:traffic_light: ${formatUserName(payload.actor)} submitted review comments to the ${prLink}${commentPart}`;
+            return `:traffic_light: ${payload.actor.name} submitted review comments to the ${prLink}${commentPart}`;
         default:
             throw new Error(`Unknown review state: ${payload.review.state}`);
     }

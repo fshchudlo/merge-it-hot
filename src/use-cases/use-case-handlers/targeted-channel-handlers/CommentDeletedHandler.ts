@@ -1,5 +1,5 @@
 
-import { formatUserName, getTaskOrCommentTitle, markdownToSlackMarkup, snapshotCommentState } from "../utils";
+import { getTaskOrCommentTitle, markdownToSlackMarkup, snapshotCommentState } from "../utils";
 import { quote, section } from "../utils/slack-building-blocks";
 import { PullRequestCommentActionNotification } from "../../contracts";
 import { WebhookPayloadHandler } from "../WebhookPayloadHandler";
@@ -18,7 +18,7 @@ export class CommentDeletedHandler implements WebhookPayloadHandler {
 }
 
 function buildSlackMessage(payload: PullRequestCommentActionNotification, commentSnapshot: PullRequestCommentSnapshot): SendMessageArguments {
-    const messageTitle = `:broom: ${formatUserName(payload.actor)} deleted ${getTaskOrCommentTitle(payload)}:`;
+    const messageTitle = `:broom: ${payload.actor.name} deleted ${getTaskOrCommentTitle(payload)}:`;
     const commentText = markdownToSlackMarkup(payload.comment.text);
     return {
         text: messageTitle,

@@ -1,5 +1,4 @@
 import { PullRequestGenericNotification } from "../../contracts";
-import { formatUserName } from "./formatUserName";
 
 export function getPullRequestCompletionAction(payload: PullRequestGenericNotification): {
     text: string,
@@ -9,19 +8,19 @@ export function getPullRequestCompletionAction(payload: PullRequestGenericNotifi
     switch (payload.eventKey) {
         case "pr:deleted":
             return {
-                text: `Pull request was deleted by ${formatUserName(payload.actor)}.`,
+                text: `Pull request was deleted by ${payload.actor.name}.`,
                 emoji: ":no_entry_sign:",
                 reaction: "no_entry_sign"
             };
         case "pr:declined":
             return {
-                text: `Pull request was declined by ${formatUserName(payload.actor)}.`,
+                text: `Pull request was declined by ${payload.actor.name}.`,
                 emoji: ":no_entry_sign:",
                 reaction: "no_entry_sign"
             };
         case "pr:merged":
             return {
-                text: `Pull request was merged by ${formatUserName(payload.actor)}. Well done, thank you all.`,
+                text: `Pull request was merged by ${payload.actor.name}. Well done, thank you all.`,
                 emoji: ":white_check_mark:",
                 reaction: "white_check_mark"
             };

@@ -1,5 +1,5 @@
-import { link, section, divider, contextBlock } from "../utils/slack-building-blocks";
-import { formatUserName, formatPullRequestDescription, reviewPRAction } from "../utils";
+import { link, section, divider, contextBlock, italic } from "../utils/slack-building-blocks";
+import { formatPullRequestDescription, reviewPRAction } from "../utils";
 import { PullRequestGenericNotification } from "../../contracts";
 import { WebhookPayloadHandler } from "../WebhookPayloadHandler";
 import { SendMessageArguments, SlackTargetedChannel } from "../../slack-api-ports";
@@ -25,14 +25,16 @@ async function setChannelBookmark(payload: PullRequestGenericNotification, slack
 }
 
 async function inviteParticipants(payload: PullRequestGenericNotification, slackChannel: SlackTargetedChannel) {
-    const slackUserIds = [payload.pullRequest.author, ...payload.pullRequest.reviewers.map(r => r.user)].map(u=>u.slackUserId);
+    const slackUserIds = [payload.pullRequest.author, ...payload.pullRequest.reviewers.map(r => r.user)].map(u => u.slackUserId);
     if (slackUserIds.length > 0) {
         await slackChannel.inviteToChannel({ users: slackUserIds, force: true });
     }
 }
 
 function buildInvitationMessage(payload: PullRequestGenericNotification): SendMessageArguments {
-    const messageTitle = `${formatUserName(payload.actor)} opened ${link(payload.pullRequest.links.self, "pull request")}`;
+    const prStateName = payload.pullRequest.draft ? `${italic("draft")} pull request` : "pull request";
+
+    const messageTitle = `${payload.actor.name} opened ${link(payload.pullRequest.links.self, prStateName)}`;
     const descriptionText = formatPullRequestDescription(payload.pullRequest.description ?? payload.pullRequest.title);
     return {
         text: messageTitle,

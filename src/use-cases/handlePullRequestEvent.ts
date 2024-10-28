@@ -5,6 +5,7 @@ import { SlackBroadcastChannel, SlackTargetedChannel } from "./slack-api-ports";
 
 const payloadHandlers = new Array<useCases.WebhookPayloadHandler>(
     new useCases.PullRequestOpenedHandler(),
+    new useCases.PullRequestIsReadyForReviewHandler(),
     new useCases.PullRequestModifiedHandler(),
     new useCases.PullRequestParticipantsChangedHandler(),
     new useCases.PullRequestReviewSubmittedHandler(),
@@ -25,6 +26,9 @@ export default async function handlePullRequestEvent(payload: PullRequestNotific
     switch (eventKey) {
         case "pr:opened":
             await useCases.tryBroadcastMessageAboutOpenedPR(payload, broadcastChannel);
+            break;
+        case "pr:ready_for_review":
+            await useCases.tryBroadcastMessageAboutPRReadyForReviewState(payload, broadcastChannel);
             break;
         case "pr:merged":
         case "pr:declined":

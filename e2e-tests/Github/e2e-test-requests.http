@@ -118,6 +118,18 @@ Content-Type: application/json
     });
 %}
 
+### Set as ready for review
+POST {{EndpointHost}}/github-webhook
+Content-Type: application/json
+
+< ./test-payloads/PR-ready-for-review-test-payload.json
+
+> {%
+    client.test("Set as ready for review should be successful", function() {
+        client.assert(response.status === 200);
+    });
+%}
+
 ### Add assignee
 POST {{EndpointHost}}/github-webhook
 Content-Type: application/json
