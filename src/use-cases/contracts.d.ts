@@ -77,6 +77,7 @@ export type PullRequestPayload = {
     readonly draft: boolean;
     readonly author: UserPayload;
     readonly reviewers: Array<ReviewerPayload>;
+    readonly assignees: Array<UserPayload>;
     readonly links: {
         readonly self: string;
     };

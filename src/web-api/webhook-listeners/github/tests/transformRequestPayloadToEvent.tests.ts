@@ -1,11 +1,11 @@
-import { normalizeGitHubPayload } from "../normalizeGitHubPayload";
+import { transformRequestPayloadToEvent } from "../transformRequestPayloadToEvent";
 
-describe("normalizeGitHubPayload.tests", () => {
+describe("transformRequestPayloadToEvent.tests", () => {
     it("Should throw Error on unknown action type", async () => {
         expect.assertions(1);
 
         try {
-            await normalizeGitHubPayload({
+            await transformRequestPayloadToEvent({
                 action: "unknown action"
             } as any, null, null);
         } catch (error) {

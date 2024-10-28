@@ -25,10 +25,6 @@
     "merged_at": null,
     "merge_commit_sha": null,
     "assignees": [
-      {
-        "login": "{{FirstAssigneeName}}",
-        "type": "User"
-      }
     ],
     "requested_reviewers":  [
       {

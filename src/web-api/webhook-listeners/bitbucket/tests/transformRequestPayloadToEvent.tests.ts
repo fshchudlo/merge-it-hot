@@ -1,11 +1,11 @@
-import { normalizeBitbucketPayload } from "../normalizeBitbucketPayload";
+import { transformRequestPayloadToEvent } from "../transformRequestPayloadToEvent";
 
-describe("normalizeBitbucketPayload", () => {
+describe("transformRequestPayloadToEvent", () => {
     it("Should throw Error on unknown action type", async () => {
         expect.assertions(1);
 
         try {
-            await normalizeBitbucketPayload({
+            await transformRequestPayloadToEvent({
                 eventKey: "unknown action"
             } as any, null, null);
         } catch (error) {

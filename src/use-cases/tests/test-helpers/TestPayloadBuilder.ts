@@ -53,6 +53,7 @@ function getBasicPayload(): PullRequestGenericNotification {
                 user: { ...reviewer2User },
                 status: "UNAPPROVED"
             }],
+            assignees: [],
             links: {
                 self: "https://git.test.com/projects/TEST-PROJ/repos/test-repository/pull-requests/1/overview"
             }
@@ -359,7 +360,29 @@ export default class TestPayloadBuilder {
             ...getBasicPayload(),
             eventKey: "pr:participants:changed",
             addedParticipants: [reviewer3User],
-            removedParticipants: [reviewer1User]
+            removedParticipants: [reviewer1User],
+
+            pullRequest: {
+                ...getBasicPayload().pullRequest,
+                reviewers: [{
+                    user: { ...reviewer2User },
+                    status: "UNAPPROVED"
+                }, {
+                    user: { ...reviewer3User },
+                    status: "UNAPPROVED"
+                }]
+            }
+        };
+    }
+
+    static reviewerRemovedButHeIsAnAssignee(): PullRequestParticipantsUpdatedNotification {
+        const payload = TestPayloadBuilder.participantsUpdated();
+        return {
+            ...payload,
+            pullRequest: {
+                ...payload.pullRequest,
+                assignees: payload.removedParticipants.map(p => p)
+            }
         };
     }
 }

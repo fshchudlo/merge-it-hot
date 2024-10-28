@@ -4,17 +4,17 @@ import {
     PullRequestGenericNotification, PullRequestModifiedNotification,
     PullRequestNotification,
     PullRequestParticipantsUpdatedNotification, PullRequestReviewState, PullRequestReviewSubmittedNotification,
-    ReviewerPayload
-} from "../../../../use-cases/contracts";
-import { SlackUserIdResolver } from "../../ports/SlackUserIdResolver";
-import GitHubAPI from "../../../../adapters/GitHubAPI";
+    ReviewerPayload, UserPayload
+} from "../../../use-cases/contracts";
+import { SlackUserIdResolver } from "../ports/SlackUserIdResolver";
+import GitHubAPI from "../../../adapters/GitHubAPI";
 import {
     GitHubNotification,
     GitHubPullRequestCommentActionType,
     GitHubPullRequestReviewState
 } from "./GitHub.contracts";
 
-export async function normalizeGitHubPayload(notification: GitHubNotification, userIdResolver: SlackUserIdResolver, githubAPI: GitHubAPI): Promise<PullRequestNotification> {
+export async function transformRequestPayloadToEvent(notification: GitHubNotification, userIdResolver: SlackUserIdResolver, githubAPI: GitHubAPI): Promise<PullRequestNotification> {
 
     // Small duck-typing hack because GitHub has identical action keys for PR edit and comment edit events
     if (notification.action === "edited" && (<any>notification).comment) {
@@ -39,7 +39,7 @@ export async function normalizeGitHubPayload(notification: GitHubNotification, u
                 ...(await normalizePayloadGenericPart(notification, userIdResolver)),
                 eventKey: "pr:participants:changed",
                 addedParticipants: [{
-                    name: notification.requested_reviewer.login,
+                    name: formatUsername(notification.requested_reviewer.login),
                     slackUserId: await getSlackUserId(userIdResolver, notification.requested_reviewer.login)
                 }],
                 removedParticipants: []
@@ -50,7 +50,7 @@ export async function normalizeGitHubPayload(notification: GitHubNotification, u
                 eventKey: "pr:participants:changed",
                 addedParticipants: [],
                 removedParticipants: [{
-                    name: notification.requested_reviewer.login,
+                    name: formatUsername(notification.requested_reviewer.login),
                     slackUserId: await getSlackUserId(userIdResolver, notification.requested_reviewer.login)
                 }]
             } as PullRequestParticipantsUpdatedNotification;
@@ -59,7 +59,7 @@ export async function normalizeGitHubPayload(notification: GitHubNotification, u
                 ...(await normalizePayloadGenericPart(notification, userIdResolver)),
                 eventKey: "pr:participants:changed",
                 addedParticipants: [{
-                    name: notification.assignee.login,
+                    name: formatUsername(notification.assignee.login),
                     slackUserId: await getSlackUserId(userIdResolver, notification.assignee.login)
                 }],
                 removedParticipants: []
@@ -69,7 +69,7 @@ export async function normalizeGitHubPayload(notification: GitHubNotification, u
                 ...(await normalizePayloadGenericPart(notification, userIdResolver)),
                 eventKey: "pr:participants:changed",
                 removedParticipants: [{
-                    name: notification.assignee.login,
+                    name: formatUsername(notification.assignee.login),
                     slackUserId: await getSlackUserId(userIdResolver, notification.assignee.login)
                 }],
                 addedParticipants: []
@@ -113,7 +113,7 @@ export async function normalizeGitHubPayload(notification: GitHubNotification, u
                     text: notification.comment.body,
                     severity: "NORMAL",
                     author: {
-                        name: notification.comment.user.login,
+                        name: formatUsername(notification.comment.user.login),
                         slackUserId: await getSlackUserId(userIdResolver, notification.comment.user.login)
                     },
                     resolvedAt: null,
@@ -134,7 +134,7 @@ export async function normalizeGitHubPayload(notification: GitHubNotification, u
                     text: rootComment.body,
                     severity: "NORMAL",
                     author: {
-                        name: rootComment.user.login,
+                        name: formatUsername(rootComment.user.login),
                         slackUserId: await getSlackUserId(userIdResolver, rootComment.user.login)
                     },
                     resolvedAt: null,
@@ -177,14 +177,23 @@ function mapGitHubReviewState(state: GitHubPullRequestReviewState): PullRequestR
 }
 
 async function normalizePayloadGenericPart(payload: GitHubNotification, userIdResolver: SlackUserIdResolver) {
+
     const normalizedReviewersPayload = await Promise.all(
         payload.pull_request.requested_reviewers.map(async reviewer => {
             return {
                 user: {
-                    name: reviewer.login,
+                    name: formatUsername(reviewer.login),
                     slackUserId: await getSlackUserId(userIdResolver, reviewer.login)
                 }
             } as ReviewerPayload;
+        }));
+
+    const normalizedAssigneesPayload = await Promise.all(
+        payload.pull_request.assignees.map(async assignee => {
+            return {
+                name: formatUsername(assignee.login),
+                slackUserId: await getSlackUserId(userIdResolver, assignee.login)
+            } as UserPayload;
         }));
 
     const basePayload: PullRequestGenericNotification = {
@@ -216,6 +225,7 @@ async function normalizePayloadGenericPart(payload: GitHubNotification, userIdRe
                 slackUserId: await getSlackUserId(userIdResolver, payload.pull_request.user.login)
             },
             reviewers: normalizedReviewersPayload,
+            assignees: normalizedAssigneesPayload,
             links: {
                 self: payload.pull_request.html_url
             }

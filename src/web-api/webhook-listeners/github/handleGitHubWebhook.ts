@@ -1,18 +1,18 @@
 import { NextFunction, Request, Response } from "express";
 import { SlackChannelProvisioner } from "../../../adapters/slack-api/SlackChannelProvisioner";
-import { normalizeGitHubPayload } from "./payload-normalization/normalizeGitHubPayload";
+import { transformRequestPayloadToEvent } from "./transformRequestPayloadToEvent";
 import { AppConfig } from "../../../app.config";
 import { PullRequestNotification } from "../../../use-cases/contracts";
 import handlePullRequestEvent from "../../../use-cases/handlePullRequestEvent";
 import { SlackUserIdResolver } from "../ports/SlackUserIdResolver";
 import GitHubAPI from "../../../adapters/GitHubAPI";
-import { GitHubNotification } from "./payload-normalization/GitHub.contracts";
+import { GitHubNotification } from "./GitHub.contracts";
 
 export async function handleGitHubWebhook(req: Request, res: Response, next: NextFunction, slackChannelFactory: SlackChannelProvisioner, slackUserIdResolver: SlackUserIdResolver) {
     try {
         const githubAPI = new GitHubAPI(AppConfig.tryGetGitHubReadToken((<GitHubNotification>req.body)?.organization?.login));
 
-        const payload = await normalizeGitHubPayload(req.body, slackUserIdResolver, githubAPI);
+        const payload = await transformRequestPayloadToEvent(req.body, slackUserIdResolver, githubAPI);
         const broadcastChannelName = AppConfig.getOpenedPRBroadcastChannel(payload);
         const broadcastChannel = broadcastChannelName ? await slackChannelFactory.getBroadcastChannel(broadcastChannelName, ":github:") : null;
 
