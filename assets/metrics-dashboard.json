@@ -279,6 +279,8 @@
         "valueMode": "color"
       },
       "pluginVersion": "10.4.7",
+      "repeat": "route",
+      "repeatDirection": "v",
       "targets": [
         {
           "datasource": {
@@ -286,7 +288,7 @@
             "uid": "${DS_PROM}"
           },
           "editorMode": "code",
-          "expr": "http_request_duration_seconds_bucket{job=\"$endpoint_job_name_in_prometheus\", route=\"/github-webhook\"}",
+          "expr": "sum(http_request_duration_seconds_bucket{job=\"$endpoint_job_name_in_prometheus\", route=\"$route\"}) without (instance, pod)",
           "format": "heatmap",
           "hide": false,
           "instant": false,
@@ -296,7 +298,7 @@
           "refId": "bitbucket-webhook"
         }
       ],
-      "title": "Requests duration for \"github-webhook\" endpoint",
+      "title": "Requests duration for \"$route\" endpoint",
       "type": "bargauge"
     },
     {
@@ -368,6 +370,8 @@
         }
       },
       "pluginVersion": "10.4.7",
+      "repeat": "route",
+      "repeatDirection": "v",
       "targets": [
         {
           "datasource": {
@@ -375,7 +379,7 @@
             "uid": "${DS_PROM}"
           },
           "editorMode": "code",
-          "expr": "sum(increase(http_request_duration_seconds_bucket{job=\"$endpoint_job_name_in_prometheus\", route=\"/github-webhook\"}[$__interval])) by (le)",
+          "expr": "sum(increase(http_request_duration_seconds_bucket{job=\"$endpoint_job_name_in_prometheus\", route=\"$route\"}[$__interval])) by (le)",
           "format": "heatmap",
           "hide": false,
           "instant": false,
@@ -385,378 +389,7 @@
           "refId": "bitbucket-webhook"
         }
       ],
-      "title": "Requests duration for \"github-webhook\" endpoint",
-      "type": "heatmap"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${DS_PROM}"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "links": [],
-          "mappings": [],
-          "min": 0,
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              }
-            ]
-          },
-          "unit": "locale"
-        },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Heap used bytes"
-            },
-            "properties": [
-              {
-                "id": "unit",
-                "value": "bytes"
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Active requests total"
-            },
-            "properties": [
-              {
-                "id": "unit",
-                "value": "locale"
-              }
-            ]
-          }
-        ]
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 0,
-        "y": 14
-      },
-      "id": 7,
-      "options": {
-        "displayMode": "gradient",
-        "maxVizHeight": 300,
-        "minVizHeight": 16,
-        "minVizWidth": 8,
-        "namePlacement": "auto",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "showUnfilled": true,
-        "sizing": "auto",
-        "valueMode": "color"
-      },
-      "pluginVersion": "10.4.7",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROM}"
-          },
-          "editorMode": "code",
-          "expr": "http_request_duration_seconds_bucket{job=\"$endpoint_job_name_in_prometheus\", route=\"/slack-channel\"}",
-          "format": "heatmap",
-          "hide": false,
-          "instant": false,
-          "interval": "",
-          "intervalFactor": 1,
-          "legendFormat": "__auto",
-          "refId": "bitbucket-webhook"
-        }
-      ],
-      "title": "Requests duration for \"slack-channel\" endpoint",
-      "type": "bargauge"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${DS_PROM}"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "custom": {
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "scaleDistribution": {
-              "type": "linear"
-            }
-          },
-          "links": []
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 12,
-        "y": 14
-      },
-      "id": 9,
-      "maxDataPoints": 25,
-      "options": {
-        "calculate": false,
-        "cellGap": 1,
-        "cellValues": {
-          "unit": "none"
-        },
-        "color": {
-          "exponent": 0.5,
-          "fill": "dark-orange",
-          "mode": "scheme",
-          "reverse": false,
-          "scale": "exponential",
-          "scheme": "Oranges",
-          "steps": 64
-        },
-        "exemplars": {
-          "color": "rgba(255,0,255,0.7)"
-        },
-        "filterValues": {
-          "le": 1e-9
-        },
-        "legend": {
-          "show": false
-        },
-        "rowsFrame": {
-          "layout": "auto",
-          "value": "Count"
-        },
-        "tooltip": {
-          "mode": "single",
-          "showColorScale": false,
-          "yHistogram": false
-        },
-        "yAxis": {
-          "axisPlacement": "left",
-          "reverse": false
-        }
-      },
-      "pluginVersion": "10.4.7",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROM}"
-          },
-          "editorMode": "code",
-          "expr": "sum(increase(http_request_duration_seconds_bucket{job=\"$endpoint_job_name_in_prometheus\", route=\"/slack-channel\"}[$__interval])) by (le)",
-          "format": "heatmap",
-          "hide": false,
-          "instant": false,
-          "interval": "",
-          "intervalFactor": 1,
-          "legendFormat": "__auto",
-          "refId": "bitbucket-webhook"
-        }
-      ],
-      "title": "Requests duration for \"slack-channel\" endpoint",
-      "type": "heatmap"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${DS_PROM}"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "links": [],
-          "mappings": [],
-          "min": 0,
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              }
-            ]
-          },
-          "unit": "locale"
-        },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Heap used bytes"
-            },
-            "properties": [
-              {
-                "id": "unit",
-                "value": "bytes"
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Active requests total"
-            },
-            "properties": [
-              {
-                "id": "unit",
-                "value": "locale"
-              }
-            ]
-          }
-        ]
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 0,
-        "y": 22
-      },
-      "id": 5,
-      "options": {
-        "displayMode": "gradient",
-        "maxVizHeight": 300,
-        "minVizHeight": 16,
-        "minVizWidth": 8,
-        "namePlacement": "auto",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "showUnfilled": true,
-        "sizing": "auto",
-        "valueMode": "color"
-      },
-      "pluginVersion": "10.4.7",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROM}"
-          },
-          "editorMode": "code",
-          "expr": "http_request_duration_seconds_bucket{job=\"$endpoint_job_name_in_prometheus\", route=\"/bitbucket-webhook\"}",
-          "format": "heatmap",
-          "hide": false,
-          "instant": false,
-          "interval": "",
-          "intervalFactor": 1,
-          "legendFormat": "__auto",
-          "refId": "bitbucket-webhook"
-        }
-      ],
-      "title": "Requests duration for \"bitbucket-webhook\" endpoint",
-      "type": "bargauge"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${DS_PROM}"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "custom": {
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "scaleDistribution": {
-              "type": "linear"
-            }
-          },
-          "links": []
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 12,
-        "y": 22
-      },
-      "id": 8,
-      "maxDataPoints": 25,
-      "options": {
-        "calculate": false,
-        "cellGap": 1,
-        "cellValues": {
-          "unit": "none"
-        },
-        "color": {
-          "exponent": 0.5,
-          "fill": "dark-orange",
-          "mode": "scheme",
-          "reverse": false,
-          "scale": "exponential",
-          "scheme": "Oranges",
-          "steps": 64
-        },
-        "exemplars": {
-          "color": "rgba(255,0,255,0.7)"
-        },
-        "filterValues": {
-          "le": 1e-9
-        },
-        "legend": {
-          "show": false
-        },
-        "rowsFrame": {
-          "layout": "auto",
-          "value": "Count"
-        },
-        "tooltip": {
-          "mode": "single",
-          "showColorScale": false,
-          "yHistogram": false
-        },
-        "yAxis": {
-          "axisPlacement": "left",
-          "reverse": false,
-          "unit": "s"
-        }
-      },
-      "pluginVersion": "10.4.7",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROM}"
-          },
-          "editorMode": "code",
-          "expr": "sum(increase(http_request_duration_seconds_bucket{job=\"$endpoint_job_name_in_prometheus\", route=\"/bitbucket-webhook\"}[$__interval])) by (le)",
-          "format": "heatmap",
-          "hide": false,
-          "instant": false,
-          "interval": "",
-          "intervalFactor": 1,
-          "legendFormat": "__auto",
-          "refId": "bitbucket-webhook"
-        }
-      ],
-      "title": "Requests duration for \"bitbucket-webhook\" endpoint",
+      "title": "Requests duration for \"$route\" endpoint",
       "type": "heatmap"
     },
     {
@@ -860,38 +493,14 @@
                 }
               }
             ]
-          },
-          {
-            "__systemRef": "hideSeriesFrom",
-            "matcher": {
-              "id": "byNames",
-              "options": {
-                "mode": "exclude",
-                "names": [
-                  "Cache misses"
-                ],
-                "prefix": "All except:",
-                "readOnly": true
-              }
-            },
-            "properties": [
-              {
-                "id": "custom.hideFrom",
-                "value": {
-                  "legend": false,
-                  "tooltip": false,
-                  "viz": true
-                }
-              }
-            ]
           }
         ]
       },
       "gridPos": {
         "h": 6,
-        "w": 12,
+        "w": 8,
         "x": 0,
-        "y": 30
+        "y": 22
       },
       "id": 4,
       "options": {
@@ -907,6 +516,8 @@
         }
       },
       "pluginVersion": "10.4.0",
+      "repeat": "cache",
+      "repeatDirection": "h",
       "targets": [
         {
           "datasource": {
@@ -914,7 +525,7 @@
             "uid": "${DS_PROM}"
           },
           "editorMode": "code",
-          "expr": "sum(channels_cache_utilized_size{job=\"$endpoint_job_name_in_prometheus\"}) by(job)",
+          "expr": "sum(${cache}_cache_utilized_size{job=\"$endpoint_job_name_in_prometheus\"}) by(job)",
           "format": "time_series",
           "hide": false,
           "instant": false,
@@ -929,7 +540,7 @@
             "uid": "${DS_PROM}"
           },
           "editorMode": "code",
-          "expr": "sum(channels_cache_hits{job=\"$endpoint_job_name_in_prometheus\"}) by(job)",
+          "expr": "sum(${cache}_cache_hits{job=\"$endpoint_job_name_in_prometheus\"}) by(job)",
           "format": "time_series",
           "instant": false,
           "interval": "",
@@ -943,7 +554,7 @@
             "uid": "${DS_PROM}"
           },
           "editorMode": "code",
-          "expr": "sum(channels_cache_misses{job=\"$endpoint_job_name_in_prometheus\"}) by(job)",
+          "expr": "sum(${cache}_cache_misses{job=\"$endpoint_job_name_in_prometheus\"}) by(job)",
           "format": "time_series",
           "hide": false,
           "instant": false,
@@ -953,353 +564,7 @@
           "refId": "Cache misses"
         }
       ],
-      "title": "Channel cache stats",
-      "type": "timeseries"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${DS_PROM}"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisBorderShow": false,
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "insertNulls": false,
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "links": [],
-          "mappings": [],
-          "min": 0,
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              }
-            ]
-          },
-          "unit": "none"
-        },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Utilized size"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "blue",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Cache hits"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "green",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Cache misses"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "orange",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          }
-        ]
-      },
-      "gridPos": {
-        "h": 6,
-        "w": 12,
-        "x": 12,
-        "y": 30
-      },
-      "id": 3,
-      "options": {
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": true
-        },
-        "tooltip": {
-          "mode": "multi",
-          "sort": "none"
-        }
-      },
-      "pluginVersion": "10.4.0",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROM}"
-          },
-          "editorMode": "code",
-          "expr": "sum(comments_cache_utilized_size{job=\"$endpoint_job_name_in_prometheus\"}) by(job)",
-          "format": "time_series",
-          "hide": false,
-          "instant": false,
-          "interval": "",
-          "intervalFactor": 1,
-          "legendFormat": "Utilized size",
-          "refId": "Utilized size"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROM}"
-          },
-          "editorMode": "code",
-          "expr": "sum(comments_cache_hits{job=\"$endpoint_job_name_in_prometheus\"}) by(job)",
-          "format": "time_series",
-          "instant": false,
-          "interval": "",
-          "intervalFactor": 1,
-          "legendFormat": "Cache hits",
-          "refId": "Cache hits"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROM}"
-          },
-          "editorMode": "code",
-          "expr": "sum(comments_cache_misses{job=\"$endpoint_job_name_in_prometheus\"}) by(job)",
-          "format": "time_series",
-          "hide": false,
-          "instant": false,
-          "interval": "",
-          "intervalFactor": 1,
-          "legendFormat": "Cache misses",
-          "refId": "Cache misses"
-        }
-      ],
-      "title": "Comments cache stats",
-      "type": "timeseries"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${DS_PROM}"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisBorderShow": false,
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "insertNulls": false,
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "links": [],
-          "mappings": [],
-          "min": 0,
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              }
-            ]
-          },
-          "unit": "none"
-        },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Utilized size"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "blue",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Cache hits"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "green",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Cache misses"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "orange",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          }
-        ]
-      },
-      "gridPos": {
-        "h": 6,
-        "w": 12,
-        "x": 0,
-        "y": 36
-      },
-      "id": 12,
-      "options": {
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": true
-        },
-        "tooltip": {
-          "mode": "multi",
-          "sort": "none"
-        }
-      },
-      "pluginVersion": "10.4.0",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROM}"
-          },
-          "editorMode": "code",
-          "expr": "sum(userids_cache_utilized_size{job=\"$endpoint_job_name_in_prometheus\"}) by(job)",
-          "format": "time_series",
-          "hide": false,
-          "instant": false,
-          "interval": "",
-          "intervalFactor": 1,
-          "legendFormat": "Utilized size",
-          "refId": "Utilized size"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROM}"
-          },
-          "editorMode": "code",
-          "expr": "sum(userids_cache_hits{job=\"$endpoint_job_name_in_prometheus\"}) by(job)",
-          "format": "time_series",
-          "instant": false,
-          "interval": "",
-          "intervalFactor": 1,
-          "legendFormat": "Cache hits",
-          "refId": "Cache hits"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROM}"
-          },
-          "editorMode": "code",
-          "expr": "sum(userids_cache_misses{job=\"$endpoint_job_name_in_prometheus\"}) by(job)",
-          "format": "time_series",
-          "hide": false,
-          "instant": false,
-          "interval": "",
-          "intervalFactor": 1,
-          "legendFormat": "Cache misses",
-          "refId": "Cache misses"
-        }
-      ],
-      "title": "User Ids cache stats",
+      "title": "Cache stats for ${cache}",
       "type": "timeseries"
     }
   ],
@@ -1325,6 +590,86 @@
             "selected": false
           }
         ]
+      },
+      {
+        "current": {
+          "selected": false,
+          "text": [
+            "/github-webhook",
+            "/slack-channel"
+          ],
+          "value": [
+            "/github-webhook",
+            "/slack-channel"
+          ]
+        },
+        "description": "",
+        "hide": 0,
+        "includeAll": false,
+        "multi": true,
+        "name": "route",
+        "options": [
+          {
+            "selected": true,
+            "text": "/github-webhook",
+            "value": "/github-webhook"
+          },
+          {
+            "selected": true,
+            "text": "/slack-channel",
+            "value": "/slack-channel"
+          },
+          {
+            "selected": false,
+            "text": "/bitbucket-webhook",
+            "value": "/bitbucket-webhook"
+          }
+        ],
+        "query": "/github-webhook, /slack-channel, /bitbucket-webhook",
+        "queryValue": "",
+        "skipUrlSync": false,
+        "type": "custom"
+      },
+      {
+        "current": {
+          "selected": false,
+          "text": [
+            "channels",
+            "userids",
+            "comments"
+          ],
+          "value": [
+            "channels",
+            "userids",
+            "comments"
+          ]
+        },
+        "description": "",
+        "hide": 0,
+        "includeAll": false,
+        "multi": true,
+        "name": "cache",
+        "options": [
+          {
+            "selected": true,
+            "text": "channels",
+            "value": "channels"
+          },
+          {
+            "selected": true,
+            "text": "userids",
+            "value": "userids"
+          },
+          {
+            "selected": true,
+            "text": "comments",
+            "value": "comments"
+          }
+        ],
+        "query": "channels, userids, comments",
+        "queryValue": "",
+        "skipUrlSync": false,
+        "type": "custom"
       }
     ]
   },
