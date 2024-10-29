@@ -1,5 +1,5 @@
 import "dotenv/config";
-import { PullRequestNotification } from "./use-cases/contracts";
+import { PullRequestEvent } from "./pr-events-handler/event-contracts";
 
 export const AppConfig = {
     NODE_ENV: process.env.NODE_ENV,
@@ -28,7 +28,7 @@ export const AppConfig = {
     /*
     * You can implement any other logic depending on the granularity level you need
     * */
-    getOpenedPRBroadcastChannel(payload: PullRequestNotification): string | null {
+    getOpenedPRBroadcastChannel(payload: PullRequestEvent): string | null {
         const configuredBotUsers = process.env.BOT_USER_NAMES?.split(",").map(u => u.trim());
         const projectKey = payload.pullRequest.targetBranch.projectKey;
         const prAuthor = payload.pullRequest.author.name;

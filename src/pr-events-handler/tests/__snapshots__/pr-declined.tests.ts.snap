@@ -1,0 +1,101 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`PR declined use-case Should send completion message and close the channel on PR declining 1`] = `
+{
+  "addedBookmarks": [],
+  "addedReactions": [],
+  "closeChannelCalls": [
+    "12345",
+  ],
+  "invitesToChannels": [],
+  "kicksFromChannels": [],
+  "reopenChannelCalls": [],
+  "searchedCommentSnapshots": [],
+  "searchedPrOpenedBroadcastMessages": [],
+  "sentMessages": [
+    {
+      "text": ":no_entry_sign: Pull request was declined by Test Author.",
+    },
+  ],
+}
+`;
+
+exports[`PR declined use-case Should send notification to the broadcast channel, if it is specified 1`] = `
+{
+  "addedBookmarks": [],
+  "addedReactions": [
+    {
+      "channelId": "12345",
+      "messageId": "ABCDE",
+      "reaction": "no_entry_sign",
+    },
+  ],
+  "closeChannelCalls": [],
+  "invitesToChannels": [],
+  "kicksFromChannels": [],
+  "reopenChannelCalls": [],
+  "searchedCommentSnapshots": [],
+  "searchedPrOpenedBroadcastMessages": [
+    {
+      "channelId": "12345",
+      "prCreationDate": 2024-04-29T08:59:44.802Z,
+      "pullRequestTraits": {
+        "projectKey": "TEST-PROJ",
+        "pullRequestId": "1",
+        "repositorySlug": "test-repository",
+      },
+    },
+  ],
+  "sentMessages": [
+    {
+      "blocks": [
+        {
+          "text": {
+            "text": ":snowboarder: Test Author opened pull request "Test pull request title".",
+            "type": "mrkdwn",
+          },
+          "type": "section",
+        },
+        {
+          "elements": [
+            {
+              "text": "Target: \`test-repository/main\`",
+              "type": "mrkdwn",
+            },
+          ],
+          "type": "context",
+        },
+        {
+          "elements": [
+            {
+              "text": "Assigned reviewers: Test Reviewer 1,Test Reviewer 2.",
+              "type": "mrkdwn",
+            },
+          ],
+          "type": "context",
+        },
+        {
+          "text": {
+            "text": "You're welcome to <https://git.test.com/projects/TEST-PROJ/repos/test-repository/pull-requests/1/overview|join code review>.",
+            "type": "mrkdwn",
+          },
+          "type": "section",
+        },
+      ],
+      "metadata": {
+        "eventPayload": {
+          "projectKey": "TEST-PROJ",
+          "pullRequestId": "1",
+          "repositorySlug": "test-repository",
+        },
+        "eventType": "pull_request_opened",
+      },
+      "text": ":snowboarder: Test Author opened pull request "Test pull request title".",
+    },
+    {
+      "text": ":no_entry_sign: Pull request was declined by Test Author.",
+      "threadId": "ABCDE",
+    },
+  ],
+}
+`;

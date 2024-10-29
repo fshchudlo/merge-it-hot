@@ -1,0 +1,97 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`PR modified use-case Should not send message if PR doesn't contain visible changes 1`] = `
+{
+  "addedBookmarks": [],
+  "addedReactions": [],
+  "closeChannelCalls": [],
+  "invitesToChannels": [],
+  "kicksFromChannels": [],
+  "reopenChannelCalls": [],
+  "searchedCommentSnapshots": [],
+  "searchedPrOpenedBroadcastMessages": [],
+  "sentMessages": [],
+}
+`;
+
+exports[`PR modified use-case Should send message when PR modified 1`] = `
+{
+  "addedBookmarks": [],
+  "addedReactions": [],
+  "closeChannelCalls": [],
+  "invitesToChannels": [],
+  "kicksFromChannels": [],
+  "reopenChannelCalls": [],
+  "searchedCommentSnapshots": [],
+  "searchedPrOpenedBroadcastMessages": [],
+  "sentMessages": [
+    {
+      "blocks": [
+        {
+          "text": {
+            "text": ":writing_hand: Test Author changed the pull request",
+            "type": "mrkdwn",
+          },
+          "type": "section",
+        },
+        {
+          "text": {
+            "text": "Target is changed to \`not-the-main\`",
+            "type": "mrkdwn",
+          },
+          "type": "section",
+        },
+        {
+          "type": "divider",
+        },
+        {
+          "text": {
+            "text": "Updated title:",
+            "type": "mrkdwn",
+          },
+          "type": "section",
+        },
+        {
+          "elements": [
+            {
+              "text": "New pull request title",
+              "type": "mrkdwn",
+            },
+          ],
+          "type": "context",
+        },
+        {
+          "type": "divider",
+        },
+        {
+          "text": {
+            "text": "Updated description:",
+            "type": "mrkdwn",
+          },
+          "type": "section",
+        },
+        {
+          "elements": [
+            {
+              "text": "New pull request description",
+              "type": "mrkdwn",
+            },
+          ],
+          "type": "context",
+        },
+        {
+          "type": "divider",
+        },
+        {
+          "text": {
+            "text": "Please <https://git.test.com/projects/TEST-PROJ/repos/test-repository/pull-requests/1/overview|review the PR>",
+            "type": "mrkdwn",
+          },
+          "type": "section",
+        },
+      ],
+      "text": ":writing_hand: Test Author changed the pull request",
+    },
+  ],
+}
+`;

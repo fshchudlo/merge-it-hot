@@ -1,0 +1,27 @@
+import { link, section, contextBlock, italic } from "../utils/slack-building-blocks";
+import { snapshotPullRequestState } from "../utils";
+import { PullRequestGenericEvent } from "../../event-contracts";
+import { SendMessageArguments, SlackBroadcastChannel } from "../../slack-api-ports";
+
+export async function tryBroadcastMessageAboutOpenedPR(payload: PullRequestGenericEvent, broadcastChannel: SlackBroadcastChannel) {
+    await broadcastChannel?.sendMessage(buildMessage(payload));
+}
+
+function buildMessage(payload: PullRequestGenericEvent): SendMessageArguments {
+    const prStateName = payload.pullRequest.draft? `${italic("draft")} pull request` : "pull request";
+
+    const messageTitle = `:snowboarder: ${payload.actor.name} opened ${prStateName} "${payload.pullRequest.title}".`;
+
+    const targetText = `Target: \`${payload.pullRequest.targetBranch.repositoryName}/${payload.pullRequest.targetBranch.branchName}\``;
+    const reviewers = payload.pullRequest.reviewers.map(r => r.user.name);
+    const reviewersContextBlock = reviewers.length == 0 ? null : contextBlock(`Assigned reviewers: ${reviewers.join(",")}.`);
+
+    const invitationText = `You're welcome to ${link(payload.pullRequest.links.self, "join code review")}.`;
+
+    return {
+        text: messageTitle,
+        blocks: [section(messageTitle), contextBlock(targetText), reviewersContextBlock, section(invitationText)]
+            .filter(b => !!b),
+        metadata: snapshotPullRequestState(payload)
+    };
+}
