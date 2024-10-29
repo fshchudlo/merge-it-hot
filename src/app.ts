@@ -1,17 +1,16 @@
 import { App, ExpressReceiver } from "@slack/bolt";
 import { AppConfig } from "./app.config";
 import express, { NextFunction } from "express";
-import { handleBitbucketWebhook } from "./web-api/webhook-listeners/bitbucket/handleBitbucketWebhook";
-import { SlackChannelProvisioner } from "./adapters/slack-api/SlackChannelProvisioner";
+import { handleBitbucketWebhookCall } from "./web-api/route-handlers/bitbucket-webhook/handleBitbucketWebhookCall";
+import { SlackChannelProvisioner } from "./api-adapters/slack-api/SlackChannelProvisioner";
 import measureRequestDuration from "./app.metrics";
-import logUnhandledError from "./web-api/helpers/logErrorMessage";
+import  handleError from "./web-api/middlewares/handleError";
 import { register } from "prom-client";
-import { handleGitHubWebhook } from "./web-api/webhook-listeners/github/handleGitHubWebhook";
+import { handleGitHubWebhookCall } from "./web-api/route-handlers/github-webhook/handleGitHubWebhookCall";
 import bodyParser from "body-parser";
-import verifyHMACSignature from "./web-api/helpers/verifyHMACSignature";
-import util from "util";
-import { SlackWebClientUserIdResolver } from "./adapters/slack-api/SlackWebClientUserIdResolver";
-import { getSlackChannelInfo } from "./web-api/getSlackChannelInfo";
+import verifyHMACSignature from "./web-api/middlewares/verifyHMACSignature";
+import { SlackWebClientUserIdResolver } from "./api-adapters/slack-api/SlackWebClientUserIdResolver";
+import { getSlackChannelInfo } from "./web-api/route-handlers/slack-channel/getSlackChannelInfo";
 
 
 const expressReceiver = new ExpressReceiver({
@@ -38,11 +37,11 @@ if (AppConfig.HMAC_SECRET) {
 expressReceiver.router.use(measureRequestDuration);
 
 expressReceiver.router.post("/bitbucket-webhook", verifyHMACSignature, async (req, res, next: NextFunction) => {
-    await handleBitbucketWebhook(req, res, next, slackChannelFactory, userIdResolver);
+    await handleBitbucketWebhookCall(req, res, next, slackChannelFactory, userIdResolver);
 });
 
 expressReceiver.router.post("/github-webhook", verifyHMACSignature, async (req, res, next: NextFunction) => {
-    await handleGitHubWebhook(req, res, next, slackChannelFactory, userIdResolver);
+    await handleGitHubWebhookCall(req, res, next, slackChannelFactory, userIdResolver);
 });
 
 expressReceiver.router.get("/metrics", async (req, res) => {
@@ -61,14 +60,7 @@ expressReceiver.router.get("/health", async (req, res) => {
 });
 
 expressReceiver.router.use(async (error: any, req: express.Request, res: express.Response, next: NextFunction) => {
-    const errorMessage = ["Error processing webhook.", `Error: ${util.inspect(error, false, 8)}.`].join("\n\n");
-    await logUnhandledError(errorMessage, slackApp.client);
-
-    if (res.headersSent) {
-        return next(error);
-    } else {
-        res.status(500).send(AppConfig.NODE_ENV == "development" ? errorMessage : "Internal server error");
-    }
+    return handleError(error, res, next, slackApp.client);
 });
 
 expressReceiver.app.listen(AppConfig.SLACK_BOT_PORT, AppConfig.SLACK_BOT_HOST, () => {

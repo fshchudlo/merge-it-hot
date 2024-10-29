@@ -1,0 +1,7 @@
+import { PullRequestPayload } from "../../event-contracts";
+import { link, section } from "./slack-building-blocks";
+
+export function reviewPRAction(payload: PullRequestPayload) {
+    const pleaseReviewText = `Please ${link(payload.links.self, "review the PR")}`;
+    return section(pleaseReviewText)
+}

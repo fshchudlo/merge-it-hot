@@ -1,0 +1,52 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Comment deleted use-case Should send message on PR comment deletion 1`] = `
+{
+  "addedBookmarks": [],
+  "addedReactions": [],
+  "closeChannelCalls": [],
+  "invitesToChannels": [],
+  "kicksFromChannels": [],
+  "reopenChannelCalls": [],
+  "searchedCommentSnapshots": [
+    {
+      "channelId": "12345",
+      "reviewCommentId": 1,
+    },
+  ],
+  "searchedPrOpenedBroadcastMessages": [],
+  "sentMessages": [
+    {
+      "blocks": [
+        {
+          "text": {
+            "text": ":broom: Test Reviewer 1 deleted comment:",
+            "type": "mrkdwn",
+          },
+          "type": "section",
+        },
+        {
+          "text": {
+            "text": "> Test comment",
+            "type": "mrkdwn",
+          },
+          "type": "section",
+        },
+      ],
+      "metadata": {
+        "eventPayload": {
+          "commentId": "1",
+          "commentParentId": undefined,
+          "severity": "NORMAL",
+          "taskResolvedDate": undefined,
+          "threadResolvedDate": undefined,
+        },
+        "eventType": "review_comment_snapshot_saved",
+      },
+      "replyBroadcast": undefined,
+      "text": ":broom: Test Reviewer 1 deleted comment:",
+      "threadId": undefined,
+    },
+  ],
+}
+`;

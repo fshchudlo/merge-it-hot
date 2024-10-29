@@ -1,0 +1,126 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`PR review submitted use-case Should send message on PR review submit 1`] = `
+{
+  "addedBookmarks": [],
+  "addedReactions": [],
+  "closeChannelCalls": [],
+  "invitesToChannels": [],
+  "kicksFromChannels": [],
+  "reopenChannelCalls": [],
+  "searchedCommentSnapshots": [],
+  "searchedPrOpenedBroadcastMessages": [],
+  "sentMessages": [
+    {
+      "blocks": [
+        {
+          "text": {
+            "text": ":traffic_light: Test Reviewer 1 requested changes for the <https://git.test.com/projects/TEST-PROJ/repos/test-repository/pull-requests/1/overview|pull request>.",
+            "type": "mrkdwn",
+          },
+          "type": "section",
+        },
+        {
+          "type": "divider",
+        },
+        {
+          "elements": [
+            {
+              "text": ":large_yellow_circle:  Approved: 0 |  Requested changes: Test Reviewer 1 |  Not reviewed: Test Reviewer 2",
+              "type": "mrkdwn",
+            },
+          ],
+          "type": "context",
+        },
+      ],
+      "text": ":traffic_light: Test Reviewer 1 requested changes for the <https://git.test.com/projects/TEST-PROJ/repos/test-repository/pull-requests/1/overview|pull request>.",
+    },
+    {
+      "blocks": [
+        {
+          "text": {
+            "text": ":traffic_light: Test Reviewer 1 dismissed <https://git.test.com/projects/TEST-PROJ/repos/test-repository/pull-requests/1/overview|pull request>.",
+            "type": "mrkdwn",
+          },
+          "type": "section",
+        },
+        {
+          "type": "divider",
+        },
+        {
+          "elements": [
+            {
+              "text": ":large_yellow_circle:  Approved: 0 |  Not reviewed: Test Reviewer 1,Test Reviewer 2",
+              "type": "mrkdwn",
+            },
+          ],
+          "type": "context",
+        },
+      ],
+      "text": ":traffic_light: Test Reviewer 1 dismissed <https://git.test.com/projects/TEST-PROJ/repos/test-repository/pull-requests/1/overview|pull request>.",
+    },
+    {
+      "blocks": [
+        {
+          "text": {
+            "text": ":traffic_light: Test Reviewer 1 approved <https://git.test.com/projects/TEST-PROJ/repos/test-repository/pull-requests/1/overview|pull request>.",
+            "type": "mrkdwn",
+          },
+          "type": "section",
+        },
+        {
+          "type": "divider",
+        },
+        {
+          "elements": [
+            {
+              "text": ":large_yellow_circle:  Approved: Test Reviewer 1 |  Not reviewed: Test Reviewer 2",
+              "type": "mrkdwn",
+            },
+          ],
+          "type": "context",
+        },
+      ],
+      "text": ":traffic_light: Test Reviewer 1 approved <https://git.test.com/projects/TEST-PROJ/repos/test-repository/pull-requests/1/overview|pull request>.",
+    },
+    {
+      "blocks": [
+        {
+          "text": {
+            "text": ":traffic_light: Test Reviewer 1 submitted review comments to the <https://git.test.com/projects/TEST-PROJ/repos/test-repository/pull-requests/1/overview|pull request> with the message: 
+> Please, implement x, y, and z",
+            "type": "mrkdwn",
+          },
+          "type": "section",
+        },
+        {
+          "type": "divider",
+        },
+        {
+          "elements": [
+            {
+              "text": ":large_yellow_circle:  Approved: Test Reviewer 1 |  Not reviewed: Test Reviewer 2",
+              "type": "mrkdwn",
+            },
+          ],
+          "type": "context",
+        },
+      ],
+      "text": ":traffic_light: Test Reviewer 1 submitted review comments to the <https://git.test.com/projects/TEST-PROJ/repos/test-repository/pull-requests/1/overview|pull request> with the message: 
+> Please, implement x, y, and z",
+    },
+    {
+      "blocks": [
+        {
+          "text": {
+            "text": ":traffic_light: Test Reviewer 1 approved <https://git.test.com/projects/TEST-PROJ/repos/test-repository/pull-requests/1/overview|pull request>.",
+            "type": "mrkdwn",
+          },
+          "type": "section",
+        },
+      ],
+      "text": ":traffic_light: Test Reviewer 1 approved <https://git.test.com/projects/TEST-PROJ/repos/test-repository/pull-requests/1/overview|pull request>.",
+    },
+  ],
+}
+`;

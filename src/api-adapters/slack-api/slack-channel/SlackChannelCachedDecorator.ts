@@ -1,0 +1,88 @@
+import { SlackChannelInfo } from "../SlackChannelProvisioner";
+import { CHANNELS_CACHE } from "../CHANNELS_CACHE";
+import { COMMENTS_CACHE } from "../COMMENTS_CACHE";
+import {
+    AddBookmarkArguments, PullRequestCommentSnapshot, PullrequestCommentSnapshotInSlackMetadata,
+    InviteToChannelArguments,
+    KickFromChannelArguments,
+    PullRequestSnapshotInSlackMetadata,
+    SendMessageArguments,
+    SendMessageResponse, SlackBroadcastChannel, SlackTargetedChannel
+} from "../../../pr-events-handler/slack-api-ports";
+import { SlackWebClientChannel } from "./SlackWebClientChannel";
+
+function getCommentCacheKey(channelId: string, reviewCommentId: number | string) {
+    return `${channelId}-${reviewCommentId}`;
+}
+
+
+export class SlackChannelCachedDecorator implements SlackTargetedChannel, SlackBroadcastChannel {
+    get channelInfo(): SlackChannelInfo {
+        return this.channel.channelInfo;
+    }
+
+    private channel: SlackWebClientChannel;
+
+    constructor(channel: SlackWebClientChannel) {
+        this.channel = channel;
+    }
+
+
+    async closeChannel(): Promise<void> {
+        await this.channel.closeChannel();
+        await CHANNELS_CACHE.delete(this.channel.channelInfo.name);
+        await COMMENTS_CACHE.deleteWhere((k) => k.startsWith(getCommentCacheKey(this.channel.channelInfo.id, "")));
+    }
+    async reopenChannel(): Promise<void> {
+        await this.channel.reopenChannel();
+    }
+
+    addReaction(messageId: string, reaction: string): Promise<void> {
+        return this.channel.addReaction(messageId, reaction);
+    }
+
+    addBookmark(options: AddBookmarkArguments): Promise<void> {
+        return this.channel.addBookmark(options);
+    }
+
+    inviteToChannel(options: InviteToChannelArguments): Promise<void> {
+        return this.channel.inviteToChannel(options);
+    }
+
+    kickFromChannel(options: KickFromChannelArguments): Promise<void> {
+        return this.channel.kickFromChannel(options);
+    }
+
+    async sendMessage(options: SendMessageArguments): Promise<SendMessageResponse> {
+        const response = await this.channel.sendMessage(options);
+        const metadata = <PullrequestCommentSnapshotInSlackMetadata>options.metadata?.eventPayload;
+        if (metadata?.commentId) {
+            const commentSnapshot: PullRequestCommentSnapshot = {
+                ...metadata,
+                slackMessageId: response.messageId,
+                slackThreadId: response.threadId
+            };
+            await COMMENTS_CACHE.set(getCommentCacheKey(this.channel.channelInfo.id, commentSnapshot.commentId), commentSnapshot);
+        }
+        return response;
+    }
+
+    async findLatestPullRequestCommentSnapshot(reviewCommentId: number | string): Promise<PullRequestCommentSnapshot | null> {
+        const cacheKey = getCommentCacheKey(this.channel.channelInfo.id, reviewCommentId);
+        const cachedCommentInfo = await COMMENTS_CACHE.get(cacheKey);
+        if (cachedCommentInfo) {
+            return Promise.resolve(cachedCommentInfo);
+        }
+        const commentSnapshot = await this.channel.findLatestPullRequestCommentSnapshot(reviewCommentId);
+
+        if (commentSnapshot) {
+            await COMMENTS_CACHE.set(cacheKey, commentSnapshot);
+        }
+        return commentSnapshot;
+    }
+
+    findPROpenedBroadcastMessageId(prCreationDate: Date, pullRequestTraits: PullRequestSnapshotInSlackMetadata): Promise<string | null> {
+        return this.channel.findPROpenedBroadcastMessageId(prCreationDate, pullRequestTraits);
+    }
+}
+
