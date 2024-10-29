@@ -19,12 +19,6 @@
   "__elements": {},
   "__requires": [
     {
-      "type": "panel",
-      "id": "bargauge",
-      "name": "Bar gauge",
-      "version": ""
-    },
-    {
       "type": "grafana",
       "id": "grafana",
       "name": "Grafana",
@@ -129,8 +123,8 @@
         ]
       },
       "gridPos": {
-        "h": 6,
-        "w": 24,
+        "h": 8,
+        "w": 12,
         "x": 0,
         "y": 0
       },
@@ -181,105 +175,6 @@
       },
       "fieldConfig": {
         "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "links": [],
-          "mappings": [],
-          "min": 0,
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              }
-            ]
-          },
-          "unit": "locale"
-        },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Heap used bytes"
-            },
-            "properties": [
-              {
-                "id": "unit",
-                "value": "bytes"
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Active requests total"
-            },
-            "properties": [
-              {
-                "id": "unit",
-                "value": "locale"
-              }
-            ]
-          }
-        ]
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 0,
-        "y": 12
-      },
-      "id": 11,
-      "options": {
-        "displayMode": "gradient",
-        "maxVizHeight": 300,
-        "minVizHeight": 16,
-        "minVizWidth": 8,
-        "namePlacement": "auto",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "showUnfilled": true,
-        "sizing": "auto",
-        "valueMode": "color"
-      },
-      "pluginVersion": "10.4.7",
-      "repeat": "route",
-      "repeatDirection": "v",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROM}"
-          },
-          "editorMode": "code",
-          "expr": "sum(http_request_duration_seconds_bucket{job=\"$endpoint_job_name_in_prometheus\", route=\"$route\"}) without (instance, pod)",
-          "format": "heatmap",
-          "hide": false,
-          "instant": false,
-          "interval": "",
-          "intervalFactor": 1,
-          "legendFormat": "__auto",
-          "refId": "bitbucket-webhook"
-        }
-      ],
-      "title": "Requests duration for \"$route\" endpoint",
-      "type": "bargauge"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${DS_PROM}"
-      },
-      "fieldConfig": {
-        "defaults": {
           "custom": {
             "hideFrom": {
               "legend": false,
@@ -298,7 +193,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 12
+        "y": 0
       },
       "id": 10,
       "maxDataPoints": 25,
@@ -324,7 +219,7 @@
           "le": 1e-9
         },
         "legend": {
-          "show": false
+          "show": true
         },
         "rowsFrame": {
           "layout": "auto",
@@ -472,7 +367,7 @@
         "h": 6,
         "w": 8,
         "x": 0,
-        "y": 28
+        "y": 16
       },
       "id": 4,
       "options": {
@@ -565,7 +460,7 @@
       },
       {
         "current": {
-          "selected": true,
+          "selected": false,
           "text": [
             "/github-webhook",
             "/slack-channel"
@@ -604,7 +499,7 @@
       },
       {
         "current": {
-          "selected": true,
+          "selected": false,
           "text": [
             "channels",
             "userids",
