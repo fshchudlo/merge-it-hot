@@ -1,5 +1,5 @@
 import "dotenv/config";
-import { PullRequestEvent } from "./pr-events-handler/event-contracts";
+import { PullRequestEvent } from "./pr-events-handling/event-contracts";
 
 export const AppConfig = {
     NODE_ENV: process.env.NODE_ENV,

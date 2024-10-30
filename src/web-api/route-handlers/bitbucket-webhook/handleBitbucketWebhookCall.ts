@@ -1,10 +1,10 @@
-import handlePullRequestEvent from "../../../pr-events-handler/handlePullRequestEvent";
+import handlePullRequestEvent from "../../../pr-events-handling/handlePullRequestEvent";
 import BitbucketAPI from "../../../api-adapters/BitbucketAPI";
 import { AppConfig } from "../../../app.config";
 import { NextFunction, Request, Response } from "express";
 import { transformRequestPayloadToEvent } from "../../payload-normalization/bitbucket/transformRequestPayloadToEvent";
 import { SlackChannelProvisioner } from "../../../api-adapters/slack-api/SlackChannelProvisioner";
-import { PullRequestGenericEvent } from "../../../pr-events-handler/event-contracts";
+import { PullRequestGenericEvent } from "../../../pr-events-handling/event-contracts";
 import { SlackUserIdResolver } from "../../payload-normalization/SlackUserIdResolver";
 
 const bitbucketAPI = new BitbucketAPI(AppConfig.BITBUCKET_BASE_URL, AppConfig.BITBUCKET_READ_API_TOKEN);
