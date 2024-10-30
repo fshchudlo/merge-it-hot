@@ -64,5 +64,5 @@ expressReceiver.router.use(async (error: any, req: express.Request, res: express
 });
 
 expressReceiver.app.listen(AppConfig.SLACK_BOT_PORT, AppConfig.SLACK_BOT_HOST, () => {
-    console.log(`⚡️ Bitbucket connector app is running on ${AppConfig.SLACK_BOT_HOST}:${AppConfig.SLACK_BOT_PORT}!`);
+    console.log(`⚡️ Merge-it-hot app is running on ${AppConfig.SLACK_BOT_HOST}:${AppConfig.SLACK_BOT_PORT}!`);
 });

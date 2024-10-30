@@ -1,11 +1,11 @@
 import * as slack from "@slack/web-api";
 import { SlackWebClientChannel } from "./slack-channel/SlackWebClientChannel";
-import { PullRequestEvent } from "../../pr-events-handler/event-contracts";
+import { PullRequestEvent } from "../../pr-events-handling/event-contracts";
 import { buildChannelName } from "./buildChannelName";
 import { CHANNELS_CACHE } from "./CHANNELS_CACHE";
 import { SlackChannelCachedDecorator } from "./slack-channel/SlackChannelCachedDecorator";
 
-import { SlackBroadcastChannel, SlackTargetedChannel } from "../../pr-events-handler/slack-api-ports";
+import { SlackBroadcastChannel, SlackTargetedChannel } from "../../pr-events-handling/slack-api-ports";
 
 export class SlackChannelProvisioner {
     private readonly client: slack.WebClient;

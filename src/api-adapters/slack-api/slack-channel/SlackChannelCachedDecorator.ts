@@ -8,7 +8,7 @@ import {
     PullRequestSnapshotInSlackMetadata,
     SendMessageArguments,
     SendMessageResponse, SlackBroadcastChannel, SlackTargetedChannel
-} from "../../../pr-events-handler/slack-api-ports";
+} from "../../../pr-events-handling/slack-api-ports";
 import { SlackWebClientChannel } from "./SlackWebClientChannel";
 
 function getCommentCacheKey(channelId: string, reviewCommentId: number | string) {

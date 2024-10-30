@@ -1,9 +1,9 @@
 import * as slack from "@slack/web-api";
 import { MessageElement } from "@slack/web-api/dist/response/ConversationsHistoryResponse";
-import { SNAPSHOT_COMMENT_STATE_EVENT_TYPE } from "../../../pr-events-handler/event-handlers/utils";
+import { SNAPSHOT_COMMENT_STATE_EVENT_TYPE } from "../../../pr-events-handling/event-handlers/utils";
 import {
     SNAPSHOT_PULL_REQUEST_STATE_EVENT_TYPE
-} from "../../../pr-events-handler/event-handlers/utils/snapshotPullRequestState";
+} from "../../../pr-events-handling/event-handlers/utils/snapshotPullRequestState";
 import { SlackChannelInfo } from "../SlackChannelProvisioner";
 import {
     AddBookmarkArguments, PullRequestCommentSnapshot, PullrequestCommentSnapshotInSlackMetadata,
@@ -12,7 +12,7 @@ import {
     PullRequestSnapshotInSlackMetadata,
     SendMessageArguments,
     SendMessageResponse, SlackBroadcastChannel, SlackTargetedChannel
-} from "../../../pr-events-handler/slack-api-ports";
+} from "../../../pr-events-handling/slack-api-ports";
 
 /**
  * Adapter for the Slack API that also acts as an {@link https://awesome-architecture.com/cloud-design-patterns/anti-corruption-layer-pattern/|anti-corruption layer} since Slack API is not always consistent

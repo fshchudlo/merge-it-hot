@@ -1,9 +1,9 @@
 import { SlackChannelCachedDecorator } from "../SlackChannelCachedDecorator";
-import { snapshotCommentState } from "../../../../pr-events-handler/event-handlers/utils";
+import { snapshotCommentState } from "../../../../pr-events-handling/event-handlers/utils";
 import { register } from "prom-client";
 import { CHANNELS_CACHE } from "../../CHANNELS_CACHE";
 import { COMMENTS_CACHE } from "../../COMMENTS_CACHE";
-import { PullrequestCommentSnapshotInSlackMetadata, SendMessageResponse, SlackTargetedChannel } from "../../../../pr-events-handler/slack-api-ports";
+import { PullrequestCommentSnapshotInSlackMetadata, SendMessageResponse, SlackTargetedChannel } from "../../../../pr-events-handling/slack-api-ports";
 
 
 const decoratedChannelMock = {

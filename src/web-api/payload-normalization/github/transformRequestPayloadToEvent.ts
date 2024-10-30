@@ -5,7 +5,7 @@ import {
     PullRequestEvent,
     PullRequestParticipantsUpdatedEvent, PullRequestReviewState, PullRequestReviewSubmittedEvent,
     ReviewerPayload, UserPayload
-} from "../../../pr-events-handler/event-contracts";
+} from "../../../pr-events-handling/event-contracts";
 import { SlackUserIdResolver } from "../SlackUserIdResolver";
 import GitHubAPI from "../../../api-adapters/GitHubAPI";
 import {

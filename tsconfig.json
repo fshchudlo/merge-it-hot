@@ -16,7 +16,7 @@
     },
     "typeRoots": [
       "./node_modules/@types",
-      "./src/pr-events-handler/event-contracts"
+      "./src/pr-events-handling/event-contracts"
     ]
   },
   "include": [
