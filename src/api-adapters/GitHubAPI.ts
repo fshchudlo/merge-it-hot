@@ -34,6 +34,13 @@ export default class GitHubAPI {
         const url = `${this.baseUrl}/repos/${owner}/${repo}/commits/${commitHash}`;
         return (await this.executeRequest<GetCommitResponse>(url)).commit.message;
     }
+
+    async fetchFromAPIUrl<T>(apiUrl: string): Promise<T | null> {
+        if (!this.canRead()) {
+            return null;
+        }
+        return await this.executeRequest<T>(apiUrl);
+    }
 }
 declare type GetCommitResponse = {
     commit: {

@@ -10,15 +10,25 @@ import { SlackUserIdResolver } from "../SlackUserIdResolver";
 import GitHubAPI from "../../../api-adapters/GitHubAPI";
 import {
     GitHubNotification,
-    GitHubPullRequestCommentActionType,
+    GitHubPullRequestCommentActionType, GitHubPullRequestPayload,
     GitHubPullRequestReviewState
 } from "./GitHub.contracts";
 
 export async function transformRequestPayloadToEvent(notification: GitHubNotification, userIdResolver: SlackUserIdResolver, githubAPI: GitHubAPI): Promise<PullRequestEvent> {
 
-    // Small duck-typing hack because GitHub has identical action keys for PR edit and comment edit events
+    // Small duck-typing hack because GitHub has identical action keys for different events
     if (notification.action === "edited" && (<any>notification).comment) {
         (<any>notification).action = "comment_edited";
+    }
+    if (notification.action == "created" && (<any>notification).issue && (<any>notification).issue.pull_request) {
+        if (!githubAPI.canRead()) {
+            throw new Error("Cannot fetch pull request details for the 'issue_comment.created' event without read access to GitHub API");
+        }
+        const pullRequest = await githubAPI.fetchFromAPIUrl<GitHubPullRequestPayload>((<any>notification).issue.pull_request.url);
+        notification = {
+            ...notification,
+            pull_request: pullRequest
+        };
     }
 
     const action = notification.action;
