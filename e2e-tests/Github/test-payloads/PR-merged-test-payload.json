@@ -9,7 +9,7 @@
     "number": "{{PullRequestId}}",
     "state": "closed",
     "locked": false,
-    "title": "Test commit",
+    "title": "Test pull request",
     "user": {
       "login": "{{PRAuthorName}}",
       "type": "User"
