@@ -19,11 +19,11 @@ export const AppConfig = {
     USE_PRIVATE_CHANNELS: true,
     DEFAULT_CHANNEL_PARTICIPANTS: process.env.DEFAULT_CHANNEL_PARTICIPANTS?.split(",").map(u => u.trim()),
 
-    tryGetGitHubReadToken(organizationMName: string): string | null {
-        if (!organizationMName) {
+    tryGetGitHubReadToken(organizationName: string): string | null {
+        if (!organizationName) {
             return null;
         }
-        return process.env[`${organizationMName.toUpperCase()}_GITHUB_READ_API_TOKEN`] ?? process.env.GITHUB_READ_API_TOKEN ?? null;
+        return process.env[`${organizationName.toUpperCase()}_GITHUB_READ_API_TOKEN`] ?? process.env.GITHUB_READ_API_TOKEN ?? null;
     },
     /*
     * You can implement any other logic depending on the granularity level you need
