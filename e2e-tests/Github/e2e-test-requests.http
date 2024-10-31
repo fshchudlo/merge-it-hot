@@ -22,6 +22,19 @@ Content-Type: application/json
     });
 %}
 
+### Add Issue-level comment
+POST {{EndpointHost}}/github-webhook
+Content-Type: application/json
+
+< ./test-payloads/Issue-comment-created.json
+
+> {%
+    client.test("Adding Issue comment to the open Pull request should be successful", function() {
+        client.assert(response.status === 200);
+    });
+%}
+
+
 ### Add comment
 POST {{EndpointHost}}/github-webhook
 Content-Type: application/json
@@ -178,6 +191,30 @@ Content-Type: application/json
     });
 %}
 
+
+### Close pull request
+POST {{EndpointHost}}/github-webhook
+Content-Type: application/json
+
+< ./test-payloads/PR-closed-test-payload.json
+
+> {%
+    client.test("Pull request closing should be successful", function() {
+        client.assert(response.status === 200);
+    });
+%}
+
+### Reopen pull request
+POST {{EndpointHost}}/github-webhook
+Content-Type: application/json
+
+< ./test-payloads/PR-reopened-test-payload.json
+
+> {%
+    client.test("Pull request reopening should be successful", function() {
+        client.assert(response.status === 200);
+    });
+%}
 
 ### Merge pull request
 POST {{EndpointHost}}/github-webhook
