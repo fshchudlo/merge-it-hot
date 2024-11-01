@@ -4,7 +4,6 @@ export type GitHubNotification =
     | GitHubPullRequestAssigneesUpdatedNotification
     | GitHubPullRequestEditedNotification
     | GitHubPullRequestReviewSubmittedNotification
-    | GitHubPullRequestCommentNotification
     | GitHubPullRequestThreadResolutionNotification;
 
 
@@ -135,5 +134,6 @@ export type GitHubRefPayload = {
     };
 };
 
-export type GitHubPullRequestCommentActionType = "created" | "comment_edited" | "deleted";
+export type GitHubPullRequestCommentActionType = "created" | "edited" | "deleted";
 export type GitHubPullRequestReviewState = "commented" | "approved" | "changes_requested" | "dismissed";
+export type GitHubPullRequestEventType = "pull_request" | "issue_comment" | "pull_request_review_comment" | "pull_request_review_thread" | "pull_request_review";

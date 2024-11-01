@@ -1,6 +1,7 @@
 ### Open pull request
 POST {{EndpointHost}}/github-webhook
 Content-Type: application/json
+X-GitHub-Event: pull_request
 
 < ./test-payloads/PR-opened-test-payload.json
 
@@ -13,6 +14,7 @@ Content-Type: application/json
 ### Add reviewer
 POST {{EndpointHost}}/github-webhook
 Content-Type: application/json
+X-GitHub-Event: pull_request
 
 < ./test-payloads/PR-review-requested-test-payload.json
 
@@ -25,6 +27,7 @@ Content-Type: application/json
 ### Add Issue-level comment
 POST {{EndpointHost}}/github-webhook
 Content-Type: application/json
+X-GitHub-Event: issue_comment
 
 < ./test-payloads/Issue-comment-created.json
 
@@ -38,6 +41,7 @@ Content-Type: application/json
 ### Add comment
 POST {{EndpointHost}}/github-webhook
 Content-Type: application/json
+X-GitHub-Event: pull_request_review_comment
 
 < ./test-payloads/PR-comment-created-test-payload.json
 
@@ -50,6 +54,7 @@ Content-Type: application/json
 ### Reply to comment
 POST {{EndpointHost}}/github-webhook
 Content-Type: application/json
+X-GitHub-Event: pull_request_review_comment
 
 < ./test-payloads/PR-comment-replied-test-payload.json
 
@@ -62,6 +67,7 @@ Content-Type: application/json
 ### Edit comment
 POST {{EndpointHost}}/github-webhook
 Content-Type: application/json
+X-GitHub-Event: pull_request_review_comment
 
 < ./test-payloads/PR-comment-edited-test-payload.json
 
@@ -74,6 +80,7 @@ Content-Type: application/json
 ### Resolve thread
 POST {{EndpointHost}}/github-webhook
 Content-Type: application/json
+X-GitHub-Event: pull_request_review_thread
 
 < ./test-payloads/PR-thread-resolved-test-payload.json
 
@@ -86,6 +93,7 @@ Content-Type: application/json
 ### Unresolve thread
 POST {{EndpointHost}}/github-webhook
 Content-Type: application/json
+X-GitHub-Event: pull_request_review_thread
 
 < ./test-payloads/PR-thread-unresolved-test-payload.json
 
@@ -98,6 +106,7 @@ Content-Type: application/json
 ### Delete comment
 POST {{EndpointHost}}/github-webhook
 Content-Type: application/json
+X-GitHub-Event: pull_request_review_comment
 
 < ./test-payloads/PR-comment-deleted-test-payload.json
 
@@ -110,6 +119,7 @@ Content-Type: application/json
 ### Remove reviewer
 POST {{EndpointHost}}/github-webhook
 Content-Type: application/json
+X-GitHub-Event: pull_request
 
 < ./test-payloads/PR-review-request-removed-test-payload.json
 
@@ -122,6 +132,7 @@ Content-Type: application/json
 ### Add commit
 POST {{EndpointHost}}/github-webhook
 Content-Type: application/json
+X-GitHub-Event: pull_request
 
 < ./test-payloads/PR-synchronized-test-payload.json
 
@@ -134,6 +145,7 @@ Content-Type: application/json
 ### Set as ready for review
 POST {{EndpointHost}}/github-webhook
 Content-Type: application/json
+X-GitHub-Event: pull_request
 
 < ./test-payloads/PR-ready-for-review-test-payload.json
 
@@ -146,6 +158,7 @@ Content-Type: application/json
 ### Add assignee
 POST {{EndpointHost}}/github-webhook
 Content-Type: application/json
+X-GitHub-Event: pull_request
 
 < ./test-payloads/PR-assigned-test-payload.json
 
@@ -158,6 +171,7 @@ Content-Type: application/json
 ### Edit pull request
 POST {{EndpointHost}}/github-webhook
 Content-Type: application/json
+X-GitHub-Event: pull_request
 
 < ./test-payloads/PR-edited-test-payload.json
 
@@ -170,6 +184,7 @@ Content-Type: application/json
 ### Remove assignee
 POST {{EndpointHost}}/github-webhook
 Content-Type: application/json
+X-GitHub-Event: pull_request
 
 < ./test-payloads/PR-unassigned-test-payload.json
 
@@ -182,6 +197,7 @@ Content-Type: application/json
 ### Submit review
 POST {{EndpointHost}}/github-webhook
 Content-Type: application/json
+X-GitHub-Event: pull_request_review
 
 < ./test-payloads/PR-review-submitted-test-payload.json
 
@@ -195,6 +211,7 @@ Content-Type: application/json
 ### Close pull request
 POST {{EndpointHost}}/github-webhook
 Content-Type: application/json
+X-GitHub-Event: pull_request
 
 < ./test-payloads/PR-closed-test-payload.json
 
@@ -204,21 +221,10 @@ Content-Type: application/json
     });
 %}
 
-### Reopen pull request
-POST {{EndpointHost}}/github-webhook
-Content-Type: application/json
-
-< ./test-payloads/PR-reopened-test-payload.json
-
-> {%
-    client.test("Pull request reopening should be successful", function() {
-        client.assert(response.status === 200);
-    });
-%}
-
 ### Merge pull request
 POST {{EndpointHost}}/github-webhook
 Content-Type: application/json
+X-GitHub-Event: pull_request
 
 < ./test-payloads/PR-merged-test-payload.json
 
@@ -231,6 +237,7 @@ Content-Type: application/json
 ### Add comment to the already closed pull request
 POST {{EndpointHost}}/github-webhook
 Content-Type: application/json
+X-GitHub-Event: pull_request_review_comment
 
 < ./test-payloads/PR-comment-created-test-payload.json
 
