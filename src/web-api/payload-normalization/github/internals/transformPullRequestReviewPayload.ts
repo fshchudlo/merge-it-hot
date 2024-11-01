@@ -4,9 +4,6 @@ import { normalizePayloadGenericPart } from "./normalizePayloadGenericPart";
 import { PullRequestReviewState, PullRequestReviewSubmittedEvent } from "../../../../pr-events-handling/event-contracts";
 
 export async function transformPullRequestReviewPayload(notification: GitHubPullRequestReviewSubmittedNotification, userIdResolver: SlackUserIdResolver) {
-    if (notification.action !== "submitted") {
-        throw new Error(`"${notification.action}" review action key is unknown.`);
-    }
     return {
         ...(await normalizePayloadGenericPart(notification, userIdResolver)),
         eventKey: "pr:review:submitted",
