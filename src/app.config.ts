@@ -14,7 +14,10 @@ export const AppConfig = {
     BITBUCKET_READ_API_TOKEN: process.env.BITBUCKET_READ_API_TOKEN,
     BITBUCKET_BASE_URL: process.env.BITBUCKET_BASE_URL,
     /*
-    If you want to use public channels and kick the users removed from PR review, you need to configure Slack permissions properly - https://stackoverflow.com/a/75442078
+    There are two reasons to use private channels:
+        - If channels are public, they all appear in search results, making it harder to find the right one, especially in a large organization.
+        - Removing users from a public channel after they’ve finished with a PR review requires enabling the global Slack permission "Remove users from public channels." This setting is only available to Slack admins and owners by default and applies globally, which feels like an unnecessary overhead.
+    If you want to use public channels and kick the users removed from PR review, make sure you configured Slack permissions properly
      */
     USE_PRIVATE_CHANNELS: true,
     DEFAULT_CHANNEL_PARTICIPANTS: process.env.DEFAULT_CHANNEL_PARTICIPANTS?.split(",").map(u => u.trim()),
