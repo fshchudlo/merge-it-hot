@@ -6,11 +6,11 @@ import { PullRequestEvent } from "../../../pr-events-handling/event-contracts";
 import handlePullRequestEvent from "../../../pr-events-handling/handlePullRequestEvent";
 import { SlackUserIdResolver } from "../../payload-normalization/SlackUserIdResolver";
 import GitHubAPI from "../../../api-adapters/GitHubAPI";
-import { GitHubNotification, GitHubPullRequestEventType } from "../../payload-normalization/github/GitHub.contracts";
+import { GitHubPullRequestEventType } from "../../payload-normalization/github/GitHub.contracts";
 
 export async function handleGitHubWebhookCall(req: Request, res: Response, next: NextFunction, slackChannelFactory: SlackChannelProvisioner, slackUserIdResolver: SlackUserIdResolver) {
     try {
-        const githubAPI = new GitHubAPI(AppConfig.tryGetGitHubReadToken((<GitHubNotification>req.body)?.organization?.login));
+        const githubAPI = new GitHubAPI(AppConfig.GITHUB_APP_ID, AppConfig.GITHUB_APP_PRIVATE_KEY, AppConfig.GITHUB_APP_INSTALLATION_ID);
 
         const eventType = req.headers["x-github-event"] as GitHubPullRequestEventType;
 
