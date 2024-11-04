@@ -83,6 +83,7 @@
     "name": "{{RepositoryName}}"
   },
   "organization": {
-    "login": "{{OrganizationName}}"
+    "login": "{{OrganizationName}}",
+    "id": "{{OrganizationId}}"
   }
 }

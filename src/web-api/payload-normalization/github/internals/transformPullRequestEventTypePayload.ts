@@ -1,6 +1,6 @@
 import { GitHubNotification } from "../GitHub.contracts";
 import { SlackUserIdResolver } from "../../SlackUserIdResolver";
-import GitHubAPI from "../../../../api-adapters/GitHubAPI";
+import GitHubAPI from "../../../../api-adapters/github-api/GitHubAPI";
 import { normalizePayloadGenericPart } from "./normalizePayloadGenericPart";
 import {
     PullRequestFromBranchUpdatedEvent,
@@ -73,7 +73,7 @@ export async function transformPullRequestEventTypePayload(notification: GitHubN
             return {
                 ...(await normalizePayloadGenericPart(notification, userIdResolver)),
                 eventKey: "pr:from_ref_updated",
-                latestCommitMessage: githubAPI.canRead() ? await githubAPI.fetchCommitMessage(notification.pull_request.head.repo.owner.login, notification.pull_request.head.repo.name, notification.pull_request.head.sha) : null,
+                latestCommitMessage: await githubAPI.fetchCommitMessage(notification.pull_request.head.repo.owner.login, notification.pull_request.head.repo.name, notification.pull_request.head.sha),
                 latestCommitViewUrl: `${notification.pull_request.html_url}/commits/${notification.pull_request.head.sha}`
             } as PullRequestFromBranchUpdatedEvent;
         case "edited":
