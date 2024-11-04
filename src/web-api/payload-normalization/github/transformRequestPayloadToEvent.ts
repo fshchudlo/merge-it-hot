@@ -1,6 +1,6 @@
 import { PullRequestEvent } from "../../../pr-events-handling/event-contracts";
 import { SlackUserIdResolver } from "../SlackUserIdResolver";
-import GitHubAPI from "../../../api-adapters/GitHubAPI";
+import GitHubAPI from "../../../api-adapters/github-api/GitHubAPI";
 import {
     GitHubNotification,
     GitHubPullRequestCommentNotification,
@@ -24,9 +24,6 @@ export async function transformRequestPayloadToEvent(eventType: GitHubPullReques
         case "pull_request_review_thread":
             return await transformPullRequestReviewThreadPayload(notification, userIdResolver);
         case "issue_comment":
-            if (!githubAPI.canRead()) {
-                throw new Error("Cannot fetch pull request details for the 'issue_comment.created' event without read access to GitHub API");
-            }
             const pullRequest = await githubAPI.fetchFromAPIUrl<GitHubPullRequestPayload>((<any>notification).issue.pull_request.url);
             notification = {
                 ...notification,

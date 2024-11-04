@@ -4,7 +4,7 @@ import express, { NextFunction } from "express";
 import { handleBitbucketWebhookCall } from "./web-api/route-handlers/bitbucket-webhook/handleBitbucketWebhookCall";
 import { SlackChannelProvisioner } from "./api-adapters/slack-api/SlackChannelProvisioner";
 import measureRequestDuration from "./app.metrics";
-import  handleError from "./web-api/middlewares/handleError";
+import handleError from "./web-api/middlewares/handleError";
 import { register } from "prom-client";
 import { handleGitHubWebhookCall } from "./web-api/route-handlers/github-webhook/handleGitHubWebhookCall";
 import bodyParser from "body-parser";

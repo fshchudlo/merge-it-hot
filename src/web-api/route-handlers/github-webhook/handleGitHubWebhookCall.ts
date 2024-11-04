@@ -5,12 +5,15 @@ import { AppConfig } from "../../../app.config";
 import { PullRequestEvent } from "../../../pr-events-handling/event-contracts";
 import handlePullRequestEvent from "../../../pr-events-handling/handlePullRequestEvent";
 import { SlackUserIdResolver } from "../../payload-normalization/SlackUserIdResolver";
-import GitHubAPI from "../../../api-adapters/GitHubAPI";
-import { GitHubNotification, GitHubPullRequestEventType } from "../../payload-normalization/github/GitHub.contracts";
+import GitHubAPI from "../../../api-adapters/github-api/GitHubAPI";
+import { GitHubPullRequestEventType } from "../../payload-normalization/github/GitHub.contracts";
 
 export async function handleGitHubWebhookCall(req: Request, res: Response, next: NextFunction, slackChannelFactory: SlackChannelProvisioner, slackUserIdResolver: SlackUserIdResolver) {
     try {
-        const githubAPI = new GitHubAPI(AppConfig.tryGetGitHubReadToken((<GitHubNotification>req.body)?.organization?.login));
+        if (!req.body?.organization?.id) {
+            throw new Error("Organization ID is missing in the request payload");
+        }
+        const githubAPI = new GitHubAPI(AppConfig.GITHUB_APP_ID, AppConfig.GITHUB_APP_PRIVATE_KEY, +req.body.organization.id);
 
         const eventType = req.headers["x-github-event"] as GitHubPullRequestEventType;
 
