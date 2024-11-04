@@ -22,8 +22,7 @@ export const AppConfig = {
     USE_PRIVATE_CHANNELS: true,
     DEFAULT_CHANNEL_PARTICIPANTS: process.env.DEFAULT_CHANNEL_PARTICIPANTS?.split(",").map(u => u.trim()),
 
-    GITHUB_APP_ID: process.env.GITHUB_APP_ID!,
-    GITHUB_APP_INSTALLATION_ID: process.env.GITHUB_APP_INSTALLATION_ID!,
+    GITHUB_APP_ID: +process.env.GITHUB_APP_ID,
     GITHUB_APP_PRIVATE_KEY: process.env.GITHUB_APP_PRIVATE_KEY!.replace(/\\n/g, "\n"),
 
     /*
