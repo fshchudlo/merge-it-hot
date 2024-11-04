@@ -66,7 +66,7 @@ export default class GitHubAPI {
             return null;
         }
         const url = `${this.baseUrl}/repos/${owner}/${repo}/commits/${commitHash}`;
-        return (await this.executeRequest<GetCommitResponse>(url)).commit.message;
+        return (await this.executeRequest<CommitResponse>(url)).commit.message;
     }
 
     async fetchFromAPIUrl<T>(apiUrl: string): Promise<T | null> {
@@ -75,9 +75,47 @@ export default class GitHubAPI {
         }
         return await this.executeRequest<T>(apiUrl);
     }
+
+    async getAppInstallations(): Promise<AppInstallation[]> {
+        const jwtToken = generateAppJWT(this.appId, this.privateKey);
+        const url = "https://api.github.com/app/installations";
+        const response = await axios.get(url, {
+            headers: {
+                Authorization: `Bearer ${jwtToken}`,
+                Accept: "application/vnd.github.v3+json"
+            }
+        });
+
+        if (response.status !== 200) {
+            throw new Error(`Error executing request for ${url} message: ${response.statusText}`);
+        }
+        return response.data.map((i: any) => {
+            return <AppInstallation>{
+                installationId: i.id,
+                organizationId: i.account.id,
+                organizationLogin: i.account.login,
+                permissions: {
+                    issues: i.permissions.issues,
+                    contents: i.permissions.contents,
+                    pullRequests: i.permissions.pull_requests
+                }
+            };
+        });
+    }
 }
-declare type GetCommitResponse = {
+
+declare type CommitResponse = {
     commit: {
         message: string;
     };
+};
+declare type AppInstallation = {
+    installationId: number,
+    organizationId: number,
+    organizationLogin: string,
+    permissions: {
+        issues?: "read"
+        contents?: "read"
+        pullRequests?: "read"
+    }
 };
