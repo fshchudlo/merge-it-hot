@@ -2,7 +2,10 @@ import jwt from "jsonwebtoken";
 import axios from "axios";
 import { createCache } from "cache-manager";
 
-// GitHub tokens are valid for 1 hour
+/*
+* GitHub installation-level tokens are valid for 1 hour
+* Cache for 59 minutes to avoid on-the-fly token expiration
+*/
 const organizationTokensCache: ReturnType<typeof createCache> = createCache({ ttl: 59 * 60 * 1000 });
 
 export async function fetchAccessToken(appId: number, privateKey: string, organizationId: number): Promise<string> {
@@ -25,7 +28,6 @@ export async function fetchAccessToken(appId: number, privateKey: string, organi
 }
 
 const appInstallationsCache: ReturnType<typeof createCache> = createCache();
-
 async function fetchAppInstallation(appId: number, privateKey: string, organizationId: number): Promise<AppInstallation> {
     return await appInstallationsCache.wrap(`appInstallations:${organizationId}`, async () => {
         const jwtToken = await fetchAppJWTToken(appId, privateKey);
@@ -54,8 +56,11 @@ async function fetchAppInstallation(appId: number, privateKey: string, organizat
     });
 }
 
+/*
+* GitHub App JWT tokens are valid for 10 minutes
+* Cache for 9 minutes to avoid on-the-fly token expiration
+*/
 const jwtTokenCacheCache: ReturnType<typeof createCache> = createCache({ ttl: 9 * 60 * 1000 });
-
 async function fetchAppJWTToken(appId: number, privateKey: string) {
     return await jwtTokenCacheCache.wrap<string>(`jwtToken:${appId}`, () => {
         const payload = {
