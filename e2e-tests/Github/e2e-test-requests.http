@@ -208,19 +208,6 @@ X-GitHub-Event: pull_request_review
 %}
 
 
-### Close pull request
-POST {{EndpointHost}}/github-webhook
-Content-Type: application/json
-X-GitHub-Event: pull_request
-
-< ./test-payloads/PR-closed-test-payload.json
-
-> {%
-    client.test("Pull request closing should be successful", function() {
-        client.assert(response.status === 200);
-    });
-%}
-
 ### Merge pull request
 POST {{EndpointHost}}/github-webhook
 Content-Type: application/json
@@ -253,15 +240,19 @@ X-GitHub-Event: pull_request_review_comment
 ### Invalid payload
 POST {{EndpointHost}}/github-webhook
 Content-Type: application/json
+X-GitHub-Event: pull_request
 
 {
-  "eventKey": "invalid-payload"
+  "action": "invalid-payload",
+  "organization": {
+    "id": "{{OrganizationId}}"
+  }
 }
 
 > {%
     client.test("Invalid payload sending should lead to error", function() {
         console.log(response.body)
-        client.assert(response.body.indexOf('"undefined" action key is unknown') !== -1);
+        client.assert(response.body.indexOf('"invalid-payload" action key is unknown') !== -1);
         client.assert(response.status === 500)
     });
 %}

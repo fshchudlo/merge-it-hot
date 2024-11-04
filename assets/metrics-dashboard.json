@@ -502,12 +502,12 @@
           "selected": false,
           "text": [
             "channels",
-            "userids",
+            "userIds",
             "comments"
           ],
           "value": [
             "channels",
-            "userids",
+            "userIds",
             "comments"
           ]
         },
@@ -524,8 +524,8 @@
           },
           {
             "selected": true,
-            "text": "userids",
-            "value": "userids"
+            "text": "userIds",
+            "value": "userIds"
           },
           {
             "selected": true,
@@ -533,7 +533,7 @@
             "value": "comments"
           }
         ],
-        "query": "channels, userids, comments",
+        "query": "channels, userIds, comments",
         "queryValue": "",
         "skipUrlSync": false,
         "type": "custom"
