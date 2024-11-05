@@ -46,7 +46,7 @@ function getBasicPayload(): PullRequestGenericEvent {
                 projectKey: "TEST-PROJ"
             },
             author: { ...authorUser },
-            reviewers: [{
+            participants: [{
                 user: { ...reviewer1User },
                 status: "UNAPPROVED"
             }, {
@@ -268,8 +268,8 @@ export default class TestPayloadBuilder {
     static pullRequestNeedsWork(): PullRequestEvent {
         const payload = getBasicPayload();
 
-        payload.pullRequest.reviewers[0] = {
-            ...payload.pullRequest.reviewers[0],
+        payload.pullRequest.participants[0] = {
+            ...payload.pullRequest.participants[0],
             status: "NEEDS_WORK"
         };
 
@@ -286,8 +286,8 @@ export default class TestPayloadBuilder {
 
     static pullRequestApproved(): PullRequestEvent {
         const payload = getBasicPayload();
-        payload.pullRequest.reviewers[0] = {
-            ...payload.pullRequest.reviewers[0],
+        payload.pullRequest.participants[0] = {
+            ...payload.pullRequest.participants[0],
             status: "APPROVED"
         };
 
@@ -304,8 +304,8 @@ export default class TestPayloadBuilder {
 
     static pullRequestReviewedWithComments(): PullRequestEvent {
         const payload = getBasicPayload();
-        payload.pullRequest.reviewers[0] = {
-            ...payload.pullRequest.reviewers[0],
+        payload.pullRequest.participants[0] = {
+            ...payload.pullRequest.participants[0],
             status: "APPROVED"
         };
 
@@ -326,7 +326,7 @@ export default class TestPayloadBuilder {
             ...payload,
             pullRequest: {
                 ...payload.pullRequest,
-                reviewers: payload.pullRequest.reviewers.map(r => {
+                participants: payload.pullRequest.participants.map(r => {
                     return {
                         user: r.user
                     };
@@ -344,8 +344,8 @@ export default class TestPayloadBuilder {
     static pullRequestUnapproved(): PullRequestEvent {
         const payload = getBasicPayload();
 
-        payload.pullRequest.reviewers[0] = {
-            ...payload.pullRequest.reviewers[0],
+        payload.pullRequest.participants[0] = {
+            ...payload.pullRequest.participants[0],
             status: "UNAPPROVED"
         };
 
@@ -384,7 +384,7 @@ export default class TestPayloadBuilder {
 
             pullRequest: {
                 ...getBasicPayload().pullRequest,
-                reviewers: [{
+                participants: [{
                     user: { ...reviewer2User },
                     status: "UNAPPROVED"
                 }, {

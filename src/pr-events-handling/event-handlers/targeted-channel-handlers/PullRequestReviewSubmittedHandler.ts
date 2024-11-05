@@ -42,13 +42,13 @@ function getReviewerActionDescription(payload: PullRequestReviewSubmittedEvent) 
 }
 
 function getReviewStatusBlocks(pullRequest: PullRequestPayload) {
-    if (pullRequest.reviewers.every(r => !r.status)) {
+    if (pullRequest.participants.every(r => !r.status)) {
         return [];
     }
 
-    const whoApproved = pullRequest.reviewers.filter(r => r.status == "APPROVED").map(r => r.user.name);
-    const whoRequestedWork = pullRequest.reviewers.filter(r => r.status == "NEEDS_WORK").map(r => r.user.name);
-    const whoUnapproved = pullRequest.reviewers.filter(r => r.status == "UNAPPROVED").map(r => r.user.name);
+    const whoApproved = pullRequest.participants.filter(r => r.status == "APPROVED").map(r => r.user.name);
+    const whoRequestedWork = pullRequest.participants.filter(r => r.status == "NEEDS_WORK").map(r => r.user.name);
+    const whoUnapproved = pullRequest.participants.filter(r => r.status == "UNAPPROVED").map(r => r.user.name);
 
     let result;
     if (whoRequestedWork.length == 0 && whoUnapproved.length == 0) {

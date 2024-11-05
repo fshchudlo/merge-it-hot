@@ -38,6 +38,9 @@ export class SlackWebClientChannel implements SlackTargetedChannel, SlackBroadca
     }
 
     inviteToChannel(options: InviteToChannelArguments): Promise<void> {
+        if ((options.users || []).length == 0) {
+            return;
+        }
         return this.client.conversations.invite({
             channel: this.channelInfo.id,
             users: options.users.join(","),
@@ -61,6 +64,7 @@ export class SlackWebClientChannel implements SlackTargetedChannel, SlackBroadca
     closeChannel(): Promise<void> {
         return this.client.conversations.archive({ channel: this.channelInfo.id }) as unknown as Promise<void>;
     }
+
     reopenChannel(): Promise<void> {
         return this.client.conversations.unarchive({ channel: this.channelInfo.id }) as unknown as Promise<void>;
     }

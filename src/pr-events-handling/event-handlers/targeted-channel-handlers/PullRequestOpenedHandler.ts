@@ -10,7 +10,6 @@ export class PullRequestOpenedHandler implements PullRequestEventHandler {
     }
 
     public async handle(payload: PullRequestGenericEvent, slackChannel: SlackTargetedChannel) {
-        await inviteParticipants(payload, slackChannel);
         await setChannelBookmark(payload, slackChannel);
         await slackChannel.sendMessage(buildInvitationMessage(payload));
     }
@@ -22,13 +21,6 @@ async function setChannelBookmark(payload: PullRequestGenericEvent, slackChannel
         emoji: ":git:",
         title: "Review Pull Request"
     });
-}
-
-async function inviteParticipants(payload: PullRequestGenericEvent, slackChannel: SlackTargetedChannel) {
-    const slackUserIds = [payload.pullRequest.author, ...payload.pullRequest.reviewers.map(r => r.user)].map(u => u.slackUserId);
-    if (slackUserIds.length > 0) {
-        await slackChannel.inviteToChannel({ users: slackUserIds, force: true });
-    }
 }
 
 function buildInvitationMessage(payload: PullRequestGenericEvent): SendMessageArguments {
