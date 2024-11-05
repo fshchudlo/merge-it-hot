@@ -2,7 +2,7 @@ import { GitHubPullRequestNotificationBasicPayload } from "../GitHub.contracts";
 import { SlackUserIdResolver } from "../../SlackUserIdResolver";
 import { formatUsername } from "./formatUsername";
 import { getSlackUserId } from "./getSlackUserId";
-import { PullRequestGenericEvent, ReviewerPayload, UserPayload } from "../../../../pr-events-handling/event-contracts";
+import { PullRequestGenericEvent, ParticipantPayload, UserPayload } from "../../../../pr-events-handling/event-contracts";
 
 export async function normalizePayloadGenericPart(payload: GitHubPullRequestNotificationBasicPayload, userIdResolver: SlackUserIdResolver) {
 
@@ -13,7 +13,7 @@ export async function normalizePayloadGenericPart(payload: GitHubPullRequestNoti
                     name: formatUsername(reviewer.login),
                     slackUserId: await getSlackUserId(userIdResolver, reviewer.login)
                 }
-            } as ReviewerPayload;
+            } as ParticipantPayload;
         }));
 
     const normalizedAssigneesPayload = await Promise.all(
@@ -52,7 +52,7 @@ export async function normalizePayloadGenericPart(payload: GitHubPullRequestNoti
                 name: formatUsername(payload.pull_request.user.login),
                 slackUserId: await getSlackUserId(userIdResolver, payload.pull_request.user.login)
             },
-            reviewers: normalizedReviewersPayload,
+            participants: normalizedReviewersPayload,
             assignees: normalizedAssigneesPayload,
             links: {
                 self: payload.pull_request.html_url

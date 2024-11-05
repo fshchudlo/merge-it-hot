@@ -12,7 +12,7 @@ export type PullRequestNotificationBasicPayload = {
 };
 
 export type PullRequestGenericEvent = PullRequestNotificationBasicPayload & {
-    readonly eventKey: "pr:opened" | "pr:ready_for_review" | "pr:merged" | "pr:declined" | "pr:deleted";
+    readonly eventKey: "pr:reopened" | "pr:opened" | "pr:ready_for_review" | "pr:merged" | "pr:declined" | "pr:deleted";
 };
 
 export type PullRequestReviewSubmittedEvent = PullRequestNotificationBasicPayload & {
@@ -76,7 +76,7 @@ export type PullRequestPayload = {
     readonly description: string | null;
     readonly draft: boolean;
     readonly author: UserPayload;
-    readonly reviewers: Array<ReviewerPayload>;
+    readonly participants: Array<ParticipantPayload>;
     readonly assignees: Array<UserPayload>;
     readonly links: {
         readonly self: string;
@@ -84,7 +84,7 @@ export type PullRequestPayload = {
     readonly fromBranch: BranchPayload;
     readonly targetBranch: BranchPayload;
 };
-export type ReviewerPayload = {
+export type ParticipantPayload = {
     user: UserPayload,
     status?: ReviewerReviewStatus
 }

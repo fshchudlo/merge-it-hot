@@ -13,8 +13,8 @@ function buildMessage(payload: PullRequestGenericEvent): SendMessageArguments {
     const messageTitle = `:snowboarder: ${payload.actor.name} opened ${prStateName} "${payload.pullRequest.title}".`;
 
     const targetText = `Target: \`${payload.pullRequest.targetBranch.repositoryName}/${payload.pullRequest.targetBranch.branchName}\``;
-    const reviewers = payload.pullRequest.reviewers.map(r => r.user.name);
-    const reviewersContextBlock = reviewers.length == 0 ? null : contextBlock(`Assigned reviewers: ${reviewers.join(",")}.`);
+    const participants = payload.pullRequest.participants.map(r => r.user.name);
+    const reviewersContextBlock = participants.length == 0 ? null : contextBlock(`Assigned reviewers: ${participants.join(",")}.`);
 
     const invitationText = `You're welcome to ${link(payload.pullRequest.links.self, "join code review")}.`;
 
