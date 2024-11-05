@@ -20,8 +20,6 @@ export interface SlackTargetedChannel {
 
     closeChannel(): Promise<void>;
 
-    reopenChannel(): Promise<void>;
-
     sendMessage(options: SendMessageArguments): Promise<SendMessageResponse>;
 
     findLatestPullRequestCommentSnapshot(commentId: number | string): Promise<PullRequestCommentSnapshot | null>;
