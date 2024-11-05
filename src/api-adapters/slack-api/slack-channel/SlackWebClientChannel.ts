@@ -38,7 +38,7 @@ export class SlackWebClientChannel implements SlackTargetedChannel, SlackBroadca
     }
 
     inviteToChannel(options: InviteToChannelArguments): Promise<void> {
-        if (options.users?.length || 0 == 0) {
+        if ((options.users || []).length == 0) {
             return;
         }
         return this.client.conversations.invite({
