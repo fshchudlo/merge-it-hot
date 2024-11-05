@@ -82,6 +82,9 @@ export class SlackChannelProvisioner {
                         iconEmoji
                     })).channelInfo;
                 }
+                if (error.data?.error == "is_archived") {
+                    return await unarchiveChannel(channelName);
+                }
                 throw error;
             }
         };
@@ -99,7 +102,7 @@ export class SlackChannelProvisioner {
                     const archivedChannel = result.channels.find((channel) => channel.name === channelName && channel.is_archived);
 
                     if (archivedChannel) {
-                        await this.client.channels.unarchive({ channel: archivedChannel.id });
+                        await this.client.conversations.unarchive({ channel: archivedChannel.id });
                         return {
                             id: archivedChannel.id,
                             name: channelName
@@ -113,14 +116,14 @@ export class SlackChannelProvisioner {
             return null;
         };
 
-        if (payload.eventKey == "pr:opened") {
-            return await createOrFindChannel();
-        }
         if (payload.eventKey == "pr:reopened") {
             return (await unarchiveChannel(channelName)) || await createOrFindChannel();
         }
 
         try {
+            if (payload.eventKey == "pr:opened") {
+                return await createOrFindChannel();
+            }
             return findOrCreateChannel();
         } catch (error: any) {
             if (error.data?.error == "is_archived") {
