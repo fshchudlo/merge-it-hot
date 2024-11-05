@@ -31,7 +31,7 @@ export async function normalizePayloadGenericPart(payload: BitbucketNotification
             links: {
                 self: payload.pullRequest.links.self[0].href
             },
-            reviewers: normalizedReviewersPayload,
+            participants: normalizedReviewersPayload,
             targetBranch: {
                 branchName: payload.pullRequest.toRef.displayId,
                 projectKey: payload.pullRequest.toRef.repository.project.key,

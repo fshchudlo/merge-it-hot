@@ -15,14 +15,12 @@ export class PullRequestParticipantsChangedHandler implements PullRequestEventHa
 async function updateChannelMembers(payload: PullRequestParticipantsUpdatedEvent, slackChannel: SlackTargetedChannel) {
     const userIdsToAdd = payload.addedParticipants.map(payload => payload.slackUserId);
 
-    if (userIdsToAdd.length > 0) {
-        await slackChannel.inviteToChannel({
-            users: userIdsToAdd,
-            force: true
-        });
-    }
+    await slackChannel.inviteToChannel({
+        users: userIdsToAdd,
+        force: true
+    });
 
-    const activeParticipants = [payload.pullRequest.author.name, ...payload.pullRequest.reviewers.map(r => r.user.name), ...payload.pullRequest.assignees.map(r => r.name)];
+    const activeParticipants = [payload.pullRequest.author.name, ...payload.pullRequest.participants.map(r => r.user.name), ...payload.pullRequest.assignees.map(r => r.name)];
     const userIdsToRemove = payload.removedParticipants
         .filter(p => !activeParticipants.includes(p.name))
         .map(p => p.slackUserId);
