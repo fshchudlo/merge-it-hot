@@ -101,16 +101,7 @@ exports[`PR is ready for review use-case Should send notification when PR is mar
   ],
   "addedReactions": [],
   "closeChannelCalls": [],
-  "invitesToChannels": [
-    {
-      "force": true,
-      "users": [
-        "000000",
-        "111111",
-        "222222",
-      ],
-    },
-  ],
+  "invitesToChannels": [],
   "kicksFromChannels": [],
   "reopenChannelCalls": [],
   "searchedCommentSnapshots": [],

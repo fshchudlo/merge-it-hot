@@ -11,16 +11,7 @@ exports[`PR opened use-case Should add bookmark and invite author and reviewers 
   ],
   "addedReactions": [],
   "closeChannelCalls": [],
-  "invitesToChannels": [
-    {
-      "force": true,
-      "users": [
-        "000000",
-        "111111",
-        "222222",
-      ],
-    },
-  ],
+  "invitesToChannels": [],
   "kicksFromChannels": [],
   "reopenChannelCalls": [],
   "searchedCommentSnapshots": [],
