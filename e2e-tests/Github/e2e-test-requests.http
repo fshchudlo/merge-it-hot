@@ -229,10 +229,8 @@ X-GitHub-Event: pull_request_review_comment
 < ./test-payloads/PR-comment-created-test-payload.json
 
 > {%
-    client.test("Addition of the comment to closed PR leads to error since channel is archived", function() {
-        console.log(response.body)
-        client.assert(response.body.indexOf('An API error occurred: name_taken') !== -1);
-        client.assert(response.status === 500)
+    client.test("Addition of the comment to closed PR should unarchive the channel and send the message", function() {
+        client.assert(response.status === 200);
     });
 %}
 
