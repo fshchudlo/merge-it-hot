@@ -5,6 +5,8 @@ import {
     SNAPSHOT_PULL_REQUEST_STATE_EVENT_TYPE
 } from "../../../pr-events-handling/event-handlers/utils/snapshotPullRequestState";
 import { SlackChannelInfo } from "../SlackChannelProvisioner";
+import { CHANNELS_CACHE } from "../CHANNELS_CACHE";
+import { COMMENTS_CACHE } from "../COMMENTS_CACHE";
 import {
     AddBookmarkArguments, PullRequestCommentSnapshot, PullrequestCommentSnapshotInSlackMetadata,
     InviteToChannelArguments,
@@ -15,7 +17,8 @@ import {
 } from "../../../pr-events-handling/slack-api-ports";
 
 /**
- * Adapter for the Slack API that also acts as an {@link https://awesome-architecture.com/cloud-design-patterns/anti-corruption-layer-pattern/|anti-corruption layer} since Slack API is not always consistent
+ * Adapter for the Slack API that also acts as an anti-corruption layer since Slack API is not always consistent.
+ * Includes caching functionality.
  */
 export class SlackWebClientChannel implements SlackTargetedChannel, SlackBroadcastChannel {
     private readonly client: slack.WebClient;
@@ -28,53 +31,63 @@ export class SlackWebClientChannel implements SlackTargetedChannel, SlackBroadca
         this.iconEmoji = iconEmoji;
     }
 
-    addBookmark(options: AddBookmarkArguments): Promise<void> {
-        return this.client.bookmarks.add({
+    private getCommentCacheKey(reviewCommentId: number | string) {
+        return `${this.channelInfo.id}-${reviewCommentId}`;
+    }
+
+    async addBookmark(options: AddBookmarkArguments): Promise<void> {
+        await this.client.bookmarks.add({
             channel_id: this.channelInfo.id,
             link: options.link,
             title: options.title,
             type: "link"
-        }) as unknown as Promise<void>;
+        });
     }
 
-    inviteToChannel(options: InviteToChannelArguments): Promise<void> {
-        if ((options.users || []).length == 0) {
+    async inviteToChannel(options: InviteToChannelArguments): Promise<void> {
+        if ((options.users || []).length === 0) {
             return;
         }
-        return this.client.conversations.invite({
-            channel: this.channelInfo.id,
-            users: options.users.join(","),
-            force: true
-        }).catch(error => {
-            return (error.data.errors || [error.data.error]).every((innerError: any) => {
-                return innerError.error == "already_in_channel";
-            }) ? undefined : error;
-        }) as unknown as Promise<void>;
-    }
-
-    kickFromChannel(options: KickFromChannelArguments): Promise<void> {
-        return Promise.all(options.users.map(async userId => {
-            return this.client.conversations.kick({
+        try {
+            await this.client.conversations.invite({
                 channel: this.channelInfo.id,
-                user: userId
-            }).catch(error => error.data.error == "not_in_channel" ? undefined : error);
-        })) as unknown as Promise<void>;
+                users: options.users.join(","),
+                force: true
+            });
+        } catch (error: any) {
+            if (!(error.data.errors || [error.data.error]).every((innerError: any) => innerError.error === "already_in_channel")) {
+                throw error;
+            }
+        }
     }
 
-    closeChannel(): Promise<void> {
-        return this.client.conversations.archive({ channel: this.channelInfo.id }) as unknown as Promise<void>;
+    async kickFromChannel(options: KickFromChannelArguments): Promise<void> {
+        await Promise.all(options.users.map(async userId => {
+            try {
+                await this.client.conversations.kick({
+                    channel: this.channelInfo.id,
+                    user: userId
+                });
+            } catch (error: any) {
+                if (error.data.error !== "not_in_channel") {
+                    throw error;
+                }
+            }
+        }));
     }
 
-    reopenChannel(): Promise<void> {
-        return this.client.conversations.unarchive({ channel: this.channelInfo.id }) as unknown as Promise<void>;
+    async closeChannel(): Promise<void> {
+        await this.client.conversations.archive({ channel: this.channelInfo.id });
+        await CHANNELS_CACHE.delete(this.channelInfo.name);
+        await COMMENTS_CACHE.deleteWhere(key => key.startsWith(this.getCommentCacheKey("")));
     }
 
-    addReaction(messageId: string, reaction: string): Promise<void> {
-        return this.client.reactions.add({
+    async addReaction(messageId: string, reaction: string): Promise<void> {
+        await this.client.reactions.add({
             channel: this.channelInfo.id,
             timestamp: messageId,
             name: reaction
-        }) as unknown as Promise<void>;
+        });
     }
 
     async sendMessage(options: SendMessageArguments): Promise<SendMessageResponse> {
@@ -90,6 +103,17 @@ export class SlackWebClientChannel implements SlackTargetedChannel, SlackBroadca
             thread_ts: options.threadId,
             reply_broadcast: options.replyBroadcast
         });
+
+        const metadata = <PullrequestCommentSnapshotInSlackMetadata>options.metadata?.eventPayload;
+        if (metadata?.commentId) {
+            const commentSnapshot: PullRequestCommentSnapshot = {
+                ...metadata,
+                slackMessageId: response.message.ts,
+                slackThreadId: response.message.thread_ts
+            };
+            await COMMENTS_CACHE.set(this.getCommentCacheKey(commentSnapshot.commentId), commentSnapshot);
+        }
+
         return {
             messageId: response.message.ts,
             threadId: response.message.thread_ts
@@ -97,36 +121,60 @@ export class SlackWebClientChannel implements SlackTargetedChannel, SlackBroadca
     }
 
     async findLatestPullRequestCommentSnapshot(reviewCommentId: number | string): Promise<PullRequestCommentSnapshot | null> {
-        const matchPredicate = (message: MessageElement) => {
-            const eventPayload = message.metadata?.event_type === SNAPSHOT_COMMENT_STATE_EVENT_TYPE ? <PullrequestCommentSnapshotInSlackMetadata>message.metadata?.event_payload : null;
-            return eventPayload && eventPayload?.commentId === reviewCommentId.toString();
-        };
-        const message = await this.findMessageInChannelHistory(this.channelInfo.id, matchPredicate);
+        const cacheKey = this.getCommentCacheKey(reviewCommentId);
+        const cachedCommentInfo = await COMMENTS_CACHE.get(cacheKey);
 
-        if (message) {
-            const metadata = <PullrequestCommentSnapshotInSlackMetadata>message.metadata?.event_payload;
-            return <PullRequestCommentSnapshot>{
+        if (cachedCommentInfo) return cachedCommentInfo;
+
+        const comment = await this.findMessageInChannelHistory(
+            this.channelInfo.id,
+            message => {
+                const eventPayload = message.metadata?.event_type === SNAPSHOT_COMMENT_STATE_EVENT_TYPE
+                    ? <PullrequestCommentSnapshotInSlackMetadata>message.metadata?.event_payload
+                    : null;
+                return eventPayload && eventPayload.commentId === reviewCommentId.toString();
+            }
+        );
+
+        if (comment) {
+            const metadata = <PullrequestCommentSnapshotInSlackMetadata>comment.metadata?.event_payload;
+            const snapshot = <PullRequestCommentSnapshot>{
                 commentId: metadata.commentId,
                 commentParentId: metadata.commentParentId,
                 threadResolvedDate: metadata.threadResolvedDate,
                 taskResolvedDate: metadata.taskResolvedDate,
                 severity: metadata.severity,
-                slackMessageId: message.ts,
-                slackThreadId: message.thread_ts
+                slackMessageId: comment.ts,
+                slackThreadId: comment.thread_ts
             };
+            await COMMENTS_CACHE.set(cacheKey, snapshot);
+            return snapshot;
         }
+
+        return null;
     }
 
     async findPROpenedBroadcastMessageId(prCreationDate: Date, pullRequestTraits: PullRequestSnapshotInSlackMetadata): Promise<string | null> {
-        const matchPredicate = (message: MessageElement) => {
-            const eventPayload = message.metadata?.event_type === SNAPSHOT_PULL_REQUEST_STATE_EVENT_TYPE ? <PullRequestSnapshotInSlackMetadata>message.metadata?.event_payload : null;
-            return eventPayload && eventPayload?.pullRequestId === pullRequestTraits.pullRequestId && eventPayload?.projectKey === pullRequestTraits.projectKey && eventPayload?.repositorySlug === pullRequestTraits.repositorySlug;
-        };
-        const message = await this.findMessageInChannelHistory(this.channelInfo.id, matchPredicate, prCreationDate);
+        const message = await this.findMessageInChannelHistory(
+            this.channelInfo.id,
+            message => {
+                const eventPayload = message.metadata?.event_type === SNAPSHOT_PULL_REQUEST_STATE_EVENT_TYPE
+                    ? <PullRequestSnapshotInSlackMetadata>message.metadata?.event_payload
+                    : null;
+                return (
+                    eventPayload &&
+                    eventPayload.pullRequestId === pullRequestTraits.pullRequestId &&
+                    eventPayload.projectKey === pullRequestTraits.projectKey &&
+                    eventPayload.repositorySlug === pullRequestTraits.repositorySlug
+                );
+            },
+            prCreationDate
+        );
+
         return message?.ts || null;
     }
 
-    private async findMessageInChannelHistory(channelId: string, matchPredicate: (message: MessageElement) => boolean, oldestDate: Date | undefined = undefined) {
+    private async findMessageInChannelHistory(channelId: string, matchPredicate: (message: MessageElement) => boolean, oldestDate: Date | undefined = undefined): Promise<MessageElement | null> {
         let cursor: string | undefined = undefined;
         const slackTimestamp = oldestDate ? Math.floor(oldestDate.getTime() / 1000) + ".000000" : undefined;
 
@@ -140,17 +188,10 @@ export class SlackWebClientChannel implements SlackTargetedChannel, SlackBroadca
             });
 
             const message = response.messages.find(matchPredicate);
+            if (message) return message;
 
-            if (message) {
-                return message;
-            }
-
-            if (response.response_metadata && response.response_metadata.next_cursor
-            ) {
-                cursor = response.response_metadata.next_cursor;
-            } else {
-                return null;
-            }
+            cursor = response.response_metadata?.next_cursor;
+            if (!cursor) return null;
         }
     }
 }

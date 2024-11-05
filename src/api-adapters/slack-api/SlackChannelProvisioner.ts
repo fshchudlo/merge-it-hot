@@ -3,7 +3,6 @@ import { SlackWebClientChannel } from "./slack-channel/SlackWebClientChannel";
 import { PullRequestEvent } from "../../pr-events-handling/event-contracts";
 import { buildChannelName } from "./buildChannelName";
 import { CHANNELS_CACHE } from "./CHANNELS_CACHE";
-import { SlackChannelCachedDecorator } from "./slack-channel/SlackChannelCachedDecorator";
 
 import { SlackBroadcastChannel, SlackTargetedChannel } from "../../pr-events-handling/slack-api-ports";
 
@@ -16,7 +15,7 @@ export class SlackChannelProvisioner {
 
     async findBroadcastChannel(channelName: string, iconEmoji: BotEconEmoji): Promise<SlackBroadcastChannel | null> {
         const channelInfo = await this.findTargetedChannelInfo(channelName);
-        return channelInfo ? new SlackChannelCachedDecorator(new SlackWebClientChannel(this.client, channelInfo, iconEmoji)) : null;
+        return channelInfo ? new SlackWebClientChannel(this.client, channelInfo, iconEmoji) : null;
     }
 
     async provisionTargetedChannel(payload: PullRequestEvent, iconEmoji: BotEconEmoji, usePrivateChannels: boolean, defaultChannelParticipants: string[]): Promise<SlackTargetedChannel> {
@@ -24,7 +23,7 @@ export class SlackChannelProvisioner {
         const channelInfo = await CHANNELS_CACHE.wrap(channelName, async () => {
             return await this.instantiateChannel(channelName, payload, iconEmoji, usePrivateChannels, defaultChannelParticipants);
         });
-        return new SlackChannelCachedDecorator(new SlackWebClientChannel(this.client, channelInfo, iconEmoji));
+        return new SlackWebClientChannel(this.client, channelInfo, iconEmoji);
     }
 
     async findTargetedChannelInfo(channelName: string): Promise<SlackChannelInfo | null> {
@@ -145,7 +144,7 @@ export class SlackChannelProvisioner {
         }, options.iconEmoji);
 
         await channel.inviteToChannel({ users: options.defaultParticipants, force: true });
-        return new SlackChannelCachedDecorator(channel);
+        return channel;
     }
 
     private async findExistingChannel(channelName: string): Promise<SlackChannelInfo | null> {
