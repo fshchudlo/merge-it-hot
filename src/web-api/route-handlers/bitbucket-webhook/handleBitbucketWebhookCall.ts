@@ -13,7 +13,7 @@ export async function handleBitbucketWebhookCall(req: Request, res: Response, ne
         const payload = await transformRequestPayloadToEvent(req.body, bitbucketAPI, slackUserIdResolver);
         const broadcastChannelName = AppConfig.getOpenedPRBroadcastChannel(payload);
         const broadcastChannel = broadcastChannelName ? await slackChannelFactory.findBroadcastChannel(broadcastChannelName, ":bitbucket:") : null;
-        const targetedChannel = await slackChannelFactory.provisionTargetedChannel(payload, ":bitbucket:", AppConfig.USE_PRIVATE_CHANNELS, AppConfig.DEFAULT_CHANNEL_PARTICIPANTS);
+        const targetedChannel = await slackChannelFactory.provisionTargetedChannel(payload, ":bitbucket:", AppConfig.DEFAULT_CHANNEL_PARTICIPANTS);
 
         await handlePullRequestEvent(payload, targetedChannel, broadcastChannel);
 

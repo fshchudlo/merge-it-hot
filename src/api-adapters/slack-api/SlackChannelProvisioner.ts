@@ -18,10 +18,10 @@ export class SlackChannelProvisioner {
         return channelInfo ? new SlackWebClientChannel(this.client, channelInfo, iconEmoji) : null;
     }
 
-    async provisionTargetedChannel(payload: PullRequestEvent, iconEmoji: BotEconEmoji, usePrivateChannels: boolean, defaultChannelParticipants: string[]): Promise<SlackTargetedChannel> {
+    async provisionTargetedChannel(payload: PullRequestEvent, iconEmoji: BotEconEmoji, defaultChannelParticipants: string[]): Promise<SlackTargetedChannel> {
         const channelName = buildChannelName(payload.pullRequest);
         const channelInfo = await CHANNELS_CACHE.wrap(channelName, async () => {
-            return await this.setupChannel(channelName, payload, iconEmoji, usePrivateChannels, defaultChannelParticipants);
+            return await this.setupChannel(channelName, payload, iconEmoji, defaultChannelParticipants);
         });
         return new SlackWebClientChannel(this.client, channelInfo, iconEmoji);
     }
@@ -44,7 +44,7 @@ export class SlackChannelProvisioner {
 * - For other events, we try to find an existing channel. But it may not exist, if "pr:opened" payload wasn't delivered first.
 * - The last point is that channel was archived because PR was merged, but latter the comment had arrived. In this case, we need to unarchive the channel.
 * */
-    private async setupChannel(channelName: string, payload: PullRequestEvent, iconEmoji: BotEconEmoji, usePrivateChannels: boolean, defaultChannelParticipants: string[]): Promise<SlackChannelInfo> {
+    private async setupChannel(channelName: string, payload: PullRequestEvent, iconEmoji: BotEconEmoji, defaultChannelParticipants: string[]): Promise<SlackChannelInfo> {
         const allParticipantsToInvite = [...new Set(
             [payload.pullRequest.author, ...payload.pullRequest.participants.map(r => r.user)].map(u => u.slackUserId)
                 .concat(defaultChannelParticipants)
@@ -52,7 +52,7 @@ export class SlackChannelProvisioner {
 
         const createChannelWithFallbacks = async (): Promise<SlackChannelInfo> => {
             try {
-                return await this.createNewChannel(channelName, allParticipantsToInvite, usePrivateChannels, iconEmoji);
+                return await this.createNewChannel(channelName, allParticipantsToInvite, iconEmoji);
             } catch (error: any) {
                 if (error.data?.error !== "name_taken") {
                     throw error;
@@ -104,8 +104,8 @@ export class SlackChannelProvisioner {
         return null;
     }
 
-    private async createNewChannel(channelName: string, participants: string[], isPrivate: boolean, iconEmoji: BotEconEmoji): Promise<SlackChannelInfo> {
-        const response = await this.client.conversations.create({ name: channelName, is_private: isPrivate });
+    private async createNewChannel(channelName: string, participants: string[], iconEmoji: BotEconEmoji): Promise<SlackChannelInfo> {
+        const response = await this.client.conversations.create({ name: channelName, is_private: true });
         const channel = new SlackWebClientChannel(this.client, { id: response.channel.id, name: response.channel.name }, iconEmoji);
         await channel.inviteToChannel({ users: participants, force: true });
         return { id: response.channel.id, name: response.channel.name };
@@ -126,11 +126,5 @@ export class SlackChannelProvisioner {
 export type SlackChannelInfo = {
     id: string;
     name: string;
-}
-export type CreateChannelArguments = {
-    name: string;
-    isPrivate: boolean;
-    defaultParticipants: string[];
-    iconEmoji: string;
 }
 export type BotEconEmoji = ":bitbucket:" | ":github:";
