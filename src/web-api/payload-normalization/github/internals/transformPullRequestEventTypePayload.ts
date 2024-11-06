@@ -4,7 +4,7 @@ import GitHubAPI from "../../../../api-adapters/github-api/GitHubAPI";
 import { normalizePayloadGenericPart } from "./normalizePayloadGenericPart";
 import {
     PullRequestFromBranchUpdatedEvent,
-    PullRequestGenericEvent,
+    PullRequestGenericEvent, PullRequestIgnoredEvent,
     PullRequestModifiedEvent,
     PullRequestParticipantsUpdatedEvent
 } from "../../../../pr-events-handling/event-contracts";
@@ -14,6 +14,12 @@ import { getSlackUserId } from "./getSlackUserId";
 export async function transformPullRequestEventTypePayload(notification: GitHubNotification, userIdResolver: SlackUserIdResolver, githubAPI: GitHubAPI) {
     const action = notification.action;
     switch (action) {
+        case "auto_merge_enabled":
+            console.log(`Event ${notification.action} was configured to ignore.`);
+            return {
+                ...(await normalizePayloadGenericPart(notification, userIdResolver)),
+                eventKey: "ignored_event"
+            } as PullRequestIgnoredEvent;
         case "opened":
             return {
                 ...(await normalizePayloadGenericPart(notification, userIdResolver)),
