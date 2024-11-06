@@ -13,7 +13,8 @@ const payloadHandlers = new Array<useCases.PullRequestEventHandler>(
     new useCases.CommentEditedHandler(),
     new useCases.CommentDeletedHandler(),
     new useCases.NewCommitAddedHandler(),
-    new useCases.PullRequestCompletionHandler()
+    new useCases.PullRequestCompletionHandler(),
+    new useCases.PullRequestReopenedHandler()
 );
 
 export default async function handlePullRequestEvent(payload: PullRequestEvent, pullRequestChannel: SlackTargetedChannel, broadcastChannel: SlackBroadcastChannel = null) {
@@ -23,17 +24,23 @@ export default async function handlePullRequestEvent(payload: PullRequestEvent, 
             await handler.handle(payload, pullRequestChannel);
         }
     }
+    if (!broadcastChannel) {
+        return;
+    }
     switch (eventKey) {
         case "pr:opened":
-            await useCases.tryBroadcastMessageAboutOpenedPR(payload, broadcastChannel);
+            await useCases.broadcastMessageAboutOpenedPR(payload, broadcastChannel);
             break;
         case "pr:ready_for_review":
-            await useCases.tryBroadcastMessageAboutPRReadyForReviewState(payload, broadcastChannel);
+            await useCases.broadcastMessageAboutPRReadyForReviewState(payload, broadcastChannel);
             break;
         case "pr:merged":
         case "pr:declined":
         case "pr:deleted":
-            await useCases.tryBroadcastMessageAboutClosedPR(payload, broadcastChannel);
+            await useCases.broadcastMessageAboutClosedPR(payload, broadcastChannel);
+            break;
+        case "pr:reopened":
+            await useCases.broadcastMessageAboutReopenedPR(payload, broadcastChannel);
             break;
     }
 }
