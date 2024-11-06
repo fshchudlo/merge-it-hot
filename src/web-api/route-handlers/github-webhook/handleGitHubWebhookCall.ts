@@ -12,6 +12,8 @@ export async function handleGitHubWebhookCall(req: Request, res: Response, next:
         const eventType = req.headers["x-github-event"];
         if (eventType === "installation_repositories") {
             console.log(`Application was installed into ${req.body.installation.account.login} ${req.body.installation.account.type.toLowerCase()}`);
+            res.sendStatus(200);
+            return;
         }
 
         if (!req.body?.organization?.id) {
