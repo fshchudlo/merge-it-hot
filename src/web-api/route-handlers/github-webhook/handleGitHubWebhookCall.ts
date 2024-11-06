@@ -9,14 +9,18 @@ import { GitHubPullRequestEventType } from "../../payload-normalization/github/G
 
 export async function handleGitHubWebhookCall(req: Request, res: Response, next: NextFunction, slackChannelFactory: SlackChannelProvisioner, slackUserIdResolver: SlackUserIdResolver) {
     try {
+        const eventType = req.headers["x-github-event"];
+        if (eventType === "installation_repositories") {
+            console.log(`Application was installed into ${req.body.installation.account.login} ${req.body.installation.account.type.toLowerCase()}`);
+        }
+
         if (!req.body?.organization?.id) {
             throw new Error("Organization ID is missing in the request payload");
         }
         const githubAPI = new GitHubAPI(AppConfig.GITHUB_APP_ID, AppConfig.GITHUB_APP_PRIVATE_KEY, +req.body.organization.id);
 
-        const eventType = req.headers["x-github-event"] as GitHubPullRequestEventType;
 
-        const payload = await transformRequestPayloadToEvent(eventType, req.body, slackUserIdResolver, githubAPI);
+        const payload = await transformRequestPayloadToEvent(eventType as GitHubPullRequestEventType, req.body, slackUserIdResolver, githubAPI);
         const broadcastChannelName = AppConfig.getOpenedPRBroadcastChannel(payload);
         const broadcastChannel = broadcastChannelName ? await slackChannelFactory.findBroadcastChannel(broadcastChannelName, ":github:") : null;
 
