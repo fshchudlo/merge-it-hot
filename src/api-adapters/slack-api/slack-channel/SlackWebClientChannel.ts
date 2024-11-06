@@ -83,11 +83,17 @@ export class SlackWebClientChannel implements SlackTargetedChannel, SlackBroadca
     }
 
     async addReaction(messageId: string, reaction: string): Promise<void> {
-        await this.client.reactions.add({
-            channel: this.channelInfo.id,
-            timestamp: messageId,
-            name: reaction
-        });
+        try {
+            await this.client.reactions.add({
+                channel: this.channelInfo.id,
+                timestamp: messageId,
+                name: reaction
+            });
+        } catch (error: any) {
+            if (error.data.error !== "already_reacted") {
+                throw error;
+            }
+        }
     }
 
     async sendMessage(options: SendMessageArguments): Promise<SendMessageResponse> {

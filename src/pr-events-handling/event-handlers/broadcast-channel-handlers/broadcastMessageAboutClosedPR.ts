@@ -3,10 +3,7 @@ import { getPullRequestCompletionAction } from "../utils/getPullRequestCompletio
 
 import { SlackBroadcastChannel } from "../../slack-api-ports";
 
-export async function tryBroadcastMessageAboutClosedPR(payload: PullRequestGenericEvent, broadcastChannel: SlackBroadcastChannel) {
-    if (!broadcastChannel) {
-        return;
-    }
+export async function broadcastMessageAboutClosedPR(payload: PullRequestGenericEvent, broadcastChannel: SlackBroadcastChannel) {
     const initialBroadcastMessageId = await broadcastChannel.findPROpenedBroadcastMessageId(payload.pullRequest.createdAt, {
         pullRequestId: payload.pullRequest.number.toString(),
         projectKey: payload.pullRequest.targetBranch.projectKey,

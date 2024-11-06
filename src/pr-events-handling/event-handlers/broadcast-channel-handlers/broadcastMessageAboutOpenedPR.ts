@@ -3,8 +3,8 @@ import { snapshotPullRequestState } from "../utils";
 import { PullRequestGenericEvent } from "../../event-contracts";
 import { SendMessageArguments, SlackBroadcastChannel } from "../../slack-api-ports";
 
-export async function tryBroadcastMessageAboutOpenedPR(payload: PullRequestGenericEvent, broadcastChannel: SlackBroadcastChannel) {
-    await broadcastChannel?.sendMessage(buildMessage(payload));
+export async function broadcastMessageAboutOpenedPR(payload: PullRequestGenericEvent, broadcastChannel: SlackBroadcastChannel) {
+    await broadcastChannel.sendMessage(buildMessage(payload));
 }
 
 function buildMessage(payload: PullRequestGenericEvent): SendMessageArguments {

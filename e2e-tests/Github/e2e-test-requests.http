@@ -207,6 +207,32 @@ X-GitHub-Event: pull_request_review
     });
 %}
 
+### Close pull request
+POST {{EndpointHost}}/github-webhook
+Content-Type: application/json
+X-GitHub-Event: pull_request
+
+< ./test-payloads/PR-closed-test-payload.json
+
+> {%
+    client.test("Pull request close should be successful", function() {
+        client.assert(response.status === 200);
+    });
+%}
+
+### Reopen pull request
+POST {{EndpointHost}}/github-webhook
+Content-Type: application/json
+X-GitHub-Event: pull_request
+
+< ./test-payloads/PR-reopened-test-payload.json
+
+> {%
+    client.test("Pull request reopen should be successful", function() {
+        client.assert(response.status === 200);
+    });
+%}
+
 
 ### Merge pull request
 POST {{EndpointHost}}/github-webhook

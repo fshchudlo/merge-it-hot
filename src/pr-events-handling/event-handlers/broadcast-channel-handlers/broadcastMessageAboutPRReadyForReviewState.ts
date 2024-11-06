@@ -4,10 +4,7 @@ import { SlackBroadcastChannel } from "../../slack-api-ports";
 import { italic, section } from "../utils/slack-building-blocks";
 import { reviewPRAction } from "../utils";
 
-export async function tryBroadcastMessageAboutPRReadyForReviewState(payload: PullRequestGenericEvent, broadcastChannel: SlackBroadcastChannel) {
-    if (!broadcastChannel) {
-        return;
-    }
+export async function broadcastMessageAboutPRReadyForReviewState(payload: PullRequestGenericEvent, broadcastChannel: SlackBroadcastChannel) {
     const initialBroadcastMessageId = await broadcastChannel.findPROpenedBroadcastMessageId(payload.pullRequest.createdAt, {
         pullRequestId: payload.pullRequest.number.toString(),
         projectKey: payload.pullRequest.targetBranch.projectKey,

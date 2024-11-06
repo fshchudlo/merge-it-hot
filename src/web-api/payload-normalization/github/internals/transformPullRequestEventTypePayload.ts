@@ -30,6 +30,11 @@ export async function transformPullRequestEventTypePayload(notification: GitHubN
                 ...(await normalizePayloadGenericPart(notification, userIdResolver)),
                 eventKey: notification.pull_request.merged ? "pr:merged" : "pr:deleted"
             } as PullRequestGenericEvent;
+        case "reopened":
+            return {
+                ...(await normalizePayloadGenericPart(notification, userIdResolver)),
+                eventKey: "pr:reopened"
+            } as PullRequestGenericEvent;
         case "ready_for_review":
             return {
                 ...(await normalizePayloadGenericPart(notification, userIdResolver)),
