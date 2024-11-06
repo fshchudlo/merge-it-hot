@@ -17,8 +17,8 @@ export async function transformPullRequestCommentPayload(notification: GitHubPul
             text: notification.comment.body,
             severity: "NORMAL",
             author: {
-                name: formatUsername(notification.comment.user.login),
-                slackUserId: await getSlackUserId(userIdResolver, notification.comment.user.login)
+                name: formatUsername(notification.comment.user),
+                slackUserId: await getSlackUserId(userIdResolver, notification.comment.user)
             },
             resolvedAt: null,
             threadResolvedAt: null,

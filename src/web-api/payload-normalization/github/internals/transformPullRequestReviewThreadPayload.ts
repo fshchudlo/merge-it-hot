@@ -20,8 +20,8 @@ export async function transformPullRequestReviewThreadPayload(notification: GitH
             text: rootComment.body,
             severity: "NORMAL",
             author: {
-                name: formatUsername(rootComment.user.login),
-                slackUserId: await getSlackUserId(userIdResolver, rootComment.user.login)
+                name: formatUsername(rootComment.user),
+                slackUserId: await getSlackUserId(userIdResolver, rootComment.user)
             },
             resolvedAt: null,
             threadResolvedAt: notification.action == "resolved" ? new Date(rootComment.updated_at) : null,

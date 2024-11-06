@@ -10,8 +10,8 @@ export async function normalizePayloadGenericPart(payload: GitHubPullRequestNoti
         payload.pull_request.requested_reviewers.map(async reviewer => {
             return {
                 user: {
-                    name: formatUsername(reviewer.login),
-                    slackUserId: await getSlackUserId(userIdResolver, reviewer.login)
+                    name: formatUsername(reviewer),
+                    slackUserId: await getSlackUserId(userIdResolver, reviewer)
                 }
             } as ParticipantPayload;
         }));
@@ -19,16 +19,16 @@ export async function normalizePayloadGenericPart(payload: GitHubPullRequestNoti
     const normalizedAssigneesPayload = await Promise.all(
         payload.pull_request.assignees.map(async assignee => {
             return {
-                name: formatUsername(assignee.login),
-                slackUserId: await getSlackUserId(userIdResolver, assignee.login)
+                name: formatUsername(assignee),
+                slackUserId: await getSlackUserId(userIdResolver, assignee)
             } as UserPayload;
         }));
 
     const basePayload: PullRequestGenericEvent = {
         eventKey: "pr:opened",
         actor: {
-            name: formatUsername(payload.sender.login),
-            slackUserId: await getSlackUserId(userIdResolver, payload.sender.login)
+            name: formatUsername(payload.sender),
+            slackUserId: await getSlackUserId(userIdResolver, payload.sender)
         },
         pullRequest: {
             number: payload.pull_request.number,
@@ -49,8 +49,8 @@ export async function normalizePayloadGenericPart(payload: GitHubPullRequestNoti
                 projectKey: payload.pull_request.head.repo.owner.login
             },
             author: {
-                name: formatUsername(payload.pull_request.user.login),
-                slackUserId: await getSlackUserId(userIdResolver, payload.pull_request.user.login)
+                name: formatUsername(payload.pull_request.user),
+                slackUserId: await getSlackUserId(userIdResolver, payload.pull_request.user)
             },
             participants: normalizedReviewersPayload,
             assignees: normalizedAssigneesPayload,

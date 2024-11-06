@@ -1,8 +1,14 @@
 /*
 * Gets the user login in the format "john-doe_company name" and returns "John Doe"
 * */
-export function formatUsername(login: string) {
-    const namePart = login.split("_")[0];
+import { GitHubUserPayload } from "../GitHub.contracts";
+
+export function formatUsername(user: GitHubUserPayload) {
+    if (user.type === "Mannequin") {
+        return user.html_url.replace("https://github.com/", "");
+    }
+
+    const namePart = user.login.split("_")[0];
 
     const [firstName, lastName] = namePart.split("-");
 

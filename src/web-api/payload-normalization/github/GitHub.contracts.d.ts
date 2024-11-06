@@ -121,7 +121,8 @@ export type GitHubPullRequestPayload = {
 }
 export type GitHubUserPayload = {
     readonly login: string;
-    readonly type: string;
+    readonly type: "User" | "Mannequin";
+    readonly html_url: string;
 };
 export type GitHubRefPayload = {
     readonly ref: string;

@@ -45,8 +45,8 @@ export async function transformPullRequestEventTypePayload(notification: GitHubN
                 ...(await normalizePayloadGenericPart(notification, userIdResolver)),
                 eventKey: "pr:participants:changed",
                 addedParticipants: [{
-                    name: formatUsername(notification.requested_reviewer.login),
-                    slackUserId: await getSlackUserId(userIdResolver, notification.requested_reviewer.login)
+                    name: formatUsername(notification.requested_reviewer),
+                    slackUserId: await getSlackUserId(userIdResolver, notification.requested_reviewer)
                 }],
                 removedParticipants: []
             } as PullRequestParticipantsUpdatedEvent;
@@ -56,8 +56,8 @@ export async function transformPullRequestEventTypePayload(notification: GitHubN
                 eventKey: "pr:participants:changed",
                 addedParticipants: [],
                 removedParticipants: [{
-                    name: formatUsername(notification.requested_reviewer.login),
-                    slackUserId: await getSlackUserId(userIdResolver, notification.requested_reviewer.login)
+                    name: formatUsername(notification.requested_reviewer),
+                    slackUserId: await getSlackUserId(userIdResolver, notification.requested_reviewer)
                 }]
             } as PullRequestParticipantsUpdatedEvent;
         case "assigned":
@@ -65,8 +65,8 @@ export async function transformPullRequestEventTypePayload(notification: GitHubN
                 ...(await normalizePayloadGenericPart(notification, userIdResolver)),
                 eventKey: "pr:participants:changed",
                 addedParticipants: [{
-                    name: formatUsername(notification.assignee.login),
-                    slackUserId: await getSlackUserId(userIdResolver, notification.assignee.login)
+                    name: formatUsername(notification.assignee),
+                    slackUserId: await getSlackUserId(userIdResolver, notification.assignee)
                 }],
                 removedParticipants: []
             } as PullRequestParticipantsUpdatedEvent;
@@ -75,8 +75,8 @@ export async function transformPullRequestEventTypePayload(notification: GitHubN
                 ...(await normalizePayloadGenericPart(notification, userIdResolver)),
                 eventKey: "pr:participants:changed",
                 removedParticipants: [{
-                    name: formatUsername(notification.assignee.login),
-                    slackUserId: await getSlackUserId(userIdResolver, notification.assignee.login)
+                    name: formatUsername(notification.assignee),
+                    slackUserId: await getSlackUserId(userIdResolver, notification.assignee)
                 }],
                 addedParticipants: []
             } as PullRequestParticipantsUpdatedEvent;
