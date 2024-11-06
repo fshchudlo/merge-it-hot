@@ -110,6 +110,12 @@ export default class TestPayloadBuilder {
             eventKey: "pr:deleted"
         };
     }
+    static pullRequestReopened(): PullRequestEvent {
+        return {
+            ...getBasicPayload(),
+            eventKey: "pr:reopened"
+        };
+    }
 
     static pullRequestCommentDeleted(): PullRequestCommentActionEvent {
         const payload = this.pullRequestCommentAdded() as any;
