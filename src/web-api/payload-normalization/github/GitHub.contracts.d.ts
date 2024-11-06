@@ -6,9 +6,8 @@ export type GitHubNotification =
     | GitHubPullRequestReviewSubmittedNotification
     | GitHubPullRequestThreadResolutionNotification;
 
-
 export type GitHubPullRequestBasicNotification = GitHubPullRequestNotificationBasicPayload & {
-    readonly action: "opened" | "closed" | "synchronize" | "ready_for_review";
+    readonly action: "opened" | "closed" | "synchronize" | "ready_for_review" | "auto_merge_enabled";
 };
 
 export export type GitHubPullRequestReviewersUpdatedNotification = GitHubPullRequestNotificationBasicPayload & {

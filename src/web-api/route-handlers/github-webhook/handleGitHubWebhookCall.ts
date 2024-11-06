@@ -21,6 +21,11 @@ export async function handleGitHubWebhookCall(req: Request, res: Response, next:
 
 
         const payload = await transformRequestPayloadToEvent(eventType as GitHubPullRequestEventType, req.body, slackUserIdResolver, githubAPI);
+        if (payload.eventKey === "ignored_event") {
+            res.sendStatus(200);
+            return;
+        }
+
         const broadcastChannelName = AppConfig.getOpenedPRBroadcastChannel(payload);
         const broadcastChannel = broadcastChannelName ? await slackChannelFactory.findBroadcastChannel(broadcastChannelName, ":github:") : null;
 
