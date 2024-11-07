@@ -13,7 +13,7 @@ export type GitHubPullRequestBasicNotification = GitHubPullRequestNotificationBa
 export export type GitHubPullRequestReviewersUpdatedNotification = GitHubPullRequestNotificationBasicPayload & {
     readonly action: "review_requested" | "review_request_removed";
     readonly requested_reviewer?: GitHubUserPayload;
-    readonly requested_team?: { members_url: string };
+    readonly requested_team?: GitHubTeamPayload;
 };
 
 export export type GitHubPullRequestAssigneesUpdatedNotification = GitHubPullRequestNotificationBasicPayload & {
@@ -101,6 +101,7 @@ export type GitHubPullRequestPayload = {
     readonly assignee: string | null;
     readonly assignees: GitHubUserPayload[];
     readonly requested_reviewers: GitHubUserPayload[];
+    readonly requested_teams: GitHubTeamPayload[];
     readonly draft: boolean;
     readonly head: GitHubRefPayload;
     readonly base: GitHubRefPayload;
@@ -120,6 +121,9 @@ export type GitHubPullRequestPayload = {
     readonly deletions: number;
     readonly changed_files: number;
 }
+export type GitHubTeamPayload = {
+    members_url: string
+};
 export type GitHubUserPayload = {
     readonly login: string;
     readonly type: "User" | "Mannequin" | "Bot";

@@ -3,15 +3,16 @@ import { SlackUserIdResolver } from "../../SlackUserIdResolver";
 import { normalizePayloadGenericPart } from "./normalizePayloadGenericPart";
 import { PullRequestCommentActionEvent } from "../../../../pr-events-handling/event-contracts";
 import mapGitHubUserToSlackUser from "./mapGitHubUserToSlackUser";
+import GitHubAPI from "../../../../api-adapters/github-api/GitHubAPI";
 
-export async function transformPullRequestReviewThreadPayload(notification: GitHubNotification, userIdResolver: SlackUserIdResolver) {
+export async function transformPullRequestReviewThreadPayload(notification: GitHubNotification, userIdResolver: SlackUserIdResolver, githubAPI: GitHubAPI) {
     if (notification.action !== "resolved" && notification.action !== "unresolved") {
         throw new Error(`"${notification.action}" review thread action key is unknown.`);
     }
 
     const rootComment = notification.thread.comments.find(comment => !comment.in_reply_to_id);
     return {
-        ...(await normalizePayloadGenericPart(notification, userIdResolver)),
+        ...(await normalizePayloadGenericPart(notification, userIdResolver, githubAPI)),
         eventKey: "pr:comment:edited",
         comment: {
             id: rootComment.id,

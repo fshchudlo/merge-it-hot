@@ -3,12 +3,13 @@ import { SlackUserIdResolver } from "../../SlackUserIdResolver";
 import { normalizePayloadGenericPart } from "./normalizePayloadGenericPart";
 import { PullRequestCommentActionEvent } from "../../../../pr-events-handling/event-contracts";
 import mapGitHubUserToSlackUser from "./mapGitHubUserToSlackUser";
+import GitHubAPI from "../../../../api-adapters/github-api/GitHubAPI";
 
-export async function transformPullRequestCommentPayload(notification: GitHubPullRequestCommentNotification, userIdResolver: SlackUserIdResolver) {
+export async function transformPullRequestCommentPayload(notification: GitHubPullRequestCommentNotification, userIdResolver: SlackUserIdResolver, githubAPI: GitHubAPI) {
     const action = notification.action;
 
     return {
-        ...(await normalizePayloadGenericPart(notification, userIdResolver)),
+        ...(await normalizePayloadGenericPart(notification, userIdResolver, githubAPI)),
         eventKey: mapGitHubCommentActionToEventKey(action),
         comment: {
             id: notification.comment.id,

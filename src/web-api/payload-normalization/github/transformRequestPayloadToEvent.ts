@@ -18,18 +18,18 @@ export async function transformRequestPayloadToEvent(eventType: GitHubPullReques
         case "pull_request":
             return await transformPullRequestEventTypePayload(notification, userIdResolver, githubAPI);
         case "pull_request_review":
-            return await transformPullRequestReviewPayload(<GitHubPullRequestReviewSubmittedNotification>notification, userIdResolver);
+            return await transformPullRequestReviewPayload(<GitHubPullRequestReviewSubmittedNotification>notification, userIdResolver, githubAPI);
         case "pull_request_review_comment":
-            return await transformPullRequestCommentPayload(<GitHubPullRequestCommentNotification>notification, userIdResolver);
+            return await transformPullRequestCommentPayload(<GitHubPullRequestCommentNotification>notification, userIdResolver, githubAPI);
         case "pull_request_review_thread":
-            return await transformPullRequestReviewThreadPayload(notification, userIdResolver);
+            return await transformPullRequestReviewThreadPayload(notification, userIdResolver, githubAPI);
         case "issue_comment":
             const pullRequest = await githubAPI.fetchFromAPIUrl<GitHubPullRequestPayload>((<any>notification).issue.pull_request.url);
             notification = {
                 ...notification,
                 pull_request: pullRequest
             };
-            return await transformPullRequestCommentPayload(<GitHubPullRequestCommentNotification>notification, userIdResolver);
+            return await transformPullRequestCommentPayload(<GitHubPullRequestCommentNotification>notification, userIdResolver, githubAPI);
         default:
             throw new Error(`"${eventType}" event type is unknown.`);
     }

@@ -2,10 +2,11 @@ import { GitHubPullRequestReviewState, GitHubPullRequestReviewSubmittedNotificat
 import { SlackUserIdResolver } from "../../SlackUserIdResolver";
 import { normalizePayloadGenericPart } from "./normalizePayloadGenericPart";
 import { PullRequestReviewState, PullRequestReviewSubmittedEvent } from "../../../../pr-events-handling/event-contracts";
+import GitHubAPI from "../../../../api-adapters/github-api/GitHubAPI";
 
-export async function transformPullRequestReviewPayload(notification: GitHubPullRequestReviewSubmittedNotification, userIdResolver: SlackUserIdResolver) {
+export async function transformPullRequestReviewPayload(notification: GitHubPullRequestReviewSubmittedNotification, userIdResolver: SlackUserIdResolver, githubAPI: GitHubAPI) {
     return {
-        ...(await normalizePayloadGenericPart(notification, userIdResolver)),
+        ...(await normalizePayloadGenericPart(notification, userIdResolver, githubAPI)),
         eventKey: "pr:review:submitted",
         review: {
             comment: notification.review.body || null,

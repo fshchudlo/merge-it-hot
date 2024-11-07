@@ -43,6 +43,7 @@
         "type": "User"
       }
     ],
+    "requested_teams": [],
     "draft": true,
     "head": {
       "ref": "feature/test",

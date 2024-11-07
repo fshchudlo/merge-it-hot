@@ -9,14 +9,14 @@ export async function transformPullRequestReviewRequestedPayload(notification: G
     switch (notification.action) {
         case "review_requested":
             return {
-                ...(await normalizePayloadGenericPart(notification, userIdResolver)),
+                ...(await normalizePayloadGenericPart(notification, userIdResolver, githubAPI)),
                 eventKey: "pr:participants:changed",
                 addedParticipants: await fetchParticipantsList(notification, userIdResolver, githubAPI),
                 removedParticipants: []
             } as PullRequestParticipantsUpdatedEvent;
         case "review_request_removed":
             return {
-                ...(await normalizePayloadGenericPart(notification, userIdResolver)),
+                ...(await normalizePayloadGenericPart(notification, userIdResolver, githubAPI)),
                 eventKey: "pr:participants:changed",
                 addedParticipants: [],
                 removedParticipants: await fetchParticipantsList(notification, userIdResolver, githubAPI)

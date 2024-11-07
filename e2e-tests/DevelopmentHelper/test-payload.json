@@ -1,6 +1,6 @@
 {
   "action": "invalid-payload",
   "organization": {
-    "id": "12345"
+    "id": "{{OrganizationId}}"
   }
 }

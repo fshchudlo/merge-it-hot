@@ -1,16 +1,12 @@
-import { GitHubPullRequestNotificationBasicPayload } from "../GitHub.contracts";
+import { GitHubPullRequestNotificationBasicPayload, GitHubUserPayload } from "../GitHub.contracts";
 import { SlackUserIdResolver } from "../../SlackUserIdResolver";
 import { PullRequestGenericEvent, ParticipantPayload } from "../../../../pr-events-handling/event-contracts";
 import mapGitHubUserToSlackUser from "./mapGitHubUserToSlackUser";
+import GitHubAPI from "../../../../api-adapters/github-api/GitHubAPI";
 
-export async function normalizePayloadGenericPart(payload: GitHubPullRequestNotificationBasicPayload, userIdResolver: SlackUserIdResolver) {
+export async function normalizePayloadGenericPart(payload: GitHubPullRequestNotificationBasicPayload, userIdResolver: SlackUserIdResolver, githubAPI: GitHubAPI) {
 
-    const normalizedReviewersPayload = await Promise.all(
-        payload.pull_request.requested_reviewers.map(async reviewer => {
-            return {
-                user: await mapGitHubUserToSlackUser(reviewer, userIdResolver)
-            } as ParticipantPayload;
-        }));
+    const normalizedReviewersPayload = await fetchReviewersList(payload, userIdResolver, githubAPI);
 
     const normalizedAssigneesPayload = await Promise.all(
         payload.pull_request.assignees.map(async assignee => mapGitHubUserToSlackUser(assignee, userIdResolver)));
@@ -45,4 +41,19 @@ export async function normalizePayloadGenericPart(payload: GitHubPullRequestNoti
         }
     };
     return basePayload;
+}
+
+async function fetchReviewersList(payload: GitHubPullRequestNotificationBasicPayload, userIdResolver: SlackUserIdResolver, githubAPI: GitHubAPI) {
+    const normalizedReviewersPayload = await Promise.all(
+        payload.pull_request.requested_reviewers.map(async reviewer => {
+            return {
+                user: await mapGitHubUserToSlackUser(reviewer, userIdResolver)
+            } as ParticipantPayload;
+        }));
+    for (const team of payload.pull_request.requested_teams) {
+        const teamMembers = await githubAPI.fetchFromAPIUrl<GitHubUserPayload[]>(team.members_url.replace("{/member}", ""));
+        const mappedUsers = await Promise.all(teamMembers.map(async teamMember => (await mapGitHubUserToSlackUser(teamMember, userIdResolver))));
+        normalizedReviewersPayload.push(...mappedUsers.map(user => ({ user })));
+    }
+    return normalizedReviewersPayload;
 }
