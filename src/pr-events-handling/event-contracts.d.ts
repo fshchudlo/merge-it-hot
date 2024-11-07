@@ -17,7 +17,7 @@ export type PullRequestIgnoredEvent = PullRequestNotificationBasicPayload & {
 };
 
 export type PullRequestGenericEvent = PullRequestNotificationBasicPayload & {
-    readonly eventKey: "pr:reopened" | "pr:opened" | "pr:ready_for_review" | "pr:merged" | "pr:declined" | "pr:deleted";
+    readonly eventKey: "pr:reopened" | "pr:opened" | "pr:ready_for_review" | "pr:converted_to_draft" | "pr:merged" | "pr:declined" | "pr:deleted";
 };
 
 export type PullRequestReviewSubmittedEvent = PullRequestNotificationBasicPayload & {

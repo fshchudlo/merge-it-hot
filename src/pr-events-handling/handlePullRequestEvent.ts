@@ -5,7 +5,7 @@ import { SlackBroadcastChannel, SlackTargetedChannel } from "./slack-api-ports";
 
 const payloadHandlers = new Array<useCases.PullRequestEventHandler>(
     new useCases.PullRequestOpenedHandler(),
-    new useCases.PullRequestIsReadyForReviewHandler(),
+    new useCases.PullRequestDraftStatusChangedHandler(),
     new useCases.PullRequestModifiedHandler(),
     new useCases.PullRequestParticipantsChangedHandler(),
     new useCases.PullRequestReviewSubmittedHandler(),
@@ -32,7 +32,8 @@ export default async function handlePullRequestEvent(payload: PullRequestEvent, 
             await useCases.broadcastMessageAboutOpenedPR(payload, broadcastChannel);
             break;
         case "pr:ready_for_review":
-            await useCases.broadcastMessageAboutPRReadyForReviewState(payload, broadcastChannel);
+        case "pr:converted_to_draft":
+            await useCases.broadcastMessageAboutPRDraftStatusChange(payload, broadcastChannel);
             break;
         case "pr:merged":
         case "pr:declined":

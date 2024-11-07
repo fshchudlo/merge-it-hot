@@ -2,9 +2,8 @@ import { PullRequestGenericEvent } from "../../event-contracts";
 
 import { SlackBroadcastChannel } from "../../slack-api-ports";
 import { italic, section } from "../utils/slack-building-blocks";
-import { reviewPRAction } from "../utils";
 
-export async function broadcastMessageAboutPRReadyForReviewState(payload: PullRequestGenericEvent, broadcastChannel: SlackBroadcastChannel) {
+export async function broadcastMessageAboutPRDraftStatusChange(payload: PullRequestGenericEvent, broadcastChannel: SlackBroadcastChannel) {
     const initialBroadcastMessageId = await broadcastChannel.findPROpenedBroadcastMessageId(payload.pullRequest.createdAt, {
         pullRequestId: payload.pullRequest.number.toString(),
         projectKey: payload.pullRequest.targetBranch.projectKey,
@@ -13,11 +12,15 @@ export async function broadcastMessageAboutPRReadyForReviewState(payload: PullRe
     if (!initialBroadcastMessageId) {
         return;
     }
-    const messageTitle = `:sparkler: ${payload.actor.name} marked the pull request as ${italic("ready for review")}!`;
-
+    let messageTitle;
+    if (payload.eventKey === "pr:ready_for_review") {
+        messageTitle = `:sparkler: ${payload.actor.name} marked the pull request as ${italic("ready for review")}`;
+    } else {
+        messageTitle = `:shushing_face: ${payload.actor.name} converted the pull request back to draft`;
+    }
     await broadcastChannel.sendMessage({
         text: messageTitle,
-        blocks: [section(messageTitle), reviewPRAction(payload.pullRequest)].filter(s => !!s),
+        blocks: [section(messageTitle)],
         threadId: initialBroadcastMessageId
     });
 }

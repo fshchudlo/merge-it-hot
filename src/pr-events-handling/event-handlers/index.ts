@@ -1,10 +1,10 @@
 export { broadcastMessageAboutOpenedPR } from "./broadcast-channel-handlers/broadcastMessageAboutOpenedPR";
 export { broadcastMessageAboutClosedPR } from "./broadcast-channel-handlers/broadcastMessageAboutClosedPR";
-export { broadcastMessageAboutPRReadyForReviewState } from "./broadcast-channel-handlers/broadcastMessageAboutPRReadyForReviewState";
+export { broadcastMessageAboutPRDraftStatusChange } from "./broadcast-channel-handlers/broadcastMessageAboutPRDraftStatusChange";
 export { broadcastMessageAboutReopenedPR } from "./broadcast-channel-handlers/broadcastMessageAboutReopenedPR";
 export { PullRequestOpenedHandler } from "./targeted-channel-handlers/PullRequestOpenedHandler";
 export { PullRequestReopenedHandler } from "./targeted-channel-handlers/PullRequestReopenedHandler";
-export { PullRequestIsReadyForReviewHandler } from "./targeted-channel-handlers/PullRequestIsReadyForReviewHandler";
+export { PullRequestDraftStatusChangedHandler } from "./targeted-channel-handlers/PullRequestDraftStatusChangedHandler";
 export { PullRequestCompletionHandler } from "./targeted-channel-handlers/PullRequestCompletionHandler";
 export { NewCommitAddedHandler } from "./targeted-channel-handlers/NewCommitAddedHandler";
 export { CommentAddedHandler } from "./targeted-channel-handlers/CommentAddedHandler";

@@ -83,6 +83,16 @@ export default class TestPayloadBuilder {
             eventKey: "pr:ready_for_review"
         };
     }
+    static pullRequestIsConvertedToDraft(): PullRequestEvent {
+        return {
+            ...getBasicPayload(),
+            pullRequest: {
+                ...getBasicPayload().pullRequest,
+                draft: false
+            },
+            eventKey: "pr:converted_to_draft"
+        };
+    }
     static pullRequestOpened(): PullRequestEvent {
         return {
             ...getBasicPayload(),

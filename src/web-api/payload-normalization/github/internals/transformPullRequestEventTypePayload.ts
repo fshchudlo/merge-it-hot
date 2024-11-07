@@ -15,6 +15,7 @@ export async function transformPullRequestEventTypePayload(notification: GitHubN
     const action = notification.action;
     switch (action) {
         case "auto_merge_enabled":
+        case "auto_merge_disabled":
             console.log(`Event ${notification.action} was configured to ignore.`);
             return {
                 ...(await normalizePayloadGenericPart(notification, userIdResolver)),
@@ -39,6 +40,11 @@ export async function transformPullRequestEventTypePayload(notification: GitHubN
             return {
                 ...(await normalizePayloadGenericPart(notification, userIdResolver)),
                 eventKey: "pr:ready_for_review"
+            } as PullRequestGenericEvent;
+        case "converted_to_draft":
+            return {
+                ...(await normalizePayloadGenericPart(notification, userIdResolver)),
+                eventKey: "pr:converted_to_draft"
             } as PullRequestGenericEvent;
         case "review_requested":
             return {
