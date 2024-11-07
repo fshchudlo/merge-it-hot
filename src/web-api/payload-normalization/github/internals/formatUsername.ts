@@ -12,6 +12,11 @@ export function formatUsername(user: GitHubUserPayload) {
 
     const [firstName, lastName] = namePart.split("-");
 
+    if (lastName === undefined) {
+        // Name has some other format
+        return namePart;
+    }
+
     const formattedFirstName = firstName.charAt(0).toUpperCase() + firstName.slice(1).toLowerCase();
     const formattedLastName = lastName.charAt(0).toUpperCase() + lastName.slice(1).toLowerCase();
 
