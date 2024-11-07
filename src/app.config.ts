@@ -4,6 +4,7 @@ import { PullRequestEvent } from "./pr-events-handling/event-contracts";
 export const AppConfig = {
     NODE_ENV: process.env.NODE_ENV,
     HMAC_SECRET: process.env.HMAC_SECRET as string,
+    REQUEST_BODY_SIZE_LIMIT: 1024 * 200,
 
     SLACK_SIGNING_SECRET: process.env.SLACK_SIGNING_SECRET as string,
     SLACK_BOT_TOKEN: process.env.SLACK_BOT_TOKEN,

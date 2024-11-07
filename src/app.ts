@@ -29,10 +29,11 @@ if (AppConfig.HMAC_SECRET) {
     expressReceiver.router.use(bodyParser.json({
         verify: (req: Request, _res: Response, buf: Buffer) => {
             (req as any).rawBody = buf.toString();
-        }
+        },
+        limit: AppConfig.REQUEST_BODY_SIZE_LIMIT
     } as any));
 } else {
-    expressReceiver.router.use(express.json());
+    expressReceiver.router.use(express.json({ limit: AppConfig.REQUEST_BODY_SIZE_LIMIT }));
 }
 expressReceiver.router.use(measureRequestDuration);
 
