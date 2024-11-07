@@ -9,9 +9,9 @@ import { GitHubPullRequestEventType } from "../../payload-normalization/github/G
 
 export async function handleGitHubWebhookCall(req: Request, res: Response, next: NextFunction, slackChannelFactory: SlackChannelProvisioner, slackUserIdResolver: SlackUserIdResolver) {
     try {
-        const eventType = req.headers["x-github-event"];
-        if (eventType === "installation_repositories") {
-            console.log(`Application was installed into ${req.body.installation.account.login} ${req.body.installation.account.type.toLowerCase()}`);
+        const eventType = req.headers["x-github-event"] as string;
+        if (["installation_repositories", "new_permissions_accepted"].includes(eventType)) {
+            console.log(`${eventType} event triggered for the installation: ${req.body.installation.account.login} ${req.body.installation.account.type.toLowerCase()}`);
             res.sendStatus(200);
             return;
         }
