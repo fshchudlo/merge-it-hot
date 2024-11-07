@@ -8,8 +8,8 @@ import {
     PullRequestModifiedEvent,
     PullRequestParticipantsUpdatedEvent
 } from "../../../../pr-events-handling/event-contracts";
-import { formatUsername } from "./formatUsername";
-import { getSlackUserId } from "./getSlackUserId";
+import { transformPullRequestReviewRequestedPayload } from "./transformPullRequestReviewRequestedPayload";
+import mapGitHubUserToSlackUser from "./mapGitHubUserToSlackUser";
 
 export async function transformPullRequestEventTypePayload(notification: GitHubNotification, userIdResolver: SlackUserIdResolver, githubAPI: GitHubAPI) {
     const action = notification.action;
@@ -47,43 +47,20 @@ export async function transformPullRequestEventTypePayload(notification: GitHubN
                 eventKey: "pr:converted_to_draft"
             } as PullRequestGenericEvent;
         case "review_requested":
-            return {
-                ...(await normalizePayloadGenericPart(notification, userIdResolver)),
-                eventKey: "pr:participants:changed",
-                addedParticipants: notification.requested_reviewer ? [{
-                    name: formatUsername(notification.requested_reviewer),
-                    slackUserId: await getSlackUserId(userIdResolver, notification.requested_reviewer)
-                }] : [],
-                removedParticipants: []
-            } as PullRequestParticipantsUpdatedEvent;
         case "review_request_removed":
-            return {
-                ...(await normalizePayloadGenericPart(notification, userIdResolver)),
-                eventKey: "pr:participants:changed",
-                addedParticipants: [],
-                removedParticipants: notification.requested_reviewer ? [{
-                    name: formatUsername(notification.requested_reviewer),
-                    slackUserId: await getSlackUserId(userIdResolver, notification.requested_reviewer)
-                }] : []
-            } as PullRequestParticipantsUpdatedEvent;
+            return await transformPullRequestReviewRequestedPayload(notification, userIdResolver, githubAPI);
         case "assigned":
             return {
                 ...(await normalizePayloadGenericPart(notification, userIdResolver)),
                 eventKey: "pr:participants:changed",
-                addedParticipants: [{
-                    name: formatUsername(notification.assignee),
-                    slackUserId: await getSlackUserId(userIdResolver, notification.assignee)
-                }],
+                addedParticipants: [await mapGitHubUserToSlackUser(notification.assignee, userIdResolver)],
                 removedParticipants: []
             } as PullRequestParticipantsUpdatedEvent;
         case "unassigned":
             return {
                 ...(await normalizePayloadGenericPart(notification, userIdResolver)),
                 eventKey: "pr:participants:changed",
-                removedParticipants: [{
-                    name: formatUsername(notification.assignee),
-                    slackUserId: await getSlackUserId(userIdResolver, notification.assignee)
-                }],
+                removedParticipants: [await mapGitHubUserToSlackUser(notification.assignee, userIdResolver)],
                 addedParticipants: []
             } as PullRequestParticipantsUpdatedEvent;
         case "synchronize":

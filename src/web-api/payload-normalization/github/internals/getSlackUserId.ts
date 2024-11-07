@@ -3,12 +3,17 @@ import { GitHubUserPayload } from "../GitHub.contracts";
 
 export async function getSlackUserId(userIdResolver: SlackUserIdResolver, user: GitHubUserPayload): Promise<string> {
     if (user.type === "Mannequin") {
-        console.warn(`The user is mannequin, skiping searching him in Slack`);
+        console.warn(`The user is mannequin, skipping searching him in Slack`);
+        return null;
+    }
+    if (user.type === "Bot") {
+        console.warn(`The user is bot, skipping searching him in Slack`);
         return null;
     }
     const userId = await userIdResolver.getUserId(getUserEmailFromGitHubLogin(user.login));
     if (!userId) {
-        console.warn(`Could not find Slack user for the login ${user.login}`);
+        console.warn(`Could not find Slack user ${user.login} by email. Returning login instead of Slack User Id`);
+        return getUserNameFromGitHubLogin(user.login);
     }
     return userId;
 }
@@ -22,4 +27,8 @@ export function getUserEmailFromGitHubLogin(login: string): string {
     const formattedName = namePart.replace("-", ".");
 
     return `${formattedName}@${companyName}.com`;
+}
+
+export function getUserNameFromGitHubLogin(login: string): string {
+    return login.split("_")[0].replace("-", ".");
 }

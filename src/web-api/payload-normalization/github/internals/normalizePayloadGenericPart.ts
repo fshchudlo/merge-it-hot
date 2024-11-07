@@ -1,35 +1,23 @@
 import { GitHubPullRequestNotificationBasicPayload } from "../GitHub.contracts";
 import { SlackUserIdResolver } from "../../SlackUserIdResolver";
-import { formatUsername } from "./formatUsername";
-import { getSlackUserId } from "./getSlackUserId";
-import { PullRequestGenericEvent, ParticipantPayload, UserPayload } from "../../../../pr-events-handling/event-contracts";
+import { PullRequestGenericEvent, ParticipantPayload } from "../../../../pr-events-handling/event-contracts";
+import mapGitHubUserToSlackUser from "./mapGitHubUserToSlackUser";
 
 export async function normalizePayloadGenericPart(payload: GitHubPullRequestNotificationBasicPayload, userIdResolver: SlackUserIdResolver) {
 
     const normalizedReviewersPayload = await Promise.all(
         payload.pull_request.requested_reviewers.map(async reviewer => {
             return {
-                user: {
-                    name: formatUsername(reviewer),
-                    slackUserId: await getSlackUserId(userIdResolver, reviewer)
-                }
+                user: await mapGitHubUserToSlackUser(reviewer, userIdResolver)
             } as ParticipantPayload;
         }));
 
     const normalizedAssigneesPayload = await Promise.all(
-        payload.pull_request.assignees.map(async assignee => {
-            return {
-                name: formatUsername(assignee),
-                slackUserId: await getSlackUserId(userIdResolver, assignee)
-            } as UserPayload;
-        }));
+        payload.pull_request.assignees.map(async assignee => mapGitHubUserToSlackUser(assignee, userIdResolver)));
 
     const basePayload: PullRequestGenericEvent = {
         eventKey: "pr:opened",
-        actor: {
-            name: formatUsername(payload.sender),
-            slackUserId: await getSlackUserId(userIdResolver, payload.sender)
-        },
+        actor: await mapGitHubUserToSlackUser(payload.sender, userIdResolver),
         pullRequest: {
             number: payload.pull_request.number,
             title: payload.pull_request.title,
@@ -48,10 +36,7 @@ export async function normalizePayloadGenericPart(payload: GitHubPullRequestNoti
                 repositoryName: payload.pull_request.head.repo.name,
                 projectKey: payload.pull_request.head.repo.owner.login
             },
-            author: {
-                name: formatUsername(payload.pull_request.user),
-                slackUserId: await getSlackUserId(userIdResolver, payload.pull_request.user)
-            },
+            author: await mapGitHubUserToSlackUser(payload.pull_request.user, userIdResolver),
             participants: normalizedReviewersPayload,
             assignees: normalizedAssigneesPayload,
             links: {

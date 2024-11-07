@@ -1,6 +1,6 @@
 ### Open pull request
 POST http://localhost:8080/github-webhook
 Content-Type: application/json
-X-GitHub-Event: pull_request_review
+X-GitHub-Event: pull_request
 
 < ./test-payload.json

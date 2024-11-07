@@ -1,9 +1,8 @@
 import { GitHubPullRequestCommentActionType, GitHubPullRequestCommentNotification } from "../GitHub.contracts";
 import { SlackUserIdResolver } from "../../SlackUserIdResolver";
 import { normalizePayloadGenericPart } from "./normalizePayloadGenericPart";
-import { formatUsername } from "./formatUsername";
-import { getSlackUserId } from "./getSlackUserId";
 import { PullRequestCommentActionEvent } from "../../../../pr-events-handling/event-contracts";
+import mapGitHubUserToSlackUser from "./mapGitHubUserToSlackUser";
 
 export async function transformPullRequestCommentPayload(notification: GitHubPullRequestCommentNotification, userIdResolver: SlackUserIdResolver) {
     const action = notification.action;
@@ -16,10 +15,7 @@ export async function transformPullRequestCommentPayload(notification: GitHubPul
             replyToCommentId: notification.comment.in_reply_to_id,
             text: notification.comment.body,
             severity: "NORMAL",
-            author: {
-                name: formatUsername(notification.comment.user),
-                slackUserId: await getSlackUserId(userIdResolver, notification.comment.user)
-            },
+            author: await mapGitHubUserToSlackUser(notification.comment.user, userIdResolver),
             resolvedAt: null,
             threadResolvedAt: null,
             link: notification.comment.html_url

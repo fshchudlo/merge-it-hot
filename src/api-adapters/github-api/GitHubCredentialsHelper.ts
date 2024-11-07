@@ -49,6 +49,7 @@ async function fetchAppInstallation(appId: number, privateKey: string, organizat
             organizationLogin: installation.account.login,
             permissions: {
                 issues: installation.permissions.issues,
+                members: installation.permissions.members,
                 contents: installation.permissions.contents,
                 pullRequests: installation.permissions.pull_requests
             }
