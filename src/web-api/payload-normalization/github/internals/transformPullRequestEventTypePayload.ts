@@ -50,10 +50,10 @@ export async function transformPullRequestEventTypePayload(notification: GitHubN
             return {
                 ...(await normalizePayloadGenericPart(notification, userIdResolver)),
                 eventKey: "pr:participants:changed",
-                addedParticipants: [{
+                addedParticipants: notification.requested_reviewer ? [{
                     name: formatUsername(notification.requested_reviewer),
                     slackUserId: await getSlackUserId(userIdResolver, notification.requested_reviewer)
-                }],
+                }] : [],
                 removedParticipants: []
             } as PullRequestParticipantsUpdatedEvent;
         case "review_request_removed":
@@ -61,10 +61,10 @@ export async function transformPullRequestEventTypePayload(notification: GitHubN
                 ...(await normalizePayloadGenericPart(notification, userIdResolver)),
                 eventKey: "pr:participants:changed",
                 addedParticipants: [],
-                removedParticipants: [{
+                removedParticipants: notification.requested_reviewer ? [{
                     name: formatUsername(notification.requested_reviewer),
                     slackUserId: await getSlackUserId(userIdResolver, notification.requested_reviewer)
-                }]
+                }] : []
             } as PullRequestParticipantsUpdatedEvent;
         case "assigned":
             return {
