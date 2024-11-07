@@ -460,7 +460,7 @@
       },
       {
         "current": {
-          "selected": false,
+          "selected": true,
           "text": [
             "/github-webhook"
           ],
@@ -500,13 +500,13 @@
           "selected": true,
           "text": [
             "channels",
-            "comments",
-            "userIds"
+            "userIds",
+            "comments"
           ],
           "value": [
             "channels",
-            "comments",
-            "userIds"
+            "userIds",
+            "comments"
           ]
         },
         "description": "",
