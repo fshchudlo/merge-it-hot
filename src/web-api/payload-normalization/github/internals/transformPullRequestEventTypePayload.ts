@@ -16,6 +16,12 @@ export async function transformPullRequestEventTypePayload(notification: GitHubN
     switch (action) {
         case "auto_merge_enabled":
         case "auto_merge_disabled":
+        case "labeled":
+        case "unlabeled":
+        case "locked":
+        case  "unlocked":
+        case  "milestoned":
+        case  "demilestoned":
             console.log(`Event ${notification.action} was configured to ignore.`);
             return {
                 ...(await normalizePayloadGenericPart(notification, userIdResolver, githubAPI)),

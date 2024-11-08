@@ -7,7 +7,7 @@ export type GitHubNotification =
     | GitHubPullRequestThreadResolutionNotification;
 
 export type GitHubPullRequestBasicNotification = GitHubPullRequestNotificationBasicPayload & {
-    readonly action: "opened" | "closed" | "reopened" | "synchronize" | "ready_for_review" | "converted_to_draft" | "auto_merge_enabled" | "auto_merge_disabled";
+    readonly action: "opened" | "closed" | "reopened" | "synchronize" | "ready_for_review" | "converted_to_draft" | "auto_merge_enabled" | "auto_merge_disabled" | "labeled" | "unlabeled" | "locked" | "unlocked" | "milestoned" | "demilestoned";
 };
 
 export export type GitHubPullRequestReviewersUpdatedNotification = GitHubPullRequestNotificationBasicPayload & {
