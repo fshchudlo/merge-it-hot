@@ -19,9 +19,9 @@ export async function transformPullRequestEventTypePayload(notification: GitHubN
         case "labeled":
         case "unlabeled":
         case "locked":
-        case  "unlocked":
-        case  "milestoned":
-        case  "demilestoned":
+        case "unlocked":
+        case "milestoned":
+        case "demilestoned":
             console.log(`Event ${notification.action} was configured to ignore.`);
             return {
                 ...(await normalizePayloadGenericPart(notification, userIdResolver, githubAPI)),
