@@ -13,7 +13,7 @@ import { transformPullRequestCommentPayload } from "./internals/transformPullReq
 import { transformPullRequestReviewThreadPayload } from "./internals/transformPullRequestReviewThreadPayload";
 import { transformPullRequestReviewPayload } from "./internals/transformPullRequestReviewPayload";
 
-export async function transformRequestPayloadToEvent(eventType: GitHubPullRequestEventType | GitHubPullRequestCommentNotification, notification: GitHubNotification, userIdResolver: SlackUserIdResolver, githubAPI: GitHubAPI): Promise<PullRequestEvent> {
+export async function transformRequestPayloadToEvent(eventType: GitHubPullRequestEventType, notification: GitHubNotification, userIdResolver: SlackUserIdResolver, githubAPI: GitHubAPI): Promise<PullRequestEvent> {
     switch (eventType) {
         case "pull_request":
             return await transformPullRequestEventTypePayload(notification, userIdResolver, githubAPI);
