@@ -1,12 +1,20 @@
 import { GitHubPullRequestCommentActionType, GitHubPullRequestCommentNotification } from "../GitHub.contracts";
 import { SlackUserIdResolver } from "../../SlackUserIdResolver";
 import { normalizePayloadGenericPart } from "./normalizePayloadGenericPart";
-import { PullRequestCommentActionEvent } from "../../../../pr-events-handling/event-contracts";
+import { PullRequestCommentActionEvent, PullRequestIgnoredEvent } from "../../../../pr-events-handling/event-contracts";
 import mapGitHubUserToSlackUser from "./mapGitHubUserToSlackUser";
 import GitHubAPI from "../../../../api-adapters/github-api/GitHubAPI";
 
-export async function transformPullRequestCommentPayload(notification: GitHubPullRequestCommentNotification, userIdResolver: SlackUserIdResolver, githubAPI: GitHubAPI) {
+export async function transformPullRequestCommentPayload(notification: GitHubPullRequestCommentNotification, userIdResolver: SlackUserIdResolver, githubAPI: GitHubAPI): Promise<PullRequestCommentActionEvent | PullRequestIgnoredEvent> {
     const action = notification.action;
+
+    if (notification.pull_request.state != "open" && notification.sender.type === "Bot") {
+        console.log(`Ignoring bot comment on closed PRs ${notification.pull_request.number} to avoid unarchiving channels no one already interested in`);
+        return {
+            ...(await normalizePayloadGenericPart(notification, userIdResolver, githubAPI)),
+            eventKey: "ignored_event"
+        };
+    }
 
     return {
         ...(await normalizePayloadGenericPart(notification, userIdResolver, githubAPI)),

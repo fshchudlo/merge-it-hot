@@ -105,21 +105,8 @@ export type GitHubPullRequestPayload = {
     readonly draft: boolean;
     readonly head: GitHubRefPayload;
     readonly base: GitHubRefPayload;
-    readonly author_association: string;
-    readonly auto_merge: string | null;
-    readonly active_lock_reason: string | null;
     readonly merged: boolean;
-    readonly mergeable: boolean | null;
-    readonly rebaseable: boolean | null;
-    readonly mergeable_state: "unknown" | "clean";
-    readonly merged_by: GitHubUserPayload | null;
-    readonly comments: number;
     readonly review_comments: number;
-    readonly maintainer_can_modify: boolean;
-    readonly commits: number;
-    readonly additions: number;
-    readonly deletions: number;
-    readonly changed_files: number;
 }
 export type GitHubTeamPayload = {
     members_url: string
