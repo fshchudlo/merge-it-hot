@@ -19,25 +19,25 @@ export default class SlackChannelSnapshottingMock implements SlackTargetedChanne
         addedReactions: any[];
         addedBookmarks: AddBookmarkArguments[];
         closeChannelCalls: string[];
-        reopenChannelCalls: string[];
         invitesToChannels: InviteToChannelArguments[];
         kicksFromChannels: KickFromChannelArguments[];
         searchedCommentSnapshots: any[];
         searchedPrOpenedBroadcastMessages: any[];
         sentMessages: SendMessageArguments[];
+        deleteMessageCalls: string[];
     };
 
     constructor() {
         this.snapshot = {
-            addedReactions: new Array<any>(),
-            addedBookmarks: new Array<AddBookmarkArguments>(),
-            closeChannelCalls: new Array<string>(),
-            reopenChannelCalls: new Array<string>(),
-            invitesToChannels: new Array<InviteToChannelArguments>(),
-            kicksFromChannels: new Array<KickFromChannelArguments>(),
-            searchedCommentSnapshots: new Array<any>(),
-            searchedPrOpenedBroadcastMessages: new Array<any>(),
-            sentMessages: new Array<SendMessageArguments>()
+            addedReactions: [],
+            addedBookmarks: [],
+            closeChannelCalls: [],
+            invitesToChannels: [],
+            kicksFromChannels: [],
+            searchedCommentSnapshots: [],
+            searchedPrOpenedBroadcastMessages: [],
+            sentMessages: [],
+            deleteMessageCalls: []
         };
     }
 
@@ -65,10 +65,11 @@ export default class SlackChannelSnapshottingMock implements SlackTargetedChanne
         this.snapshot.closeChannelCalls.push(this.channelInfo.id);
         return Promise.resolve();
     }
-    reopenChannel(): Promise<void> {
-        this.snapshot.reopenChannelCalls.push(this.channelInfo.id);
+    deleteMessage(messageId: string): Promise<void> {
+        this.snapshot.deleteMessageCalls.push(messageId);
         return Promise.resolve();
     }
+
 
     addReaction(messageId: string, reaction: string): Promise<void> {
         this.snapshot.addedReactions.push({ channelId: this.channelInfo.id, messageId, reaction });

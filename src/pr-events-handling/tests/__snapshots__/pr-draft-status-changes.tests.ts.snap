@@ -5,9 +5,9 @@ exports[`PR draft status change use-cases PR is drafted use-case Should send not
   "addedBookmarks": [],
   "addedReactions": [],
   "closeChannelCalls": [],
+  "deleteMessageCalls": [],
   "invitesToChannels": [],
   "kicksFromChannels": [],
-  "reopenChannelCalls": [],
   "searchedCommentSnapshots": [],
   "searchedPrOpenedBroadcastMessages": [
     {
@@ -94,9 +94,9 @@ exports[`PR draft status change use-cases PR is drafted use-case Should send not
   ],
   "addedReactions": [],
   "closeChannelCalls": [],
+  "deleteMessageCalls": [],
   "invitesToChannels": [],
   "kicksFromChannels": [],
-  "reopenChannelCalls": [],
   "searchedCommentSnapshots": [],
   "searchedPrOpenedBroadcastMessages": [],
   "sentMessages": [
@@ -155,9 +155,9 @@ exports[`PR draft status change use-cases PR is ready for review use-case Should
   "addedBookmarks": [],
   "addedReactions": [],
   "closeChannelCalls": [],
+  "deleteMessageCalls": [],
   "invitesToChannels": [],
   "kicksFromChannels": [],
-  "reopenChannelCalls": [],
   "searchedCommentSnapshots": [],
   "searchedPrOpenedBroadcastMessages": [
     {
@@ -244,9 +244,9 @@ exports[`PR draft status change use-cases PR is ready for review use-case Should
   ],
   "addedReactions": [],
   "closeChannelCalls": [],
+  "deleteMessageCalls": [],
   "invitesToChannels": [],
   "kicksFromChannels": [],
-  "reopenChannelCalls": [],
   "searchedCommentSnapshots": [],
   "searchedPrOpenedBroadcastMessages": [],
   "sentMessages": [

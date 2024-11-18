@@ -11,9 +11,9 @@ exports[`PR opened use-case Should add bookmark and invite author and reviewers 
   ],
   "addedReactions": [],
   "closeChannelCalls": [],
+  "deleteMessageCalls": [],
   "invitesToChannels": [],
   "kicksFromChannels": [],
-  "reopenChannelCalls": [],
   "searchedCommentSnapshots": [],
   "searchedPrOpenedBroadcastMessages": [],
   "sentMessages": [
@@ -60,9 +60,9 @@ exports[`PR opened use-case Should send notification to the broadcast channel, i
   "addedBookmarks": [],
   "addedReactions": [],
   "closeChannelCalls": [],
+  "deleteMessageCalls": [],
   "invitesToChannels": [],
   "kicksFromChannels": [],
-  "reopenChannelCalls": [],
   "searchedCommentSnapshots": [],
   "searchedPrOpenedBroadcastMessages": [],
   "sentMessages": [

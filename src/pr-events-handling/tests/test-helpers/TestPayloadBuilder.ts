@@ -135,6 +135,18 @@ export default class TestPayloadBuilder {
         };
     }
 
+    static pullRequestCommentDeletedWithoutInitialMessage(): PullRequestCommentActionEvent {
+        const payload = this.pullRequestCommentAdded() as any;
+        return {
+            ...payload,
+            comment: {
+                ...payload.comment,
+                id: -1
+            },
+            eventKey: "pr:comment:deleted"
+        };
+    }
+
     static pullRequestCommentAdded(): PullRequestCommentActionEvent {
         const payload = getBasicPayload();
         return {

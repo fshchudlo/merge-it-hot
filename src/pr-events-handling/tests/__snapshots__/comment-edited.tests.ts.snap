@@ -5,9 +5,9 @@ exports[`Comment edited use-case Should return generic message if initial commen
   "addedBookmarks": [],
   "addedReactions": [],
   "closeChannelCalls": [],
+  "deleteMessageCalls": [],
   "invitesToChannels": [],
   "kicksFromChannels": [],
-  "reopenChannelCalls": [],
   "searchedCommentSnapshots": [
     {
       "channelId": "12345",
@@ -56,9 +56,9 @@ exports[`Comment edited use-case Should send message on PR comment edit 1`] = `
   "addedBookmarks": [],
   "addedReactions": [],
   "closeChannelCalls": [],
+  "deleteMessageCalls": [],
   "invitesToChannels": [],
   "kicksFromChannels": [],
-  "reopenChannelCalls": [],
   "searchedCommentSnapshots": [
     {
       "channelId": "12345",
@@ -138,9 +138,9 @@ exports[`Comment edited use-case Should send message on comment conversion to th
   "addedBookmarks": [],
   "addedReactions": [],
   "closeChannelCalls": [],
+  "deleteMessageCalls": [],
   "invitesToChannels": [],
   "kicksFromChannels": [],
-  "reopenChannelCalls": [],
   "searchedCommentSnapshots": [
     {
       "channelId": "12345",
@@ -220,9 +220,9 @@ exports[`Comment edited use-case Should send message on comment resolving and re
   "addedBookmarks": [],
   "addedReactions": [],
   "closeChannelCalls": [],
+  "deleteMessageCalls": [],
   "invitesToChannels": [],
   "kicksFromChannels": [],
-  "reopenChannelCalls": [],
   "searchedCommentSnapshots": [
     {
       "channelId": "12345",
@@ -337,9 +337,9 @@ exports[`Comment edited use-case Should send message on task conversion to the c
   "addedBookmarks": [],
   "addedReactions": [],
   "closeChannelCalls": [],
+  "deleteMessageCalls": [],
   "invitesToChannels": [],
   "kicksFromChannels": [],
-  "reopenChannelCalls": [],
   "searchedCommentSnapshots": [
     {
       "channelId": "12345",
@@ -419,9 +419,9 @@ exports[`Comment edited use-case Should send message on task resolving and reope
   "addedBookmarks": [],
   "addedReactions": [],
   "closeChannelCalls": [],
+  "deleteMessageCalls": [],
   "invitesToChannels": [],
   "kicksFromChannels": [],
-  "reopenChannelCalls": [],
   "searchedCommentSnapshots": [
     {
       "channelId": "12345",

@@ -11,9 +11,9 @@ exports[`PR reopened use-case Should send notification to the broadcast channel,
     },
   ],
   "closeChannelCalls": [],
+  "deleteMessageCalls": [],
   "invitesToChannels": [],
   "kicksFromChannels": [],
-  "reopenChannelCalls": [],
   "searchedCommentSnapshots": [],
   "searchedPrOpenedBroadcastMessages": [
     {
@@ -101,9 +101,9 @@ exports[`PR reopened use-case Should send reopening message on PR reopening 1`] 
   "addedBookmarks": [],
   "addedReactions": [],
   "closeChannelCalls": [],
+  "deleteMessageCalls": [],
   "invitesToChannels": [],
   "kicksFromChannels": [],
-  "reopenChannelCalls": [],
   "searchedCommentSnapshots": [],
   "searchedPrOpenedBroadcastMessages": [],
   "sentMessages": [

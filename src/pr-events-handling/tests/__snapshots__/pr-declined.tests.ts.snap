@@ -7,9 +7,9 @@ exports[`PR declined use-case Should send completion message and close the chann
   "closeChannelCalls": [
     "12345",
   ],
+  "deleteMessageCalls": [],
   "invitesToChannels": [],
   "kicksFromChannels": [],
-  "reopenChannelCalls": [],
   "searchedCommentSnapshots": [],
   "searchedPrOpenedBroadcastMessages": [],
   "sentMessages": [
@@ -31,9 +31,9 @@ exports[`PR declined use-case Should send notification to the broadcast channel,
     },
   ],
   "closeChannelCalls": [],
+  "deleteMessageCalls": [],
   "invitesToChannels": [],
   "kicksFromChannels": [],
-  "reopenChannelCalls": [],
   "searchedCommentSnapshots": [],
   "searchedPrOpenedBroadcastMessages": [
     {

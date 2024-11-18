@@ -5,9 +5,9 @@ exports[`Commit added use-case Should send message on PR commit 1`] = `
   "addedBookmarks": [],
   "addedReactions": [],
   "closeChannelCalls": [],
+  "deleteMessageCalls": [],
   "invitesToChannels": [],
   "kicksFromChannels": [],
-  "reopenChannelCalls": [],
   "searchedCommentSnapshots": [],
   "searchedPrOpenedBroadcastMessages": [],
   "sentMessages": [

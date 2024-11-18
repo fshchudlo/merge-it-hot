@@ -5,6 +5,7 @@ exports[`Participants updated use-case Should add and remove users from channel 
   "addedBookmarks": [],
   "addedReactions": [],
   "closeChannelCalls": [],
+  "deleteMessageCalls": [],
   "invitesToChannels": [
     {
       "force": true,
@@ -20,7 +21,6 @@ exports[`Participants updated use-case Should add and remove users from channel 
       ],
     },
   ],
-  "reopenChannelCalls": [],
   "searchedCommentSnapshots": [],
   "searchedPrOpenedBroadcastMessages": [],
   "sentMessages": [],
@@ -32,6 +32,7 @@ exports[`Participants updated use-case Should not delete removed reviewer if he 
   "addedBookmarks": [],
   "addedReactions": [],
   "closeChannelCalls": [],
+  "deleteMessageCalls": [],
   "invitesToChannels": [
     {
       "force": true,
@@ -41,7 +42,6 @@ exports[`Participants updated use-case Should not delete removed reviewer if he 
     },
   ],
   "kicksFromChannels": [],
-  "reopenChannelCalls": [],
   "searchedCommentSnapshots": [],
   "searchedPrOpenedBroadcastMessages": [],
   "sentMessages": [],

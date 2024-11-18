@@ -22,6 +22,8 @@ export interface SlackTargetedChannel {
 
     sendMessage(options: SendMessageArguments): Promise<SendMessageResponse>;
 
+    deleteMessage(messageId: string): Promise<void>;
+
     findLatestPullRequestCommentSnapshot(commentId: number | string): Promise<PullRequestCommentSnapshot | null>;
 }
 

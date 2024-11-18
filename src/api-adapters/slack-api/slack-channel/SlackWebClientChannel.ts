@@ -126,6 +126,13 @@ export class SlackWebClientChannel implements SlackTargetedChannel, SlackBroadca
         };
     }
 
+    async deleteMessage(messageId: string): Promise<void> {
+        await this.client.chat.delete({
+            ts: messageId,
+            channel: this.channelInfo.id
+        });
+    }
+
     async findLatestPullRequestCommentSnapshot(reviewCommentId: number | string): Promise<PullRequestCommentSnapshot | null> {
         const cacheKey = this.getCommentCacheKey(reviewCommentId);
         const cachedCommentInfo = await COMMENTS_CACHE.get(cacheKey);
