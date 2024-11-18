@@ -1,57 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Comment edited use-case Should return generic message if initial comment was not found 1`] = `
-{
-  "addedBookmarks": [],
-  "addedReactions": [],
-  "closeChannelCalls": [],
-  "deleteMessageCalls": [],
-  "invitesToChannels": [],
-  "kicksFromChannels": [],
-  "searchedCommentSnapshots": [
-    {
-      "channelId": "12345",
-      "reviewCommentId": 1,
-    },
-  ],
-  "searchedPrOpenedBroadcastMessages": [],
-  "sentMessages": [
-    {
-      "blocks": [
-        {
-          "text": {
-            "text": ":writing_hand: Test Reviewer 1 <https://git.test.com/projects/TEST-PROJ/repos/test-repository/pull-requests/1/overview?commentId=1|edited task>:",
-            "type": "mrkdwn",
-          },
-          "type": "section",
-        },
-        {
-          "text": {
-            "text": "> Test comment",
-            "type": "mrkdwn",
-          },
-          "type": "section",
-        },
-      ],
-      "metadata": {
-        "eventPayload": {
-          "commentId": "1",
-          "commentParentId": undefined,
-          "severity": "BLOCKER",
-          "taskResolvedDate": undefined,
-          "threadResolvedDate": undefined,
-        },
-        "eventType": "review_comment_snapshot_saved",
-      },
-      "replyBroadcast": undefined,
-      "text": ":writing_hand: Test Reviewer 1 <https://git.test.com/projects/TEST-PROJ/repos/test-repository/pull-requests/1/overview?commentId=1|edited task>:",
-      "threadId": undefined,
-    },
-  ],
-}
-`;
-
-exports[`Comment edited use-case Should send message on PR comment edit 1`] = `
+exports[`Comment edited use-case Should edit initial message on PR comment edit 1`] = `
 {
   "addedBookmarks": [],
   "addedReactions": [],
@@ -102,7 +51,7 @@ exports[`Comment edited use-case Should send message on PR comment edit 1`] = `
       "blocks": [
         {
           "text": {
-            "text": ":writing_hand: Test Reviewer 1 <https://git.test.com/projects/TEST-PROJ/repos/test-repository/pull-requests/1/overview?commentId=1|edited comment>:",
+            "text": ":left_speech_bubble: Test Reviewer 1 <https://git.test.com/projects/TEST-PROJ/repos/test-repository/pull-requests/1/overview?commentId=1|replied>:",
             "type": "mrkdwn",
           },
           "type": "section",
@@ -115,6 +64,7 @@ exports[`Comment edited use-case Should send message on PR comment edit 1`] = `
           "type": "section",
         },
       ],
+      "editMessageId": "ABCDE",
       "metadata": {
         "eventPayload": {
           "commentId": "1",
@@ -126,8 +76,59 @@ exports[`Comment edited use-case Should send message on PR comment edit 1`] = `
         "eventType": "review_comment_snapshot_saved",
       },
       "replyBroadcast": true,
-      "text": ":writing_hand: Test Reviewer 1 <https://git.test.com/projects/TEST-PROJ/repos/test-repository/pull-requests/1/overview?commentId=1|edited comment>:",
+      "text": ":left_speech_bubble: Test Reviewer 1 <https://git.test.com/projects/TEST-PROJ/repos/test-repository/pull-requests/1/overview?commentId=1|replied>:",
       "threadId": "ABCDE",
+    },
+  ],
+}
+`;
+
+exports[`Comment edited use-case Should send generic message if initial comment was not found 1`] = `
+{
+  "addedBookmarks": [],
+  "addedReactions": [],
+  "closeChannelCalls": [],
+  "deleteMessageCalls": [],
+  "invitesToChannels": [],
+  "kicksFromChannels": [],
+  "searchedCommentSnapshots": [
+    {
+      "channelId": "12345",
+      "reviewCommentId": 1,
+    },
+  ],
+  "searchedPrOpenedBroadcastMessages": [],
+  "sentMessages": [
+    {
+      "blocks": [
+        {
+          "text": {
+            "text": ":writing_hand: Test Reviewer 1 <https://git.test.com/projects/TEST-PROJ/repos/test-repository/pull-requests/1/overview?commentId=1|edited task>:",
+            "type": "mrkdwn",
+          },
+          "type": "section",
+        },
+        {
+          "text": {
+            "text": "> Test comment",
+            "type": "mrkdwn",
+          },
+          "type": "section",
+        },
+      ],
+      "metadata": {
+        "eventPayload": {
+          "commentId": "1",
+          "commentParentId": undefined,
+          "severity": "BLOCKER",
+          "taskResolvedDate": undefined,
+          "threadResolvedDate": undefined,
+        },
+        "eventType": "review_comment_snapshot_saved",
+      },
+      "replyBroadcast": undefined,
+      "text": ":writing_hand: Test Reviewer 1 <https://git.test.com/projects/TEST-PROJ/repos/test-repository/pull-requests/1/overview?commentId=1|edited task>:",
+      "threadId": undefined,
     },
   ],
 }

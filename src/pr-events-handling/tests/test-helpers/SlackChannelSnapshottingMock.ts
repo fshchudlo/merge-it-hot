@@ -9,7 +9,6 @@ import {
     KickFromChannelArguments,
     PullRequestSnapshotInSlackMetadata,
     SendMessageArguments,
-    SendMessageResponse,
     SlackBroadcastChannel, SlackTargetedChannel
 } from "../../slack-api-ports";
 
@@ -76,9 +75,8 @@ export default class SlackChannelSnapshottingMock implements SlackTargetedChanne
         return Promise.resolve();
     }
 
-    sendMessage(options: SendMessageArguments): Promise<SendMessageResponse> {
+    sendMessage(options: SendMessageArguments) {
         this.snapshot.sentMessages.push(options);
-        return Promise.resolve({ ok: true, channelId: this.channelInfo.id, messageId: messageId });
     }
 
     findLatestPullRequestCommentSnapshot(reviewCommentId: number | string): Promise<PullRequestCommentSnapshot | null> {

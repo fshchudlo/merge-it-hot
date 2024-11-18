@@ -1,8 +1,8 @@
 
-import { PullRequestGenericEvent } from "../../event-contracts";
-import { getPullRequestCompletionAction } from "../utils/getPullRequestCompletionAction";
-import { PullRequestEventHandler } from "../PullRequestEventHandler";
-import { SendMessageArguments, SlackTargetedChannel } from "../../slack-api-ports";
+import { PullRequestGenericEvent } from "../../../event-contracts";
+import { getPullRequestCompletionAction } from "../../utils/getPullRequestCompletionAction";
+import { PullRequestEventHandler } from "../../PullRequestEventHandler";
+import { SendMessageArguments, SlackTargetedChannel } from "../../../slack-api-ports";
 
 export class PullRequestCompletionHandler implements PullRequestEventHandler {
     canHandle(payload: PullRequestGenericEvent): boolean {

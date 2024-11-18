@@ -1,8 +1,8 @@
-import { link, section, divider, contextBlock, italic } from "../utils/slack-building-blocks";
-import { formatAndTrimMarkdown, reviewPRAction } from "../utils";
-import { PullRequestGenericEvent } from "../../event-contracts";
-import { PullRequestEventHandler } from "../PullRequestEventHandler";
-import { SendMessageArguments, SlackTargetedChannel } from "../../slack-api-ports";
+import { link, section, divider, contextBlock, italic } from "../../utils/slack-building-blocks";
+import { formatAndTrimMarkdown, reviewPRAction } from "../../utils";
+import { PullRequestGenericEvent } from "../../../event-contracts";
+import { PullRequestEventHandler } from "../../PullRequestEventHandler";
+import { SendMessageArguments, SlackTargetedChannel } from "../../../slack-api-ports";
 
 export class PullRequestOpenedHandler implements PullRequestEventHandler {
     public canHandle(payload: PullRequestGenericEvent) {

@@ -13,7 +13,7 @@ import {
     KickFromChannelArguments,
     PullRequestSnapshotInSlackMetadata,
     SendMessageArguments,
-    SendMessageResponse, SlackBroadcastChannel, SlackTargetedChannel
+    SlackBroadcastChannel, SlackTargetedChannel
 } from "../../../pr-events-handling/slack-api-ports";
 
 /**
@@ -96,8 +96,8 @@ export class SlackWebClientChannel implements SlackTargetedChannel, SlackBroadca
         }
     }
 
-    async sendMessage(options: SendMessageArguments): Promise<SendMessageResponse> {
-        const response = await this.client.chat.postMessage({
+    async sendMessage(options: SendMessageArguments) {
+        const request = {
             channel: this.channelInfo.id,
             icon_emoji: this.iconEmoji,
             text: options.text,
@@ -108,22 +108,35 @@ export class SlackWebClientChannel implements SlackTargetedChannel, SlackBroadca
             blocks: options.blocks,
             thread_ts: options.threadId,
             reply_broadcast: options.replyBroadcast
-        });
-
-        const metadata = <PullrequestCommentSnapshotInSlackMetadata>options.metadata?.eventPayload;
-        if (metadata?.commentId) {
-            const commentSnapshot: PullRequestCommentSnapshot = {
-                ...metadata,
-                slackMessageId: response.message.ts,
-                slackThreadId: response.message.thread_ts
-            };
-            await COMMENTS_CACHE.set(this.getCommentCacheKey(commentSnapshot.commentId), commentSnapshot);
-        }
-
-        return {
-            messageId: response.message.ts,
-            threadId: response.message.thread_ts
         };
+
+        if (options.editMessageId) {
+            const response = await this.client.chat.update({
+                ...request,
+                ts: options.editMessageId,
+                reply_broadcast: undefined
+            });
+            const metadata = <PullrequestCommentSnapshotInSlackMetadata>options.metadata?.eventPayload;
+            if (metadata?.commentId) {
+                const commentSnapshot: PullRequestCommentSnapshot = {
+                    ...metadata,
+                    slackMessageId: response.ts,
+                    slackThreadId: options.threadId
+                };
+                await COMMENTS_CACHE.set(this.getCommentCacheKey(commentSnapshot.commentId), commentSnapshot);
+            }
+        } else {
+            const response = await this.client.chat.postMessage(request);
+            const metadata = <PullrequestCommentSnapshotInSlackMetadata>options.metadata?.eventPayload;
+            if (metadata?.commentId) {
+                const commentSnapshot: PullRequestCommentSnapshot = {
+                    ...metadata,
+                    slackMessageId: response.message.ts,
+                    slackThreadId: response.message.thread_ts
+                };
+                await COMMENTS_CACHE.set(this.getCommentCacheKey(commentSnapshot.commentId), commentSnapshot);
+            }
+        }
     }
 
     async deleteMessage(messageId: string): Promise<void> {

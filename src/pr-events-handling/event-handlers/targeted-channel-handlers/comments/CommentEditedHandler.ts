@@ -1,8 +1,9 @@
-import { PullRequestCommentActionEvent } from "../../event-contracts";
-import { formatAndTrimMarkdown, getTaskOrCommentTitle, snapshotCommentState } from "../utils";
-import { link, quote, section } from "../utils/slack-building-blocks";
-import { PullRequestEventHandler } from "../PullRequestEventHandler";
-import { PullRequestCommentSnapshot, SendMessageArguments, SlackTargetedChannel } from "../../slack-api-ports";
+import { PullRequestCommentActionEvent } from "../../../event-contracts";
+import { formatAndTrimMarkdown, getTaskOrCommentTitle, snapshotCommentState } from "../../utils";
+import { link, quote, section } from "../../utils/slack-building-blocks";
+import { PullRequestEventHandler } from "../../PullRequestEventHandler";
+import { PullRequestCommentSnapshot, SendMessageArguments, SlackTargetedChannel } from "../../../slack-api-ports";
+import { buildCommentAddedMessage } from "./buildCommentAddedMessage";
 
 export class CommentEditedHandler implements PullRequestEventHandler {
     canHandle(payload: PullRequestCommentActionEvent) {
@@ -11,14 +12,23 @@ export class CommentEditedHandler implements PullRequestEventHandler {
 
     async handle(payload: PullRequestCommentActionEvent, slackChannel: SlackTargetedChannel) {
         const commentSnapshot = await slackChannel.findLatestPullRequestCommentSnapshot(payload.comment.id);
-        const message = buildSlackMessage(payload, commentSnapshot);
-        await slackChannel.sendMessage(message);
+        const userAction = getCommentAction(payload, commentSnapshot);
+        if (commentSnapshot && userAction.isTextOnlyChange) {
+            const message = buildCommentAddedMessage(payload, commentSnapshot);
+            await slackChannel.sendMessage({
+                ...message,
+                editMessageId: commentSnapshot.slackMessageId,
+                replyBroadcast: false
+            });
+        } else {
+            const message = buildCommentChangedMessage(payload, commentSnapshot);
+            await slackChannel.sendMessage(message);
+        }
     }
 }
 
-function buildSlackMessage(payload: PullRequestCommentActionEvent, commentSnapshot: PullRequestCommentSnapshot): SendMessageArguments {
-    const userAction = getUserAction(payload, commentSnapshot);
-
+function buildCommentChangedMessage(payload: PullRequestCommentActionEvent, commentSnapshot: PullRequestCommentSnapshot): SendMessageArguments {
+    const userAction = getCommentAction(payload, commentSnapshot);
     const messageTitle = `${userAction.emoji} ${payload.actor.name} ${link(payload.comment.link, userAction.title)}:`;
     const commentText = formatAndTrimMarkdown(payload.comment.text);
 
@@ -31,7 +41,7 @@ function buildSlackMessage(payload: PullRequestCommentActionEvent, commentSnapsh
     };
 }
 
-function getUserAction(payload: PullRequestCommentActionEvent, previousCommentSnapshot: PullRequestCommentSnapshot) {
+function getCommentAction(payload: PullRequestCommentActionEvent, previousCommentSnapshot: PullRequestCommentSnapshot) {
     const commentType = getTaskOrCommentTitle(payload);
     if (previousCommentSnapshot) {
         if (previousCommentSnapshot.severity == "NORMAL" && payload.comment.severity == "BLOCKER") {
@@ -73,6 +83,7 @@ function getUserAction(payload: PullRequestCommentActionEvent, previousCommentSn
     }
     return {
         title: `edited ${commentType}`,
+        isTextOnlyChange: true,
         emoji: ":writing_hand:"
     };
 }

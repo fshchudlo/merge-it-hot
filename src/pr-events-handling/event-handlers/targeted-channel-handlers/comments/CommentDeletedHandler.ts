@@ -1,8 +1,8 @@
-import { formatAndTrimMarkdown, getTaskOrCommentTitle, snapshotCommentState } from "../utils";
-import { quote, section } from "../utils/slack-building-blocks";
-import { PullRequestCommentActionEvent } from "../../event-contracts";
-import { PullRequestEventHandler } from "../PullRequestEventHandler";
-import { SendMessageArguments, SlackTargetedChannel } from "../../slack-api-ports";
+import { formatAndTrimMarkdown, getTaskOrCommentTitle, snapshotCommentState } from "../../utils";
+import { quote, section } from "../../utils/slack-building-blocks";
+import { PullRequestCommentActionEvent } from "../../../event-contracts";
+import { PullRequestEventHandler } from "../../PullRequestEventHandler";
+import { SendMessageArguments, SlackTargetedChannel } from "../../../slack-api-ports";
 
 export class CommentDeletedHandler implements PullRequestEventHandler {
     canHandle(payload: PullRequestCommentActionEvent) {

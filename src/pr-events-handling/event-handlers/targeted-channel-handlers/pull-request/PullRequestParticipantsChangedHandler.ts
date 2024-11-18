@@ -1,6 +1,6 @@
-import { PullRequestParticipantsUpdatedEvent } from "../../event-contracts";
-import { PullRequestEventHandler } from "../PullRequestEventHandler";
-import { SlackTargetedChannel } from "../../slack-api-ports";
+import { PullRequestParticipantsUpdatedEvent } from "../../../event-contracts";
+import { PullRequestEventHandler } from "../../PullRequestEventHandler";
+import { SlackTargetedChannel } from "../../../slack-api-ports";
 
 export class PullRequestParticipantsChangedHandler implements PullRequestEventHandler {
     public canHandle(payload: PullRequestParticipantsUpdatedEvent) {

@@ -1,8 +1,8 @@
-import { contextBlock, divider, link, quote, section } from "../utils/slack-building-blocks";
-import { markdownToSlackMarkup } from "../utils";
-import { PullRequestEvent, PullRequestPayload, PullRequestReviewSubmittedEvent } from "../../event-contracts";
-import { PullRequestEventHandler } from "../PullRequestEventHandler";
-import { SendMessageArguments, SlackTargetedChannel } from "../../slack-api-ports";
+import { contextBlock, divider, link, quote, section } from "../../utils/slack-building-blocks";
+import { markdownToSlackMarkup } from "../../utils";
+import { PullRequestEvent, PullRequestPayload, PullRequestReviewSubmittedEvent } from "../../../event-contracts";
+import { PullRequestEventHandler } from "../../PullRequestEventHandler";
+import { SendMessageArguments, SlackTargetedChannel } from "../../../slack-api-ports";
 
 export class PullRequestReviewSubmittedHandler implements PullRequestEventHandler {
     public canHandle(payload: PullRequestEvent) {

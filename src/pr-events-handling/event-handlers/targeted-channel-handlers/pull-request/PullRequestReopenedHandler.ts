@@ -1,8 +1,8 @@
-import { link, section } from "../utils/slack-building-blocks";
-import { reviewPRAction } from "../utils";
-import { PullRequestGenericEvent } from "../../event-contracts";
-import { PullRequestEventHandler } from "../PullRequestEventHandler";
-import { SendMessageArguments, SlackTargetedChannel } from "../../slack-api-ports";
+import { link, section } from "../../utils/slack-building-blocks";
+import { reviewPRAction } from "../../utils";
+import { PullRequestGenericEvent } from "../../../event-contracts";
+import { PullRequestEventHandler } from "../../PullRequestEventHandler";
+import { SendMessageArguments, SlackTargetedChannel } from "../../../slack-api-ports";
 
 export class PullRequestReopenedHandler implements PullRequestEventHandler {
     public canHandle(payload: PullRequestGenericEvent) {

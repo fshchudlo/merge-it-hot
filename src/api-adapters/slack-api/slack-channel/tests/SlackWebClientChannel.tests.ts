@@ -132,7 +132,7 @@ describe("SlackWebClientChannel", () => {
                 message: { ts: "1234567890.1234", thread_ts: "1234567890.0000" }
             });
 
-            const response = await channel.sendMessage({
+            await channel.sendMessage({
                 text: "Hello, world!",
                 metadata: { eventType: "test", eventPayload: { commentId: "123" } },
                 blocks: [],
@@ -153,11 +153,6 @@ describe("SlackWebClientChannel", () => {
                 commentId: "123",
                 slackMessageId: "1234567890.1234",
                 slackThreadId: "1234567890.0000"
-            });
-
-            expect(response).toEqual({
-                messageId: "1234567890.1234",
-                threadId: "1234567890.0000"
             });
         });
     });

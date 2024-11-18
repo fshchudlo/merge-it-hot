@@ -4,7 +4,7 @@ import handlePullRequestEvent from "../handlePullRequestEvent";
 
 describe("Comment edited use-case", () => {
 
-    it("Should send message on PR comment edit", async () => {
+    it("Should edit initial message on PR comment edit", async () => {
         const channelMock = new SlackChannelSnapshottingMock();
         await handlePullRequestEvent(TestPayloadBuilder.pullRequestCommentAdded(), channelMock);
 
@@ -63,12 +63,10 @@ describe("Comment edited use-case", () => {
         expect(channelMock.snapshot).toMatchSnapshot();
     });
 
-    it("Should return generic message if initial comment was not found", async () => {
+    it("Should send generic message if initial comment was not found", async () => {
         const channelMock = new SlackChannelSnapshottingMock();
 
-
         await handlePullRequestEvent(TestPayloadBuilder.pullRequestTaskReopened(), channelMock);
-
 
         expect(channelMock.snapshot).toMatchSnapshot();
     });
