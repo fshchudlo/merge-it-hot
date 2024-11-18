@@ -1,6 +1,6 @@
 import { markdownToSlackMarkup } from "./markdownToSlackMarkup";
 
-export function formatPullRequestDescription(text: string, maxMessageLength = 3000): string {
+export function formatAndTrimMarkdown(text: string, maxMessageLength = 3000): string {
     const reformattedText = markdownToSlackMarkup(text);
     if (reformattedText.length < maxMessageLength) {
         return reformattedText;

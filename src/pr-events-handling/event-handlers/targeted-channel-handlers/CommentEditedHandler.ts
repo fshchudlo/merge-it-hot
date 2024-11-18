@@ -1,7 +1,6 @@
 import { PullRequestCommentActionEvent } from "../../event-contracts";
-import { getTaskOrCommentTitle, snapshotCommentState } from "../utils";
+import { formatAndTrimMarkdown, getTaskOrCommentTitle, snapshotCommentState } from "../utils";
 import { link, quote, section } from "../utils/slack-building-blocks";
-import { markdownToSlackMarkup } from "../utils";
 import { PullRequestEventHandler } from "../PullRequestEventHandler";
 import { PullRequestCommentSnapshot, SendMessageArguments, SlackTargetedChannel } from "../../slack-api-ports";
 
@@ -21,7 +20,7 @@ function buildSlackMessage(payload: PullRequestCommentActionEvent, commentSnapsh
     const userAction = getUserAction(payload, commentSnapshot);
 
     const messageTitle = `${userAction.emoji} ${payload.actor.name} ${link(payload.comment.link, userAction.title)}:`;
-    const commentText = markdownToSlackMarkup(payload.comment.text);
+    const commentText = formatAndTrimMarkdown(payload.comment.text);
 
     return {
         text: messageTitle,

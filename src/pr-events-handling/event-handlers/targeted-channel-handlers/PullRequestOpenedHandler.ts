@@ -1,5 +1,5 @@
 import { link, section, divider, contextBlock, italic } from "../utils/slack-building-blocks";
-import { formatPullRequestDescription, reviewPRAction } from "../utils";
+import { formatAndTrimMarkdown, reviewPRAction } from "../utils";
 import { PullRequestGenericEvent } from "../../event-contracts";
 import { PullRequestEventHandler } from "../PullRequestEventHandler";
 import { SendMessageArguments, SlackTargetedChannel } from "../../slack-api-ports";
@@ -27,7 +27,7 @@ function buildInvitationMessage(payload: PullRequestGenericEvent): SendMessageAr
     const prStateName = payload.pullRequest.draft ? `${italic("draft")} pull request` : "pull request";
 
     const messageTitle = `${payload.actor.name} opened ${link(payload.pullRequest.links.self, prStateName)}`;
-    const descriptionText = formatPullRequestDescription(payload.pullRequest.description ?? payload.pullRequest.title);
+    const descriptionText = formatAndTrimMarkdown(payload.pullRequest.description ?? payload.pullRequest.title);
     return {
         text: messageTitle,
         blocks: [section(messageTitle), divider(), contextBlock(descriptionText), divider(), reviewPRAction(payload.pullRequest)]

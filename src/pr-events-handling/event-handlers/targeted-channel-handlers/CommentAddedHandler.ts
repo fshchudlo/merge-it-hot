@@ -1,4 +1,4 @@
-import { getTaskOrCommentTitle, markdownToSlackMarkup, snapshotCommentState } from "../utils";
+import { formatAndTrimMarkdown, getTaskOrCommentTitle, snapshotCommentState } from "../utils";
 import { link, quote, section } from "../utils/slack-building-blocks";
 import { PullRequestCommentActionEvent } from "../../event-contracts";
 import { PullRequestEventHandler } from "../PullRequestEventHandler";
@@ -20,7 +20,7 @@ function buildSlackMessage(payload: PullRequestCommentActionEvent, parentComment
     const action = parentCommentSnapshot ? "replied" : `added ${getTaskOrCommentTitle(payload)}`;
     const emoji = parentCommentSnapshot ? ":left_speech_bubble:" : `:loudspeaker:`;
     const messageTitle = `${emoji} ${payload.actor.name} ${link(payload.comment.link, action)}:`;
-    const commentText = markdownToSlackMarkup(payload.comment.text);
+    const commentText = formatAndTrimMarkdown(payload.comment.text);
 
     return {
         text: messageTitle,
