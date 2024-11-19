@@ -1,5 +1,5 @@
 import { contextBlock, divider, section } from "../../utils/slack-building-blocks";
-import { formatAndTrimMarkdown, reviewPRAction } from "../../utils";
+import { markdownToSlackMarkup, reviewPRAction, trimTextToSlackMessageLimits } from "../../utils";
 import { PullRequestModifiedEvent } from "../../../event-contracts";
 import { PullRequestEventHandler } from "../../PullRequestEventHandler";
 import { SlackTargetedChannel } from "../../../slack-api-ports";
@@ -45,7 +45,7 @@ function getPRChangesDescription(payload: PullRequestModifiedEvent) {
         addDivider();
         if (pullRequest.description) {
             changesDescription.push(section("Updated description:"));
-            changesDescription.push(contextBlock(formatAndTrimMarkdown(pullRequest.description)));
+            changesDescription.push(contextBlock(trimTextToSlackMessageLimits(markdownToSlackMarkup(pullRequest.description))));
         } else {
             changesDescription.push(section("Description is deleted."));
         }

@@ -1,6 +1,6 @@
-export * from "./getTaskOrCommentTitle";
-export * from "./reviewPRAction";
+export { getTaskOrCommentTitle } from "./getTaskOrCommentTitle";
+export { reviewPRAction } from "./reviewPRAction";
 export * from "./snapshotCommentState";
-export * from "./formatAndTrimMarkdown";
-export * from "./markdownToSlackMarkup";
+export { markdownToSlackMarkup } from "./markdownToSlackMarkup";
 export { snapshotPullRequestState } from "./snapshotPullRequestState";
+export { trimTextToSlackMessageLimits } from "./trimTextToSlackMessageLimits";

@@ -75,7 +75,7 @@ exports[`Comment edited use-case Should edit initial message on PR comment edit 
         },
         "eventType": "review_comment_snapshot_saved",
       },
-      "replyBroadcast": true,
+      "replyBroadcast": undefined,
       "text": ":left_speech_bubble: Test Reviewer 1 <https://git.test.com/projects/TEST-PROJ/repos/test-repository/pull-requests/1/overview?commentId=1|replied>:",
       "threadId": "ABCDE",
     },

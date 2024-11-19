@@ -1,5 +1,5 @@
 import { PullRequestCommentActionEvent } from "../../../event-contracts";
-import { formatAndTrimMarkdown, getTaskOrCommentTitle, snapshotCommentState } from "../../utils";
+import { getTaskOrCommentTitle, markdownToSlackMarkup, snapshotCommentState, trimTextToSlackMessageLimits } from "../../utils";
 import { link, quote, section } from "../../utils/slack-building-blocks";
 import { PullRequestEventHandler } from "../../PullRequestEventHandler";
 import { PullRequestCommentSnapshot, SendMessageArguments, SlackTargetedChannel } from "../../../slack-api-ports";
@@ -18,7 +18,7 @@ export class CommentEditedHandler implements PullRequestEventHandler {
             await slackChannel.sendMessage({
                 ...message,
                 editMessageId: commentSnapshot.slackMessageId,
-                replyBroadcast: false
+                replyBroadcast: undefined
             });
         } else {
             const message = buildCommentChangedMessage(payload, commentSnapshot);
@@ -30,11 +30,11 @@ export class CommentEditedHandler implements PullRequestEventHandler {
 function buildCommentChangedMessage(payload: PullRequestCommentActionEvent, commentSnapshot: PullRequestCommentSnapshot): SendMessageArguments {
     const userAction = getCommentAction(payload, commentSnapshot);
     const messageTitle = `${userAction.emoji} ${payload.actor.name} ${link(payload.comment.link, userAction.title)}:`;
-    const commentText = formatAndTrimMarkdown(payload.comment.text);
+    const commentText = trimTextToSlackMessageLimits(quote(markdownToSlackMarkup(payload.comment.text)));
 
     return {
         text: messageTitle,
-        blocks: [section(messageTitle), section(quote(commentText))],
+        blocks: [section(messageTitle), section(commentText)],
         metadata: snapshotCommentState(payload),
         threadId: commentSnapshot?.slackThreadId || commentSnapshot?.slackMessageId,
         replyBroadcast: commentSnapshot ? true : undefined
