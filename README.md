@@ -17,19 +17,18 @@ Built on top of [Slack bolt API](https://slack.dev/bolt-js/tutorial/getting-star
 
 - Configure Slack application to get required tokens. You can use "Create an app" and "Tokens and installing apps"
   sections [from this Slack guide](https://slack.dev/bolt-js/tutorial/getting-started#create-an-app). You can
-  use `./slack_app_manifest.yml` file as a basis to create your own app and assign all the required oauth scopes.
-- Create the copy of `.env.example` file, name it `.env` and provide relevant config values. `BITBUCKET_READ_API_TOKEN`
-  is optional and needed only to fetch commit message when notifying about new commit to the pull request.
+  use [slack_app_manifest.yml](assets/slack_app_manifest.yml) file as a basis to create your own app and assign all the required oauth scopes.
+- Create the copy of [env.example](env.example) file, name it `.env` and provide relevant config values.
 - Run ```npm run start```
 
 ### Running e2e-tests with an app
 
-- e2e tests will require real Slack and Bitbucket connections. Please refer to [Running app](#running-app)
+- e2e tests will require real Slack and Bitbucket/GitHub connections. Please refer to [Running app](#running-app)
   section above.
 - e2e-tests are implemented with [HTTP Client CLI](https://www.jetbrains.com/help/idea/http-client-cli.html). Thus, it
   should be installed.
 - Fill `http-client.env.json` file with parameters you find relevant. If you want to use real data, consider creating
-  your own `http-client.private.env.json` config. It is added to the `.gitignore`
+  your own `http-client.private.env.json` config. It is already added to the `.gitignore`
 - Run ```ijhttp .e2e-tests/e2e-test-requests.http``` from the project root directory.
 
 ### Running the service
