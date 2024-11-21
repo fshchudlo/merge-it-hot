@@ -6,6 +6,7 @@ export async function normalizeUserPayload(user: BitbucketUserPayload, slackUser
     const userId = await slackUserIdResolver.getUserId(user.emailAddress);
     return {
         name: user.displayName,
+        isBotUser: false,
         slackUserId: userId
     };
 }

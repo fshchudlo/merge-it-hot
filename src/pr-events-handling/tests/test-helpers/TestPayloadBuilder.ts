@@ -8,18 +8,22 @@ import {
 
 const authorUser = {
     name: "Test Author",
+    isBotUser: false,
     slackUserId: "000000"
 };
 const reviewer1User = {
     name: "Test Reviewer 1",
+    isBotUser: false,
     slackUserId: "111111"
 };
 const reviewer2User = {
     name: "Test Reviewer 2",
+    isBotUser: false,
     slackUserId: "222222"
 };
 const reviewer3User = {
     name: "Test Reviewer 3",
+    isBotUser: false,
     slackUserId: "333333"
 };
 

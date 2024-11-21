@@ -29,7 +29,7 @@ export const AppConfig = {
 
         let channelName = null;
 
-        if (configuredBotUsers?.find(u => u == prAuthor)) {
+        if (payload.pullRequest.author.isBotUser || configuredBotUsers?.find(u => u == prAuthor)) {
             channelName = process.env[`${projectKey.toUpperCase()}_BOT_OPENED_PRS_BROADCAST_CHANNEL`]
                 ?? process.env.BOT_OPENED_PRS_BROADCAST_CHANNEL;
         }

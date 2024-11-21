@@ -75,6 +75,7 @@ export async function transformRequestPayloadToEvent(notification: BitbucketNoti
                     severity: notification.comment.severity,
                     author: {
                         name: notification.comment.author.displayName,
+                        isBotUser: false,
                         slackUserId: await userIdResolver.getUserId(notification.comment.author.emailAddress)
                     },
                     resolvedAt: notification.comment.resolvedDate ? new Date(notification.comment.resolvedDate) : null,

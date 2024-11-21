@@ -16,6 +16,7 @@ export async function normalizePayloadGenericPart(payload: BitbucketNotification
         eventKey: payload.eventKey,
         actor: {
             name: payload.actor.displayName,
+            isBotUser: false,
             slackUserId: await slackUserIdResolver.getUserId(payload.actor.emailAddress)
         },
         pullRequest: {
@@ -24,6 +25,7 @@ export async function normalizePayloadGenericPart(payload: BitbucketNotification
             createdAt: new Date(payload.pullRequest.createdDate),
             author: {
                 name: payload.pullRequest.author.user.displayName,
+                isBotUser: false,
                 slackUserId: await slackUserIdResolver.getUserId(payload.pullRequest.author.user.emailAddress)
             },
             description: payload.pullRequest.description,

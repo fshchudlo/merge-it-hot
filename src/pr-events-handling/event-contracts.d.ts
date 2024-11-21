@@ -54,6 +54,7 @@ export type PullRequestFromBranchUpdatedEvent = PullRequestNotificationBasicPayl
 
 export type UserPayload = {
     readonly name: string;
+    readonly isBotUser: boolean;
     readonly slackUserId: string;
 };
 
