@@ -1,4 +1,4 @@
-import { PullRequestEvent } from "../../../pr-events-handling/event-contracts";
+import { IgnoredEvent, PullRequestEvent } from "../../../pr-events-handling/event-contracts";
 import { SlackUserIdResolver } from "../SlackUserIdResolver";
 import GitHubAPI from "../../../api-adapters/github-api/GitHubAPI";
 import {
@@ -13,7 +13,7 @@ import { transformPullRequestCommentPayload } from "./internals/transformPullReq
 import { transformPullRequestReviewThreadPayload } from "./internals/transformPullRequestReviewThreadPayload";
 import { transformPullRequestReviewPayload } from "./internals/transformPullRequestReviewPayload";
 
-export async function transformRequestPayloadToEvent(eventType: GitHubPullRequestEventType, notification: GitHubNotification, userIdResolver: SlackUserIdResolver, githubAPI: GitHubAPI): Promise<PullRequestEvent> {
+export async function transformRequestPayloadToEvent(eventType: GitHubPullRequestEventType, notification: GitHubNotification, userIdResolver: SlackUserIdResolver, githubAPI: GitHubAPI): Promise<PullRequestEvent | IgnoredEvent> {
     switch (eventType) {
         case "pull_request":
             return await transformPullRequestEventTypePayload(notification, userIdResolver, githubAPI);
@@ -24,6 +24,12 @@ export async function transformRequestPayloadToEvent(eventType: GitHubPullReques
         case "pull_request_review_thread":
             return await transformPullRequestReviewThreadPayload(notification, userIdResolver, githubAPI);
         case "issue_comment":
+            if (!(<any>notification).issue.pull_request) {
+                // This is an issue comment, not PR comment
+                return {
+                    eventKey: "ignored_event"
+                };
+            }
             const pullRequest = await githubAPI.fetchFromAPIUrl<GitHubPullRequestPayload>((<any>notification).issue.pull_request.url);
             notification = {
                 ...notification,

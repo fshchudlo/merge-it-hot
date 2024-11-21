@@ -4,14 +4,14 @@ import GitHubAPI from "../../../../api-adapters/github-api/GitHubAPI";
 import { normalizePayloadGenericPart } from "./normalizePayloadGenericPart";
 import {
     PullRequestFromBranchUpdatedEvent,
-    PullRequestGenericEvent, PullRequestIgnoredEvent,
+    PullRequestGenericEvent, IgnoredEvent,
     PullRequestModifiedEvent,
-    PullRequestParticipantsUpdatedEvent
+    PullRequestParticipantsUpdatedEvent, PullRequestEvent
 } from "../../../../pr-events-handling/event-contracts";
 import { transformPullRequestReviewRequestedPayload } from "./transformPullRequestReviewRequestedPayload";
 import mapGitHubUserToSlackUser from "./mapGitHubUserToSlackUser";
 
-export async function transformPullRequestEventTypePayload(notification: GitHubNotification, userIdResolver: SlackUserIdResolver, githubAPI: GitHubAPI) {
+export async function transformPullRequestEventTypePayload(notification: GitHubNotification, userIdResolver: SlackUserIdResolver, githubAPI: GitHubAPI): Promise<PullRequestEvent | IgnoredEvent> {
     const action = notification.action;
     switch (action) {
         case "auto_merge_enabled":
@@ -22,11 +22,9 @@ export async function transformPullRequestEventTypePayload(notification: GitHubN
         case "unlocked":
         case "milestoned":
         case "demilestoned":
-            console.log(`Event ${notification.action} was configured to ignore.`);
             return {
-                ...(await normalizePayloadGenericPart(notification, userIdResolver, githubAPI)),
                 eventKey: "ignored_event"
-            } as PullRequestIgnoredEvent;
+            };
         case "opened":
             return {
                 ...(await normalizePayloadGenericPart(notification, userIdResolver, githubAPI)),

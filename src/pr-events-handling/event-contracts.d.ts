@@ -4,15 +4,14 @@ export type PullRequestEvent =
     | PullRequestModifiedEvent
     | PullRequestFromBranchUpdatedEvent
     | PullRequestParticipantsUpdatedEvent
-    | PullRequestReviewSubmittedEvent
-    | PullRequestIgnoredEvent;
+    | PullRequestReviewSubmittedEvent;
 
 export type PullRequestNotificationBasicPayload = {
     readonly actor: UserPayload;
     readonly pullRequest: PullRequestPayload;
 };
 
-export type PullRequestIgnoredEvent = PullRequestNotificationBasicPayload & {
+export type IgnoredEvent = {
     readonly eventKey: "ignored_event";
 };
 
