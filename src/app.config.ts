@@ -23,13 +23,10 @@ export const AppConfig = {
     * You can implement any other logic depending on the granularity level you need
     * */
     getOpenedPRBroadcastChannel(payload: PullRequestEvent): string | null {
-        const configuredBotUsers = process.env.BOT_USER_NAMES?.split(",").map(u => u.trim());
         const projectKey = payload.pullRequest.targetBranch.projectKey;
-        const prAuthor = payload.pullRequest.author.name;
-
         let channelName = null;
 
-        if (payload.pullRequest.author.isBotUser || configuredBotUsers?.find(u => u == prAuthor)) {
+        if (payload.pullRequest.author.isBotUser) {
             channelName = process.env[`${projectKey.toUpperCase()}_BOT_OPENED_PRS_BROADCAST_CHANNEL`]
                 ?? process.env.BOT_OPENED_PRS_BROADCAST_CHANNEL;
         }
