@@ -1,4 +1,4 @@
-import { PullRequestPayload } from "../../pr-events-handling/event-contracts";
+import { PullRequestPayload } from "../../event-handlers/event-contracts";
 
 interface PullRequestFlattenTraits {
     pullRequestId: string | number;

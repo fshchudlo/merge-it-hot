@@ -1,5 +1,5 @@
 import "dotenv/config";
-import { PullRequestEvent } from "./pr-events-handling/event-contracts";
+import { PullRequestEvent } from "./event-handlers/event-contracts";
 
 export const AppConfig = {
     NODE_ENV: process.env.NODE_ENV,
@@ -12,8 +12,6 @@ export const AppConfig = {
     SLACK_BOT_HOST: process.env.SLACK_BOT_HOST || "0.0.0.0",
     DIAGNOSTIC_CHANNEL: process.env.DIAGNOSTIC_CHANNEL,
 
-    BITBUCKET_READ_API_TOKEN: process.env.BITBUCKET_READ_API_TOKEN,
-    BITBUCKET_BASE_URL: process.env.BITBUCKET_BASE_URL,
     DEFAULT_CHANNEL_PARTICIPANTS: process.env.DEFAULT_CHANNEL_PARTICIPANTS?.split(",").map(u => u.trim()),
 
     GITHUB_APP_ID: +process.env.GITHUB_APP_ID,

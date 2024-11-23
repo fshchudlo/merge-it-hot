@@ -1,9 +1,9 @@
 import * as slack from "@slack/web-api";
 import { MessageElement } from "@slack/web-api/dist/response/ConversationsHistoryResponse";
-import { SNAPSHOT_COMMENT_STATE_EVENT_TYPE } from "../../../pr-events-handling/event-handlers/utils";
+import { SNAPSHOT_COMMENT_STATE_EVENT_TYPE } from "../../../event-handlers/event-handlers/utils";
 import {
     SNAPSHOT_PULL_REQUEST_STATE_EVENT_TYPE
-} from "../../../pr-events-handling/event-handlers/utils/snapshotPullRequestState";
+} from "../../../event-handlers/event-handlers/utils/snapshotPullRequestState";
 import { SlackChannelInfo } from "../SlackChannelProvisioner";
 import { CHANNELS_CACHE } from "../CHANNELS_CACHE";
 import { COMMENTS_CACHE } from "../COMMENTS_CACHE";
@@ -14,7 +14,7 @@ import {
     PullRequestSnapshotInSlackMetadata,
     SendMessageArguments,
     SlackBroadcastChannel, SlackTargetedChannel
-} from "../../../pr-events-handling/slack-api-ports";
+} from "../../../event-handlers/slack-api-ports";
 
 /**
  * Adapter for the Slack API that also acts as an anti-corruption layer since Slack API is not always consistent.
@@ -167,9 +167,7 @@ export class SlackWebClientChannel implements SlackTargetedChannel, SlackBroadca
             const snapshot = <PullRequestCommentSnapshot>{
                 commentId: metadata.commentId,
                 commentParentId: metadata.commentParentId,
-                threadResolvedDate: metadata.threadResolvedDate,
-                taskResolvedDate: metadata.taskResolvedDate,
-                severity: metadata.severity,
+                resolvedDate: metadata.resolvedDate,
                 slackMessageId: comment.ts,
                 slackThreadId: comment.thread_ts
             };

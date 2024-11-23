@@ -1,7 +1,6 @@
 import { App, ExpressReceiver } from "@slack/bolt";
 import { AppConfig } from "./app.config";
 import express, { NextFunction } from "express";
-import { handleBitbucketWebhookCall } from "./web-api/route-handlers/bitbucket-webhook/handleBitbucketWebhookCall";
 import { SlackChannelProvisioner } from "./api-adapters/slack-api/SlackChannelProvisioner";
 import measureRequestDuration from "./app.metrics";
 import handleError from "./web-api/middlewares/handleError";
@@ -36,10 +35,6 @@ if (AppConfig.HMAC_SECRET) {
     expressReceiver.router.use(express.json({ limit: AppConfig.REQUEST_BODY_SIZE_LIMIT }));
 }
 expressReceiver.router.use(measureRequestDuration);
-
-expressReceiver.router.post("/bitbucket-webhook", verifyHMACSignature, async (req, res, next: NextFunction) => {
-    await handleBitbucketWebhookCall(req, res, next, slackChannelFactory, userIdResolver);
-});
 
 expressReceiver.router.post("/github-webhook", verifyHMACSignature, async (req, res, next: NextFunction) => {
     await handleGitHubWebhookCall(req, res, next, slackChannelFactory, userIdResolver);

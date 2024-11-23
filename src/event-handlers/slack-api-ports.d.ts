@@ -1,0 +1,67 @@
+import { Block, KnownBlock } from "@slack/bolt";
+import { SlackChannelInfo } from "../api-adapters/slack-api/SlackChannelProvisioner";
+
+export interface SlackBroadcastChannel {
+    addReaction(messageId: string, reaction: string): Promise<void>;
+
+    sendMessage(options: SendMessageArguments);
+
+    findPROpenedBroadcastMessageId(prCreationDate: Date, pullRequestTraits: PullRequestSnapshotInSlackMetadata): Promise<string | null>;
+}
+export interface SlackTargetedChannel {
+    readonly channelInfo: SlackChannelInfo;
+
+    addBookmark(options: AddBookmarkArguments): Promise<void>;
+
+    inviteToChannel(options: InviteToChannelArguments): Promise<void>;
+
+    kickFromChannel(options: KickFromChannelArguments): Promise<void>;
+
+    closeChannel(): Promise<void>;
+
+    sendMessage(options: SendMessageArguments);
+
+    deleteMessage(messageId: string): Promise<void>;
+
+    findLatestPullRequestCommentSnapshot(commentId: number | string): Promise<PullRequestCommentSnapshot | null>;
+}
+
+export type SendMessageArguments = {
+    text?: string;
+    threadId?: string;
+    editMessageId?: string;
+    replyBroadcast?: boolean,
+    metadata?: {
+        eventType: string;
+        eventPayload: { [p: string]: string | number | boolean }
+    };
+    blocks?: Block[] | KnownBlock[]
+}
+
+export type PullRequestSnapshotInSlackMetadata = {
+    pullRequestId: string,
+    projectKey: string,
+    repositorySlug: string
+}
+
+export type PullrequestCommentSnapshotInSlackMetadata = {
+    resolvedDate?: number;
+    commentId: string;
+    commentParentId?: string;
+}
+export type PullRequestCommentSnapshot = PullrequestCommentSnapshotInSlackMetadata & {
+    slackMessageId: string;
+    slackThreadId?: string;
+}
+export type AddBookmarkArguments = {
+    link: string;
+    title: string;
+    emoji?: string;
+}
+export type InviteToChannelArguments = {
+    force: boolean;
+    users: string[];
+}
+export type KickFromChannelArguments = {
+    users: string[];
+}

@@ -1,6 +1,6 @@
 import * as slack from "@slack/web-api";
 import { USERIDS_CACHE } from "./USERIDS_CACHE";
-import { SlackUserIdResolver } from "../../web-api/payload-normalization/SlackUserIdResolver";
+import { SlackUserIdResolver } from "../../github-payload-to-event-mapping/SlackUserIdResolver";
 
 export class SlackWebClientUserIdResolver implements SlackUserIdResolver {
     private readonly client: slack.WebClient;
