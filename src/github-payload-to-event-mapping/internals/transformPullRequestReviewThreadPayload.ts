@@ -1,9 +1,9 @@
 import { GitHubNotification } from "../GitHub.contracts";
-import { SlackUserIdResolver } from "../../SlackUserIdResolver";
-import { normalizePayloadGenericPart } from "./normalizePayloadGenericPart";
-import { PullRequestCommentActionEvent } from "../../../../pr-events-handling/event-contracts";
+import { SlackUserIdResolver } from "../SlackUserIdResolver";
+import { mapPayloadGenericPart } from "./mapPayloadGenericPart";
+import { PullRequestCommentActionEvent } from "../../event-handlers/event-contracts";
 import mapGitHubUserToSlackUser from "./mapGitHubUserToSlackUser";
-import GitHubAPI from "../../../../api-adapters/github-api/GitHubAPI";
+import GitHubAPI from "../../api-adapters/github-api/GitHubAPI";
 
 export async function transformPullRequestReviewThreadPayload(notification: GitHubNotification, userIdResolver: SlackUserIdResolver, githubAPI: GitHubAPI) {
     if (notification.action !== "resolved" && notification.action !== "unresolved") {
@@ -12,7 +12,7 @@ export async function transformPullRequestReviewThreadPayload(notification: GitH
 
     const rootComment = notification.thread.comments.find(comment => !comment.in_reply_to_id);
     return {
-        ...(await normalizePayloadGenericPart(notification, userIdResolver, githubAPI)),
+        ...(await mapPayloadGenericPart(notification, userIdResolver, githubAPI)),
         eventKey: "pr:comment:edited",
         comment: {
             id: rootComment.id,

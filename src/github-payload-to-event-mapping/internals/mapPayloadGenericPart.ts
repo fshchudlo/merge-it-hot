@@ -1,10 +1,10 @@
 import { GitHubPullRequestNotificationBasicPayload, GitHubUserPayload } from "../GitHub.contracts";
-import { SlackUserIdResolver } from "../../SlackUserIdResolver";
-import { PullRequestGenericEvent, ParticipantPayload } from "../../../../pr-events-handling/event-contracts";
+import { SlackUserIdResolver } from "../SlackUserIdResolver";
+import { PullRequestGenericEvent, ParticipantPayload } from "../../event-handlers/event-contracts";
 import mapGitHubUserToSlackUser from "./mapGitHubUserToSlackUser";
-import GitHubAPI from "../../../../api-adapters/github-api/GitHubAPI";
+import GitHubAPI from "../../api-adapters/github-api/GitHubAPI";
 
-export async function normalizePayloadGenericPart(payload: GitHubPullRequestNotificationBasicPayload, userIdResolver: SlackUserIdResolver, githubAPI: GitHubAPI) {
+export async function mapPayloadGenericPart(payload: GitHubPullRequestNotificationBasicPayload, userIdResolver: SlackUserIdResolver, githubAPI: GitHubAPI) {
 
     const normalizedReviewersPayload = await fetchReviewersList(payload, userIdResolver, githubAPI);
 

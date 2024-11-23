@@ -3,7 +3,7 @@ import { SlackChannelInfo } from "../../SlackChannelProvisioner";
 import { SlackWebClientChannel } from "../SlackWebClientChannel";
 import { CHANNELS_CACHE } from "../../CHANNELS_CACHE";
 import { COMMENTS_CACHE } from "../../COMMENTS_CACHE";
-import { SNAPSHOT_COMMENT_STATE_EVENT_TYPE } from "../../../../pr-events-handling/event-handlers/utils";
+import { SNAPSHOT_COMMENT_STATE_EVENT_TYPE } from "../../../../event-handlers/event-handlers/utils";
 
 jest.mock("@slack/web-api", () => ({
     WebClient: jest.fn().mockImplementation(() => ({

@@ -163,7 +163,7 @@
           "interval": "",
           "intervalFactor": 1,
           "legendFormat": "{{route}} (Status code {{status_code}})",
-          "refId": "Average bitbucket-webhook request duration"
+          "refId": "Average request duration"
         }
       ],
       "title": "Requests duration for \"$route\" endpoint",
@@ -254,7 +254,7 @@
           "interval": "",
           "intervalFactor": 1,
           "legendFormat": "__auto",
-          "refId": "bitbucket-webhook"
+          "refId": "A"
         }
       ],
       "title": "Requests duration for \"$route\" endpoint",
@@ -368,7 +368,7 @@
         "h": 6,
         "w": 8,
         "x": 0,
-        "y": 8
+        "y": 16
       },
       "id": 4,
       "options": {
@@ -499,7 +499,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 14
+        "y": 22
       },
       "id": 13,
       "options": {
@@ -561,10 +561,12 @@
         "current": {
           "selected": true,
           "text": [
-            "/github-webhook"
+            "/github-webhook",
+            "/slack-channel"
           ],
           "value": [
-            "/github-webhook"
+            "/github-webhook",
+            "/slack-channel"
           ]
         },
         "description": "",
@@ -579,17 +581,12 @@
             "value": "/github-webhook"
           },
           {
-            "selected": false,
+            "selected": true,
             "text": "/slack-channel",
             "value": "/slack-channel"
-          },
-          {
-            "selected": false,
-            "text": "/bitbucket-webhook",
-            "value": "/bitbucket-webhook"
           }
         ],
-        "query": "/github-webhook, /slack-channel, /bitbucket-webhook",
+        "query": "/github-webhook, /slack-channel",
         "queryValue": "",
         "skipUrlSync": false,
         "type": "custom"

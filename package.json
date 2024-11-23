@@ -1,7 +1,7 @@
 {
   "name": "merge-it-hot",
   "version": "1.0.0",
-  "description": "An application for reflecting GitHub/Bitbucket Pull Requests events to the Slack channels for PR author and all of participants.",
+  "description": "An application for reflecting GitHub Pull Requests events to the Slack channels for PR author and all of participants.",
   "main": "src/app.ts",
   "scripts": {
     "start": "ts-node src/app.ts",
@@ -12,9 +12,13 @@
     "test:update-snapshots": "jest --updateSnapshot"
   },
   "keywords": [
-    "bitbucket",
     "github",
-    "slack"
+    "slack",
+    "review",
+    "pull request",
+    "devex",
+    "developer experience",
+    "developer productivity"
   ],
   "author": "Fedor Shchudlo",
   "license": "Apache 2.0",

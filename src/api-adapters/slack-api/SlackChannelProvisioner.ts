@@ -1,10 +1,10 @@
 import * as slack from "@slack/web-api";
 import { SlackWebClientChannel } from "./slack-channel/SlackWebClientChannel";
-import { PullRequestEvent } from "../../pr-events-handling/event-contracts";
+import { PullRequestEvent } from "../../event-handlers/event-contracts";
 import { buildChannelName } from "./buildChannelName";
 import { CHANNELS_CACHE } from "./CHANNELS_CACHE";
 
-import { SlackBroadcastChannel, SlackTargetedChannel } from "../../pr-events-handling/slack-api-ports";
+import { SlackBroadcastChannel, SlackTargetedChannel } from "../../event-handlers/slack-api-ports";
 
 export class SlackChannelProvisioner {
     private readonly client: slack.WebClient;
@@ -127,4 +127,4 @@ export type SlackChannelInfo = {
     id: string;
     name: string;
 }
-export type BotEconEmoji = ":bitbucket:" | ":github:";
+export type BotEconEmoji = ":github:";

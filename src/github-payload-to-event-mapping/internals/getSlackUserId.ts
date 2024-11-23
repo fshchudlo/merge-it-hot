@@ -1,4 +1,4 @@
-import { SlackUserIdResolver } from "../../SlackUserIdResolver";
+import { SlackUserIdResolver } from "../SlackUserIdResolver";
 import { GitHubUserPayload } from "../GitHub.contracts";
 
 export async function getSlackUserId(userIdResolver: SlackUserIdResolver, user: GitHubUserPayload): Promise<string> {

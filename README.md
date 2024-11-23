@@ -10,7 +10,7 @@ Built on top of [Slack bolt API](https://slack.dev/bolt-js/tutorial/getting-star
 
 ### Running unit tests
 
-- Easy as ```npm run test```. Unit tests are not tied to Slack or Bitbucket, thus, you can run without real setup.
+- Easy as ```npm run test```. Unit tests are not tied to Slack or GitHub, thus, you can run without real setup.
 - Since I'm a lazy guy, tests use snapshots. You can update them by running ```npm run test:update-snapshots```
 
 ### Running app
@@ -23,7 +23,7 @@ Built on top of [Slack bolt API](https://slack.dev/bolt-js/tutorial/getting-star
 
 ### Running e2e-tests with an app
 
-- e2e tests will require real Slack and Bitbucket/GitHub connections. Please refer to [Running app](#running-app)
+- e2e tests will require real Slack and GitHub connections. Please refer to [Running app](#running-app)
   section above.
 - e2e-tests are implemented with [HTTP Client CLI](https://www.jetbrains.com/help/idea/http-client-cli.html). Thus, it
   should be installed.

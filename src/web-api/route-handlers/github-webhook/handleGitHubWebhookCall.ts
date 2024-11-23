@@ -1,11 +1,11 @@
 import { NextFunction, Request, Response } from "express";
 import { SlackChannelProvisioner } from "../../../api-adapters/slack-api/SlackChannelProvisioner";
-import { transformRequestPayloadToEvent } from "../../payload-normalization/github/transformRequestPayloadToEvent";
+import { transformRequestPayloadToEvent } from "../../../github-payload-to-event-mapping/transformRequestPayloadToEvent";
 import { AppConfig } from "../../../app.config";
-import handlePullRequestEvent from "../../../pr-events-handling/handlePullRequestEvent";
-import { SlackUserIdResolver } from "../../payload-normalization/SlackUserIdResolver";
+import handlePullRequestEvent from "../../../event-handlers/handlePullRequestEvent";
+import { SlackUserIdResolver } from "../../../github-payload-to-event-mapping/SlackUserIdResolver";
 import GitHubAPI from "../../../api-adapters/github-api/GitHubAPI";
-import { GitHubPullRequestEventType } from "../../payload-normalization/github/GitHub.contracts";
+import { GitHubPullRequestEventType } from "../../../github-payload-to-event-mapping/GitHub.contracts";
 
 export async function handleGitHubWebhookCall(req: Request, res: Response, next: NextFunction, slackChannelFactory: SlackChannelProvisioner, slackUserIdResolver: SlackUserIdResolver) {
     try {

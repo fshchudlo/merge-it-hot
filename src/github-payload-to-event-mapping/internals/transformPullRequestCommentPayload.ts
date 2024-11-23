@@ -1,9 +1,9 @@
 import { GitHubPullRequestCommentActionType, GitHubPullRequestCommentNotification } from "../GitHub.contracts";
-import { SlackUserIdResolver } from "../../SlackUserIdResolver";
-import { normalizePayloadGenericPart } from "./normalizePayloadGenericPart";
-import { PullRequestCommentActionEvent, IgnoredEvent } from "../../../../pr-events-handling/event-contracts";
+import { SlackUserIdResolver } from "../SlackUserIdResolver";
+import { mapPayloadGenericPart } from "./mapPayloadGenericPart";
+import { PullRequestCommentActionEvent, IgnoredEvent } from "../../event-handlers/event-contracts";
 import mapGitHubUserToSlackUser from "./mapGitHubUserToSlackUser";
-import GitHubAPI from "../../../../api-adapters/github-api/GitHubAPI";
+import GitHubAPI from "../../api-adapters/github-api/GitHubAPI";
 
 export async function transformPullRequestCommentPayload(notification: GitHubPullRequestCommentNotification, userIdResolver: SlackUserIdResolver, githubAPI: GitHubAPI): Promise<PullRequestCommentActionEvent | IgnoredEvent> {
     const action = notification.action;
@@ -15,7 +15,7 @@ export async function transformPullRequestCommentPayload(notification: GitHubPul
     }
 
     return {
-        ...(await normalizePayloadGenericPart(notification, userIdResolver, githubAPI)),
+        ...(await mapPayloadGenericPart(notification, userIdResolver, githubAPI)),
         eventKey: mapGitHubCommentActionToEventKey(action),
         comment: {
             id: notification.comment.id,

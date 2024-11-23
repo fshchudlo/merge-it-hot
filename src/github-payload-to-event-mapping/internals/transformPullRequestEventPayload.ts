@@ -1,17 +1,17 @@
 import { GitHubNotification } from "../GitHub.contracts";
-import { SlackUserIdResolver } from "../../SlackUserIdResolver";
-import GitHubAPI from "../../../../api-adapters/github-api/GitHubAPI";
-import { normalizePayloadGenericPart } from "./normalizePayloadGenericPart";
+import { SlackUserIdResolver } from "../SlackUserIdResolver";
+import GitHubAPI from "../../api-adapters/github-api/GitHubAPI";
+import { mapPayloadGenericPart } from "./mapPayloadGenericPart";
 import {
     PullRequestFromBranchUpdatedEvent,
     PullRequestGenericEvent, IgnoredEvent,
     PullRequestModifiedEvent,
     PullRequestParticipantsUpdatedEvent, PullRequestEvent
-} from "../../../../pr-events-handling/event-contracts";
+} from "../../event-handlers/event-contracts";
 import { transformPullRequestReviewRequestedPayload } from "./transformPullRequestReviewRequestedPayload";
 import mapGitHubUserToSlackUser from "./mapGitHubUserToSlackUser";
 
-export async function transformPullRequestEventTypePayload(notification: GitHubNotification, userIdResolver: SlackUserIdResolver, githubAPI: GitHubAPI): Promise<PullRequestEvent | IgnoredEvent> {
+export async function transformPullRequestEventPayload(notification: GitHubNotification, userIdResolver: SlackUserIdResolver, githubAPI: GitHubAPI): Promise<PullRequestEvent | IgnoredEvent> {
     const action = notification.action;
     switch (action) {
         case "auto_merge_enabled":
@@ -27,27 +27,27 @@ export async function transformPullRequestEventTypePayload(notification: GitHubN
             };
         case "opened":
             return {
-                ...(await normalizePayloadGenericPart(notification, userIdResolver, githubAPI)),
+                ...(await mapPayloadGenericPart(notification, userIdResolver, githubAPI)),
                 eventKey: "pr:opened"
             } as PullRequestGenericEvent;
         case "closed":
             return {
-                ...(await normalizePayloadGenericPart(notification, userIdResolver, githubAPI)),
+                ...(await mapPayloadGenericPart(notification, userIdResolver, githubAPI)),
                 eventKey: notification.pull_request.merged ? "pr:merged" : "pr:deleted"
             } as PullRequestGenericEvent;
         case "reopened":
             return {
-                ...(await normalizePayloadGenericPart(notification, userIdResolver, githubAPI)),
+                ...(await mapPayloadGenericPart(notification, userIdResolver, githubAPI)),
                 eventKey: "pr:reopened"
             } as PullRequestGenericEvent;
         case "ready_for_review":
             return {
-                ...(await normalizePayloadGenericPart(notification, userIdResolver, githubAPI)),
+                ...(await mapPayloadGenericPart(notification, userIdResolver, githubAPI)),
                 eventKey: "pr:ready_for_review"
             } as PullRequestGenericEvent;
         case "converted_to_draft":
             return {
-                ...(await normalizePayloadGenericPart(notification, userIdResolver, githubAPI)),
+                ...(await mapPayloadGenericPart(notification, userIdResolver, githubAPI)),
                 eventKey: "pr:converted_to_draft"
             } as PullRequestGenericEvent;
         case "review_requested":
@@ -55,28 +55,28 @@ export async function transformPullRequestEventTypePayload(notification: GitHubN
             return await transformPullRequestReviewRequestedPayload(notification, userIdResolver, githubAPI);
         case "assigned":
             return {
-                ...(await normalizePayloadGenericPart(notification, userIdResolver, githubAPI)),
+                ...(await mapPayloadGenericPart(notification, userIdResolver, githubAPI)),
                 eventKey: "pr:participants:changed",
                 addedParticipants: [await mapGitHubUserToSlackUser(notification.assignee, userIdResolver)],
                 removedParticipants: []
             } as PullRequestParticipantsUpdatedEvent;
         case "unassigned":
             return {
-                ...(await normalizePayloadGenericPart(notification, userIdResolver, githubAPI)),
+                ...(await mapPayloadGenericPart(notification, userIdResolver, githubAPI)),
                 eventKey: "pr:participants:changed",
                 removedParticipants: [await mapGitHubUserToSlackUser(notification.assignee, userIdResolver)],
                 addedParticipants: []
             } as PullRequestParticipantsUpdatedEvent;
         case "synchronize":
             return {
-                ...(await normalizePayloadGenericPart(notification, userIdResolver, githubAPI)),
+                ...(await mapPayloadGenericPart(notification, userIdResolver, githubAPI)),
                 eventKey: "pr:from_ref_updated",
                 latestCommitMessage: await githubAPI.fetchCommitMessage(notification.pull_request.head.repo.owner.login, notification.pull_request.head.repo.name, notification.pull_request.head.sha),
                 latestCommitViewUrl: `${notification.pull_request.html_url}/commits/${notification.pull_request.head.sha}`
             } as PullRequestFromBranchUpdatedEvent;
         case "edited":
             return {
-                ...(await normalizePayloadGenericPart(notification, userIdResolver, githubAPI)),
+                ...(await mapPayloadGenericPart(notification, userIdResolver, githubAPI)),
                 eventKey: "pr:modified",
                 previousDescription: notification.changes.body?.from,
                 previousTitle: notification.changes.title?.from,
