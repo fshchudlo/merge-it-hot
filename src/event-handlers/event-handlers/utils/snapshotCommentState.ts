@@ -9,7 +9,7 @@ export function snapshotCommentState(payload: PullRequestCommentActionEvent) {
         eventType: SNAPSHOT_COMMENT_STATE_EVENT_TYPE,
         eventPayload: <PullrequestCommentSnapshotInSlackMetadata>{
             commentId: payload.comment.id.toString(),
-            threadResolvedDate: payload.comment.resolvedAt?.getTime(),
+            resolvedDate: payload.comment.resolvedAt?.getTime(),
             commentParentId: payload.comment.replyToCommentId?.toString()
         }
     };

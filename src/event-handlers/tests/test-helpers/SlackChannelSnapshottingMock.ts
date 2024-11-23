@@ -89,7 +89,7 @@ export default class SlackChannelSnapshottingMock implements SlackTargetedChanne
             return Promise.resolve({
                 commentId: metadata.commentId,
                 commentParentId: metadata.commentParentId,
-                threadResolvedDate: metadata.threadResolvedDate,
+                resolvedDate: metadata.resolvedDate,
                 slackMessageId: messageId,
                 slackThreadId: snapshot.threadId
             });

@@ -167,7 +167,7 @@ export class SlackWebClientChannel implements SlackTargetedChannel, SlackBroadca
             const snapshot = <PullRequestCommentSnapshot>{
                 commentId: metadata.commentId,
                 commentParentId: metadata.commentParentId,
-                threadResolvedDate: metadata.threadResolvedDate,
+                resolvedDate: metadata.resolvedDate,
                 slackMessageId: comment.ts,
                 slackThreadId: comment.thread_ts
             };

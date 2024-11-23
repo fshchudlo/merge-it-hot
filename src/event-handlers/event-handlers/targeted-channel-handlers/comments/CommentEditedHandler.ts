@@ -43,13 +43,13 @@ function buildCommentChangedMessage(payload: PullRequestCommentActionEvent, comm
 
 function getCommentAction(payload: PullRequestCommentActionEvent, previousCommentSnapshot: PullRequestCommentSnapshot) {
     if (previousCommentSnapshot) {
-        if (!previousCommentSnapshot.threadResolvedDate && payload.comment.resolvedAt) {
+        if (!previousCommentSnapshot.resolvedDate && payload.comment.resolvedAt) {
             return {
                 title: `resolved thread`,
                 emoji: ":white_check_mark:"
             };
         }
-        if (previousCommentSnapshot.threadResolvedDate && !payload.comment.resolvedAt) {
+        if (previousCommentSnapshot.resolvedDate && !payload.comment.resolvedAt) {
             return {
                 title: `reopened thread`,
                 emoji: ":repeat:"
