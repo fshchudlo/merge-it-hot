@@ -39,7 +39,6 @@ exports[`Comment deleted use-case Should delete message if it was found 1`] = `
         "eventPayload": {
           "commentId": "1",
           "commentParentId": undefined,
-          "severity": "NORMAL",
           "taskResolvedDate": undefined,
           "threadResolvedDate": undefined,
         },
@@ -90,7 +89,6 @@ exports[`Comment deleted use-case Should send deletion notification if the initi
         "eventPayload": {
           "commentId": "-1",
           "commentParentId": undefined,
-          "severity": "NORMAL",
           "taskResolvedDate": undefined,
           "threadResolvedDate": undefined,
         },

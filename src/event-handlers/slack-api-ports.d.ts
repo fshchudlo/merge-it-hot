@@ -1,6 +1,5 @@
 import { Block, KnownBlock } from "@slack/bolt";
 import { SlackChannelInfo } from "../api-adapters/slack-api/SlackChannelProvisioner";
-import { CommentSeverity } from "./event-contracts";
 
 export interface SlackBroadcastChannel {
     addReaction(messageId: string, reaction: string): Promise<void>;
@@ -46,7 +45,6 @@ export type PullRequestSnapshotInSlackMetadata = {
 }
 
 export type PullrequestCommentSnapshotInSlackMetadata = {
-    severity: CommentSeverity;
     taskResolvedDate?: number;
     threadResolvedDate?: number;
     commentId: string;

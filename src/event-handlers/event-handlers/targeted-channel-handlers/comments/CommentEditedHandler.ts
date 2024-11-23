@@ -1,5 +1,5 @@
 import { PullRequestCommentActionEvent } from "../../../event-contracts";
-import { getTaskOrCommentTitle, markdownToSlackMarkup, snapshotCommentState, trimTextToSlackMessageLimits } from "../../utils";
+import { markdownToSlackMarkup, snapshotCommentState, trimTextToSlackMessageLimits } from "../../utils";
 import { link, quote, section } from "../../utils/slack-building-blocks";
 import { PullRequestEventHandler } from "../../PullRequestEventHandler";
 import { PullRequestCommentSnapshot, SendMessageArguments, SlackTargetedChannel } from "../../../slack-api-ports";
@@ -42,29 +42,16 @@ function buildCommentChangedMessage(payload: PullRequestCommentActionEvent, comm
 }
 
 function getCommentAction(payload: PullRequestCommentActionEvent, previousCommentSnapshot: PullRequestCommentSnapshot) {
-    const commentType = getTaskOrCommentTitle(payload);
     if (previousCommentSnapshot) {
-        if (previousCommentSnapshot.severity == "NORMAL" && payload.comment.severity == "BLOCKER") {
-            return {
-                title: "converted comment to the task",
-                emoji: ":pushpin:"
-            };
-        }
-        if (previousCommentSnapshot.severity == "BLOCKER" && payload.comment.severity == "NORMAL") {
-            return {
-                title: "converted task to the comment",
-                emoji: ":writing_hand:"
-            };
-        }
         if (!previousCommentSnapshot.taskResolvedDate && payload.comment.resolvedAt) {
             return {
-                title: `resolved ${commentType}`,
+                title: `resolved comment`,
                 emoji: ":white_check_mark:"
             };
         }
         if (previousCommentSnapshot.taskResolvedDate && !payload.comment.resolvedAt) {
             return {
-                title: `reopened ${commentType}`,
+                title: `reopened comment`,
                 emoji: ":repeat:"
             };
         }
@@ -82,7 +69,7 @@ function getCommentAction(payload: PullRequestCommentActionEvent, previousCommen
         }
     }
     return {
-        title: `edited ${commentType}`,
+        title: `edited comment`,
         isTextOnlyChange: true,
         emoji: ":writing_hand:"
     };

@@ -21,7 +21,6 @@ export async function transformPullRequestCommentPayload(notification: GitHubPul
             id: notification.comment.id,
             replyToCommentId: notification.comment.in_reply_to_id,
             text: notification.comment.body,
-            severity: "NORMAL",
             author: await mapGitHubUserToSlackUser(notification.comment.user, userIdResolver),
             resolvedAt: null,
             threadResolvedAt: null,

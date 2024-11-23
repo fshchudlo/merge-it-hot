@@ -1,4 +1,4 @@
-import { getTaskOrCommentTitle, snapshotCommentState, trimTextToSlackMessageLimits, markdownToSlackMarkup } from "../../utils";
+import { snapshotCommentState, trimTextToSlackMessageLimits, markdownToSlackMarkup } from "../../utils";
 import { quote, section } from "../../utils/slack-building-blocks";
 import { PullRequestCommentActionEvent } from "../../../event-contracts";
 import { PullRequestEventHandler } from "../../PullRequestEventHandler";
@@ -22,7 +22,7 @@ export class CommentDeletedHandler implements PullRequestEventHandler {
 }
 
 function buildSlackMessage(payload: PullRequestCommentActionEvent): SendMessageArguments {
-    const messageTitle = `:broom: ${payload.actor.name} deleted ${getTaskOrCommentTitle(payload)}:`;
+    const messageTitle = `:broom: ${payload.actor.name} deleted comment:`;
     const commentText = trimTextToSlackMessageLimits(quote(markdownToSlackMarkup(payload.comment.text)));
     return {
         text: messageTitle,

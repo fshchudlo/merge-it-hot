@@ -69,7 +69,6 @@ export type PullRequestCommentPayload = {
     readonly replyToCommentId?: number;
     readonly text: string;
     readonly author: UserPayload;
-    readonly severity: CommentSeverity;
     readonly resolvedAt?: Date;
     readonly threadResolvedAt?: Date;
     readonly link: string;
@@ -95,4 +94,3 @@ export type ParticipantPayload = {
 }
 export type ReviewerReviewStatus = "UNAPPROVED" | "NEEDS_WORK" | "APPROVED";
 export type PullRequestReviewState = "COMMENTED" | "APPROVED" | "CHANGES_REQUESTED" | "DISMISSED";
-export type CommentSeverity = "NORMAL" | "BLOCKER";

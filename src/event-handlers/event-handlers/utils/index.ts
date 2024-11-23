@@ -1,4 +1,3 @@
-export { getTaskOrCommentTitle } from "./getTaskOrCommentTitle";
 export { reviewPRAction } from "./reviewPRAction";
 export * from "./snapshotCommentState";
 export { markdownToSlackMarkup } from "./markdownToSlackMarkup";

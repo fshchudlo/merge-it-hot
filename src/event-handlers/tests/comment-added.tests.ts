@@ -12,14 +12,4 @@ describe("Comment added use-case", () => {
 
         expect(channelMock.snapshot).toMatchSnapshot();
     });
-
-    it("Should send message on PR task", async () => {
-        const channelMock = new SlackChannelSnapshottingMock();
-
-
-        await handlePullRequestEvent(TestPayloadBuilder.pullRequestTaskAdded(), channelMock);
-
-
-        expect(channelMock.snapshot).toMatchSnapshot();
-    });
 });

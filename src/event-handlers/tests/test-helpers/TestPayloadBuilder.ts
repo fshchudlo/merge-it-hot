@@ -159,21 +159,9 @@ export default class TestPayloadBuilder {
             actor: { ...reviewer1User },
             comment: {
                 id: 1,
-                severity: "NORMAL",
                 text: "Test comment",
                 author: { ...reviewer1User },
                 link: `${payload.pullRequest.links.self}?commentId=1`
-            }
-        };
-    }
-
-    static pullRequestTaskAdded(): PullRequestCommentActionEvent {
-        const basicPayload = this.pullRequestCommentAdded();
-        return {
-            ...basicPayload,
-            comment: {
-                ...basicPayload.comment,
-                severity: "BLOCKER"
             }
         };
     }
@@ -186,54 +174,6 @@ export default class TestPayloadBuilder {
             comment: {
                 ...payload.comment,
                 text: "Updated comment text"
-            }
-        };
-    }
-
-    static pullRequestCommentConvertedToTheTask(): PullRequestCommentActionEvent {
-        const payload = this.pullRequestCommentAdded();
-        return {
-            ...payload,
-            eventKey: "pr:comment:edited",
-            comment: {
-                ...payload.comment,
-                severity: "BLOCKER"
-            }
-        };
-    }
-
-    static pullRequestTaskConvertedToTheComment(): PullRequestCommentActionEvent {
-        const payload = this.pullRequestTaskAdded();
-        return {
-            ...payload,
-            eventKey: "pr:comment:edited",
-            comment: {
-                ...payload.comment,
-                severity: "NORMAL"
-            }
-        };
-    }
-
-    static pullRequestTaskResolved(): PullRequestCommentActionEvent {
-        const payload = this.pullRequestTaskAdded();
-        return {
-            ...payload,
-            eventKey: "pr:comment:edited",
-            comment: {
-                ...payload.comment,
-                resolvedAt: new Date(1714381184802)
-            }
-        };
-    }
-
-    static pullRequestTaskReopened(): PullRequestCommentActionEvent {
-        const payload = this.pullRequestTaskAdded();
-        return {
-            ...payload,
-            eventKey: "pr:comment:edited",
-            comment: {
-                ...payload.comment,
-                resolvedAt: undefined
             }
         };
     }
