@@ -45,7 +45,6 @@ export type PullRequestSnapshotInSlackMetadata = {
 }
 
 export type PullrequestCommentSnapshotInSlackMetadata = {
-    taskResolvedDate?: number;
     threadResolvedDate?: number;
     commentId: string;
     commentParentId?: string;

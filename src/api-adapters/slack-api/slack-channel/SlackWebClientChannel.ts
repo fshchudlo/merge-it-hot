@@ -168,7 +168,6 @@ export class SlackWebClientChannel implements SlackTargetedChannel, SlackBroadca
                 commentId: metadata.commentId,
                 commentParentId: metadata.commentParentId,
                 threadResolvedDate: metadata.threadResolvedDate,
-                taskResolvedDate: metadata.taskResolvedDate,
                 slackMessageId: comment.ts,
                 slackThreadId: comment.thread_ts
             };

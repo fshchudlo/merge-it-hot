@@ -43,18 +43,6 @@ function buildCommentChangedMessage(payload: PullRequestCommentActionEvent, comm
 
 function getCommentAction(payload: PullRequestCommentActionEvent, previousCommentSnapshot: PullRequestCommentSnapshot) {
     if (previousCommentSnapshot) {
-        if (!previousCommentSnapshot.taskResolvedDate && payload.comment.resolvedAt) {
-            return {
-                title: `resolved comment`,
-                emoji: ":white_check_mark:"
-            };
-        }
-        if (previousCommentSnapshot.taskResolvedDate && !payload.comment.resolvedAt) {
-            return {
-                title: `reopened comment`,
-                emoji: ":repeat:"
-            };
-        }
         if (!previousCommentSnapshot.threadResolvedDate && payload.comment.threadResolvedAt) {
             return {
                 title: `resolved thread`,

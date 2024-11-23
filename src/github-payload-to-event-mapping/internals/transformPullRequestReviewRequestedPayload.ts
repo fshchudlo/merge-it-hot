@@ -11,7 +11,7 @@ export async function transformPullRequestReviewRequestedPayload(notification: G
             return {
                 ...(await mapPayloadGenericPart(notification, userIdResolver, githubAPI)),
                 eventKey: "pr:participants:changed",
-                addedParticipants: await fetchParticipantsList(notification, userIdResolver, githubAPI),
+                addedParticipants: await fetchParticipants(notification, userIdResolver, githubAPI),
                 removedParticipants: []
             } as PullRequestParticipantsUpdatedEvent;
         case "review_request_removed":
@@ -19,7 +19,7 @@ export async function transformPullRequestReviewRequestedPayload(notification: G
                 ...(await mapPayloadGenericPart(notification, userIdResolver, githubAPI)),
                 eventKey: "pr:participants:changed",
                 addedParticipants: [],
-                removedParticipants: await fetchParticipantsList(notification, userIdResolver, githubAPI)
+                removedParticipants: await fetchParticipants(notification, userIdResolver, githubAPI)
             } as PullRequestParticipantsUpdatedEvent;
         default:
             throw new Error(`"${notification.action}" action key is unknown.`);
@@ -27,7 +27,7 @@ export async function transformPullRequestReviewRequestedPayload(notification: G
     }
 }
 
-async function fetchParticipantsList(notification: GitHubPullRequestReviewersUpdatedNotification, userIdResolver: SlackUserIdResolver, githubAPI: GitHubAPI) {
+async function fetchParticipants(notification: GitHubPullRequestReviewersUpdatedNotification, userIdResolver: SlackUserIdResolver, githubAPI: GitHubAPI) {
     if (notification.requested_team) {
         const teamMembers = await githubAPI.fetchFromAPIUrl<GitHubUserPayload[]>(notification.requested_team.members_url.replace("{/member}", ""));
         return Promise.all(teamMembers.map(async teamMember => (await mapGitHubUserToSlackUser(teamMember, userIdResolver))));

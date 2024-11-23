@@ -69,7 +69,6 @@ export type PullRequestCommentPayload = {
     readonly replyToCommentId?: number;
     readonly text: string;
     readonly author: UserPayload;
-    readonly resolvedAt?: Date;
     readonly threadResolvedAt?: Date;
     readonly link: string;
 };

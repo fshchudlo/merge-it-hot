@@ -32,7 +32,6 @@ exports[`Comment added use-case Should send message on PR comment 1`] = `
         "eventPayload": {
           "commentId": "1",
           "commentParentId": undefined,
-          "taskResolvedDate": undefined,
           "threadResolvedDate": undefined,
         },
         "eventType": "review_comment_snapshot_saved",

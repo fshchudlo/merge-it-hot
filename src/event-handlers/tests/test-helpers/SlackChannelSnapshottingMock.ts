@@ -90,7 +90,6 @@ export default class SlackChannelSnapshottingMock implements SlackTargetedChanne
                 commentId: metadata.commentId,
                 commentParentId: metadata.commentParentId,
                 threadResolvedDate: metadata.threadResolvedDate,
-                taskResolvedDate: metadata.taskResolvedDate,
                 slackMessageId: messageId,
                 slackThreadId: snapshot.threadId
             });
