@@ -36,7 +36,7 @@ function getBasicPayload(): PullRequestGenericEvent {
             createdAt: new Date(1714381184802),
             title: "Test pull request title",
             description: "Test pull request description",
-            draft: false,
+            isDraft: false,
             fromBranch: {
                 branchName: "feature/test-branch",
                 latestCommit: "from-ref-commit-hash",
@@ -72,7 +72,7 @@ export default class TestPayloadBuilder {
             ...getBasicPayload(),
             pullRequest: {
                 ...getBasicPayload().pullRequest,
-                draft: true
+                isDraft: true
             },
             eventKey: "pr:opened"
         };
@@ -82,7 +82,7 @@ export default class TestPayloadBuilder {
             ...getBasicPayload(),
             pullRequest: {
                 ...getBasicPayload().pullRequest,
-                draft: false
+                isDraft: false
             },
             eventKey: "pr:ready_for_review"
         };
@@ -92,7 +92,7 @@ export default class TestPayloadBuilder {
             ...getBasicPayload(),
             pullRequest: {
                 ...getBasicPayload().pullRequest,
-                draft: false
+                isDraft: false
             },
             eventKey: "pr:converted_to_draft"
         };
@@ -185,7 +185,7 @@ export default class TestPayloadBuilder {
             eventKey: "pr:comment:edited",
             comment: {
                 ...payload.comment,
-                threadResolvedAt: new Date(1714381184802)
+                resolvedAt: new Date(1714381184802)
             }
         };
     }
@@ -197,7 +197,7 @@ export default class TestPayloadBuilder {
             eventKey: "pr:comment:edited",
             comment: {
                 ...payload.comment,
-                threadResolvedAt: undefined
+                resolvedAt: undefined
             }
         };
     }

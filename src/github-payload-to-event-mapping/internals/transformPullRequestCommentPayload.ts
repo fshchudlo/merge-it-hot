@@ -22,7 +22,7 @@ export async function transformPullRequestCommentPayload(notification: GitHubPul
             replyToCommentId: notification.comment.in_reply_to_id,
             text: notification.comment.body,
             author: await mapGitHubUserToSlackUser(notification.comment.user, userIdResolver),
-            threadResolvedAt: null,
+            resolvedAt: null,
             link: notification.comment.html_url
         },
         previousComment: notification.changes?.body?.from

@@ -8,7 +8,7 @@ export async function broadcastMessageAboutOpenedPR(payload: PullRequestGenericE
 }
 
 function buildMessage(payload: PullRequestGenericEvent): SendMessageArguments {
-    const prStateName = payload.pullRequest.draft? `${italic("draft")} pull request` : "pull request";
+    const prStateName = payload.pullRequest.isDraft? `${italic("draft")} pull request` : "pull request";
 
     const messageTitle = `:snowboarder: ${payload.actor.name} opened ${prStateName} "${payload.pullRequest.title}".`;
 

@@ -24,7 +24,7 @@ async function setChannelBookmark(payload: PullRequestGenericEvent, slackChannel
 }
 
 function buildInvitationMessage(payload: PullRequestGenericEvent): SendMessageArguments {
-    const prStateName = payload.pullRequest.draft ? `${italic("draft")} pull request` : "pull request";
+    const prStateName = payload.pullRequest.isDraft ? `${italic("draft")} pull request` : "pull request";
 
     const messageTitle = `${payload.actor.name} opened ${link(payload.pullRequest.links.self, prStateName)}`;
     const descriptionText = trimTextToSlackMessageLimits(markdownToSlackMarkup(payload.pullRequest.description ?? payload.pullRequest.title));

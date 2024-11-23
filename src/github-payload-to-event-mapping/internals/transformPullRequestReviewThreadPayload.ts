@@ -19,7 +19,7 @@ export async function transformPullRequestReviewThreadPayload(notification: GitH
             replyToCommentId: rootComment.in_reply_to_id,
             text: rootComment.body,
             author: await mapGitHubUserToSlackUser(rootComment.user, userIdResolver),
-            threadResolvedAt: notification.action == "resolved" ? new Date(rootComment.updated_at) : null,
+            resolvedAt: notification.action == "resolved" ? new Date(rootComment.updated_at) : null,
             link: rootComment.html_url
         }
     } as PullRequestCommentActionEvent;

@@ -19,7 +19,7 @@ export async function mapPayloadGenericPart(payload: GitHubPullRequestNotificati
             title: payload.pull_request.title,
             description: payload.pull_request.body,
             createdAt: new Date(payload.pull_request.created_at),
-            draft: payload.pull_request.draft,
+            isDraft: payload.pull_request.draft,
             targetBranch: {
                 branchName: payload.pull_request.base.ref,
                 latestCommit: payload.pull_request.base.sha,
@@ -50,6 +50,7 @@ async function fetchReviewersList(payload: GitHubPullRequestNotificationBasicPay
                 user: await mapGitHubUserToSlackUser(reviewer, userIdResolver)
             } as ParticipantPayload;
         }));
+
     for (const team of payload.pull_request.requested_teams) {
         const teamMembers = await githubAPI.fetchFromAPIUrl<GitHubUserPayload[]>(team.members_url.replace("{/member}", ""));
         const mappedUsers = await Promise.all(teamMembers.map(async teamMember => (await mapGitHubUserToSlackUser(teamMember, userIdResolver))));

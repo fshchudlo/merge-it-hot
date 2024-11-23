@@ -69,7 +69,7 @@ export type PullRequestCommentPayload = {
     readonly replyToCommentId?: number;
     readonly text: string;
     readonly author: UserPayload;
-    readonly threadResolvedAt?: Date;
+    readonly resolvedAt?: Date;
     readonly link: string;
 };
 export type PullRequestPayload = {
@@ -77,7 +77,7 @@ export type PullRequestPayload = {
     readonly createdAt: Date;
     readonly title: string;
     readonly description: string | null;
-    readonly draft: boolean;
+    readonly isDraft: boolean;
     readonly author: UserPayload;
     readonly participants: Array<ParticipantPayload>;
     readonly assignees: Array<UserPayload>;
