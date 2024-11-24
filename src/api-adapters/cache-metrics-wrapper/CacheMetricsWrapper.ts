@@ -7,10 +7,10 @@ export class CacheMetricsWrapper<T> {
     private readonly utilizedCacheSizeGauge: Gauge;
     private readonly cacheHitsCounter: Counter;
     private readonly cacheMissesCounter: Counter;
-    private readonly store: Keyv<any, Record<string, T>>;
+    private readonly store: Keyv<T>;
 
     constructor(metricsNamePrefix: string) {
-        this.store = new Keyv();
+        this.store = new Keyv<T>();
         this.cache = createCache({ stores: [this.store] });
         this.cacheHitsCounter = new client.Counter({
             name: `${metricsNamePrefix}_cache_hits`,

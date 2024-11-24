@@ -9,11 +9,6 @@
     "strictNullChecks": false,
     "moduleResolution": "node",
     "outDir": "./dist",
-    "paths": {
-      "*": [
-        "./node_modules/*"
-      ]
-    },
     "typeRoots": [
       "./node_modules/@types",
       "./src/event-handlers/event-contracts"
