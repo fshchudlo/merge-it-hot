@@ -7,33 +7,39 @@ import { CHANNELS_CACHE } from "./CHANNELS_CACHE";
 import { SlackBroadcastChannel, SlackTargetedChannel } from "../../event-handlers/slack-api-ports";
 
 export class SlackChannelProvisioner {
-    private readonly client: slack.WebClient;
 
-    constructor(client: slack.WebClient) {
-        this.client = client;
-    }
+    constructor(private readonly client: slack.WebClient) { }
 
     async findBroadcastChannel(channelName: string, iconEmoji: BotEconEmoji): Promise<SlackBroadcastChannel | null> {
         const channelInfo = await this.findTargetedChannelInfo(channelName);
-        return channelInfo ? new SlackWebClientChannel(this.client, channelInfo, iconEmoji) : null;
+
+        return channelInfo ?
+            new SlackWebClientChannel(this.client, channelInfo, iconEmoji)
+            : null;
     }
 
     async provisionTargetedChannel(payload: PullRequestEvent, iconEmoji: BotEconEmoji, defaultChannelParticipants: string[]): Promise<SlackTargetedChannel> {
         const channelName = buildChannelName(payload.pullRequest);
-        const channelInfo = await CHANNELS_CACHE.wrap(channelName, async () => {
-            return await this.setupChannel(channelName, payload, iconEmoji, defaultChannelParticipants);
-        });
+        const channelInfo = await CHANNELS_CACHE.wrap(channelName, () =>
+            this.setupChannel(channelName, payload, iconEmoji, defaultChannelParticipants)
+        );
+
         return new SlackWebClientChannel(this.client, channelInfo, iconEmoji);
     }
 
     async findTargetedChannelInfo(channelName: string): Promise<SlackChannelInfo | null> {
         const cachedChannelInfo = await CHANNELS_CACHE.get(channelName);
-        if (cachedChannelInfo) return cachedChannelInfo;
+        if (cachedChannelInfo) {
+            return cachedChannelInfo;
+        }
 
         try {
-            return await this.findExistingChannel(channelName);
+            return this.findExistingChannel(channelName);
         } catch (error: any) {
-            if (["is_archived", "channel_not_found"].includes(error.data?.error)) return null;
+            if (["is_archived", "channel_not_found"].includes(error.data?.error)) {
+                return null;
+            }
+
             throw error;
         }
     }
@@ -50,18 +56,18 @@ export class SlackChannelProvisioner {
                 .concat(defaultChannelParticipants)
         )];
 
-        const createChannelWithFallbacks = async (): Promise<SlackChannelInfo> => {
+        const createChannelWithFallbacks = () => {
             try {
-                return await this.createNewChannel(channelName, allParticipantsToInvite, iconEmoji);
+                return this.createNewChannel(channelName, allParticipantsToInvite, iconEmoji);
             } catch (error: any) {
                 if (error.data?.error !== "name_taken") {
                     throw error;
                 }
                 try {
-                    return await this.findExistingChannel(channelName);
+                    return this.findExistingChannel(channelName);
                 } catch (innerError: any) {
                     if (innerError.data?.error === "is_archived") {
-                        return await this.unarchiveChannel(channelName);
+                        return this.unarchiveChannel(channelName);
                     }
                     throw innerError;
                 }
@@ -69,35 +75,36 @@ export class SlackChannelProvisioner {
         };
 
         if (payload.eventKey === "pr:opened") {
-            return await createChannelWithFallbacks();
+            return createChannelWithFallbacks();
         }
 
         if (payload.eventKey === "pr:reopened") {
-            return (await this.unarchiveChannel(channelName)) || (await createChannelWithFallbacks());
+            const channel = await this.unarchiveChannel(channelName);
+            return channel || createChannelWithFallbacks();
         }
 
         // For other events, try finding the existing channel first, then fall back to creating if not found
         try {
-            return await this.findExistingChannel(channelName);
+            return this.findExistingChannel(channelName);
         } catch (error: any) {
             if (error.data?.error === "channel_not_found") {
-                return await createChannelWithFallbacks();
+                return createChannelWithFallbacks();
             }
             if (error.data?.error === "is_archived") {
-                return await this.unarchiveChannel(channelName);
+                return this.unarchiveChannel(channelName);
             }
             throw error;
         }
     }
 
     private async unarchiveChannel(channelName: string): Promise<SlackChannelInfo | null> {
-        let cursor: string | undefined = undefined;
+        let cursor: string;
         do {
             const result = await this.client.conversations.list({ exclude_archived: false, types: "private_channel", limit: 1000, cursor });
             const archivedChannel = result.channels?.find(channel => channel.name === channelName && channel.is_archived);
             if (archivedChannel) {
                 await this.client.conversations.unarchive({ channel: archivedChannel.id });
-                return { id: archivedChannel.id, name: channelName };
+                return { id: archivedChannel.id, name: channelName } as SlackChannelInfo;
             }
             cursor = result.response_metadata?.next_cursor;
         } while (cursor);

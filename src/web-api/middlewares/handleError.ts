@@ -1,9 +1,9 @@
 import { AppConfig } from "../../app.config";
 import { WebClient } from "@slack/web-api";
-import express, { NextFunction } from "express";
+import type { Response, NextFunction } from "express";
 import util from "util";
 
-export default async function handleError(error: any, res: express.Response, next: NextFunction, slackWebClient: WebClient) {
+export default async function handleError(error: Error, res: Response, next: NextFunction, slackWebClient: WebClient) {
     const errorMessage = ["Error processing webhook.", `Error: ${util.inspect(error, false, 8)}.`].join("\n\n");
     await logError(errorMessage, slackWebClient);
 

@@ -2,14 +2,26 @@ import jwt from "jsonwebtoken";
 import axios from "axios";
 import { createCache } from "cache-manager";
 
+type AppInstallation = {
+    installationId: number,
+    organizationId: number,
+    organizationLogin: string,
+    permissions: {
+        members?: "read",
+        issues?: "read"
+        contents?: "read"
+        pullRequests?: "read"
+    }
+};
+
 /*
 * GitHub installation-level tokens are valid for 1 hour
 * Cache for 59 minutes to avoid on-the-fly token expiration
 */
 const organizationTokensCache: ReturnType<typeof createCache> = createCache({ ttl: 59 * 60 * 1000 });
 
-export async function fetchAccessToken(appId: number, privateKey: string, organizationId: number): Promise<string> {
-    return await organizationTokensCache
+export function fetchAccessToken(appId: number, privateKey: string, organizationId: number) {
+    return organizationTokensCache
         .wrap<string>(`organizationTokens:${organizationId}`, async () => {
             const appInstallation = await fetchAppInstallation(appId, privateKey, organizationId);
             if (!appInstallation) {
@@ -28,8 +40,8 @@ export async function fetchAccessToken(appId: number, privateKey: string, organi
 }
 
 const appInstallationsCache: ReturnType<typeof createCache> = createCache();
-async function fetchAppInstallation(appId: number, privateKey: string, organizationId: number): Promise<AppInstallation> {
-    return await appInstallationsCache.wrap(`appInstallations:${organizationId}`, async () => {
+function fetchAppInstallation(appId: number, privateKey: string, organizationId: number) {
+    return appInstallationsCache.wrap(`appInstallations:${organizationId}`, async () => {
         const jwtToken = await fetchAppJWTToken(appId, privateKey);
         const url = "https://api.github.com/app/installations";
         const response = await axios.get(url, {
@@ -43,7 +55,7 @@ async function fetchAppInstallation(appId: number, privateKey: string, organizat
             throw new Error(`An error occurred while initializing app installations cache: ${response.statusText}`);
         }
         const installation = response.data.find((i: any) => i.account.id === organizationId);
-        return installation ? {
+        return installation ? <AppInstallation>{
             installationId: installation.id,
             organizationId: installation.account.id,
             organizationLogin: installation.account.login,
@@ -72,14 +84,3 @@ async function fetchAppJWTToken(appId: number, privateKey: string) {
         return jwt.sign(payload, privateKey, { algorithm: "RS256" });
     });
 }
-
-type AppInstallation = {
-    installationId: number,
-    organizationId: number,
-    organizationLogin: string,
-    permissions: {
-        issues?: "read"
-        contents?: "read"
-        pullRequests?: "read"
-    }
-};

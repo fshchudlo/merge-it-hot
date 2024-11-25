@@ -3,11 +3,8 @@ import { USERIDS_CACHE } from "./USERIDS_CACHE";
 import { SlackUserIdResolver } from "../../github-payload-to-event-mapping/SlackUserIdResolver";
 
 export class SlackWebClientUserIdResolver implements SlackUserIdResolver {
-    private readonly client: slack.WebClient;
-
-    constructor(client: slack.WebClient) {
-        this.client = client;
-    }
+    
+    constructor(private readonly client: slack.WebClient) {}
 
     async getUserId(email: string): Promise<string | null> {
         const cachedUserId = await USERIDS_CACHE.get(email);
