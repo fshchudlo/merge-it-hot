@@ -21,15 +21,12 @@ import { MessageElement } from "@slack/web-api/dist/types/response/Conversations
  * Includes caching functionality.
  */
 export class SlackWebClientChannel implements SlackTargetedChannel, SlackBroadcastChannel {
-    private readonly client: slack.WebClient;
-    private readonly iconEmoji: string;
-    readonly channelInfo: SlackChannelInfo;
 
-    constructor(client: slack.WebClient, channelInfo: SlackChannelInfo = null, iconEmoji: string) {
-        this.client = client;
-        this.channelInfo = channelInfo;
-        this.iconEmoji = iconEmoji;
-    }
+    constructor(
+        private readonly client: slack.WebClient,
+        readonly channelInfo: SlackChannelInfo = null,
+        private readonly iconEmoji: string
+    ) { }
 
     private getCommentCacheKey(reviewCommentId: number | string) {
         return `${this.channelInfo.id}-${reviewCommentId}`;
@@ -199,7 +196,7 @@ export class SlackWebClientChannel implements SlackTargetedChannel, SlackBroadca
     }
 
     private async findMessageInChannelHistory(channelId: string, matchPredicate: (message: MessageElement) => boolean, oldestDate: Date | undefined = undefined): Promise<MessageElement | null> {
-        let cursor: string | undefined = undefined;
+        let cursor: string;
         const slackTimestamp = oldestDate ? Math.floor(oldestDate.getTime() / 1000) + ".000000" : undefined;
 
         while (true) {

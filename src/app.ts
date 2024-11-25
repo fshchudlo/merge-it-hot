@@ -1,6 +1,6 @@
 import { App, ExpressReceiver } from "@slack/bolt";
 import { AppConfig } from "./app.config";
-import express, { NextFunction } from "express";
+import express, { NextFunction, Request } from "express";
 import { SlackChannelProvisioner } from "./api-adapters/slack-api/SlackChannelProvisioner";
 import measureRequestDuration from "./app.metrics";
 import handleError from "./web-api/middlewares/handleError";
@@ -10,7 +10,6 @@ import bodyParser from "body-parser";
 import verifyHMACSignature from "./web-api/middlewares/verifyHMACSignature";
 import { SlackWebClientUserIdResolver } from "./api-adapters/slack-api/SlackWebClientUserIdResolver";
 import { getSlackChannelInfo } from "./web-api/route-handlers/slack-channel/getSlackChannelInfo";
-
 
 const expressReceiver = new ExpressReceiver({
     signingSecret: AppConfig.SLACK_SIGNING_SECRET
@@ -27,7 +26,7 @@ const userIdResolver = new SlackWebClientUserIdResolver(slackApp.client);
 if (AppConfig.HMAC_SECRET) {
     expressReceiver.router.use(bodyParser.json({
         verify: (req: Request, _res: Response, buf: Buffer) => {
-            (req as any).rawBody = buf.toString();
+            req.rawBody = buf.toString();
         },
         limit: AppConfig.REQUEST_BODY_SIZE_LIMIT
     } as any));
