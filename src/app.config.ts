@@ -12,26 +12,34 @@ export const AppConfig = {
     SLACK_BOT_HOST: process.env.SLACK_BOT_HOST || "0.0.0.0",
     DIAGNOSTIC_CHANNEL: process.env.DIAGNOSTIC_CHANNEL,
 
-    DEFAULT_CHANNEL_PARTICIPANTS: process.env.DEFAULT_CHANNEL_PARTICIPANTS?.split(",").map(u => u.trim()),
+    DEFAULT_CHANNEL_PARTICIPANTS:
+        process.env.DEFAULT_CHANNEL_PARTICIPANTS?.split(",").map(u => u.trim()),
 
     GITHUB_APP_ID: +process.env.GITHUB_APP_ID,
-    GITHUB_APP_PRIVATE_KEY: process.env.GITHUB_APP_PRIVATE_KEY!.replace(/\\n/g, "\n"),
+    GITHUB_APP_PRIVATE_KEY: process.env.GITHUB_APP_PRIVATE_KEY!.replace(
+        /\\n/g,
+        "\n",
+    ),
 
     /*
-    * You can implement any other logic depending on the granularity level you need
-    * */
+     * You can implement any other logic depending on the granularity level you need
+     * */
     getOpenedPRBroadcastChannel(payload: PullRequestEvent): string | null {
         const projectKey = payload.pullRequest.targetBranch.projectKey;
         let channelName = null;
 
         if (payload.pullRequest.author.isBotUser) {
-            channelName = process.env[`${projectKey.toUpperCase()}_BOT_OPENED_PRS_BROADCAST_CHANNEL`]
-                ?? process.env.BOT_OPENED_PRS_BROADCAST_CHANNEL;
+            channelName =
+                process.env[
+                    `${projectKey.toUpperCase()}_BOT_OPENED_PRS_BROADCAST_CHANNEL`
+                ] ?? process.env.BOT_OPENED_PRS_BROADCAST_CHANNEL;
         }
         if (!channelName) {
-            channelName = process.env[`${projectKey.toUpperCase()}_OPENED_PRS_BROADCAST_CHANNEL`]
-                ?? process.env.OPENED_PRS_BROADCAST_CHANNEL;
+            channelName =
+                process.env[
+                    `${projectKey.toUpperCase()}_OPENED_PRS_BROADCAST_CHANNEL`
+                ] ?? process.env.OPENED_PRS_BROADCAST_CHANNEL;
         }
         return channelName ?? null;
-    }
+    },
 };

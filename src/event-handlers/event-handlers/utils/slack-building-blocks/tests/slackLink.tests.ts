@@ -16,4 +16,3 @@ describe("slackLink", () => {
         expect(result).toBe(expected);
     });
 });
-

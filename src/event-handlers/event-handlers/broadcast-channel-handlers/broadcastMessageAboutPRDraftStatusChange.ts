@@ -3,12 +3,19 @@ import { PullRequestGenericEvent } from "../../event-contracts";
 import { SlackBroadcastChannel } from "../../slack-api-ports";
 import { italic, section } from "../utils/slack-building-blocks";
 
-export async function broadcastMessageAboutPRDraftStatusChange(payload: PullRequestGenericEvent, broadcastChannel: SlackBroadcastChannel) {
-    const initialBroadcastMessageId = await broadcastChannel.findPROpenedBroadcastMessageId(payload.pullRequest.createdAt, {
-        pullRequestId: payload.pullRequest.number.toString(),
-        projectKey: payload.pullRequest.targetBranch.projectKey,
-        repositorySlug: payload.pullRequest.targetBranch.repositoryName
-    });
+export async function broadcastMessageAboutPRDraftStatusChange(
+    payload: PullRequestGenericEvent,
+    broadcastChannel: SlackBroadcastChannel,
+) {
+    const initialBroadcastMessageId =
+        await broadcastChannel.findPROpenedBroadcastMessageId(
+            payload.pullRequest.createdAt,
+            {
+                pullRequestId: payload.pullRequest.number.toString(),
+                projectKey: payload.pullRequest.targetBranch.projectKey,
+                repositorySlug: payload.pullRequest.targetBranch.repositoryName,
+            },
+        );
     if (!initialBroadcastMessageId) {
         return;
     }
@@ -21,6 +28,6 @@ export async function broadcastMessageAboutPRDraftStatusChange(payload: PullRequ
     await broadcastChannel.sendMessage({
         text: messageTitle,
         blocks: [section(messageTitle)],
-        threadId: initialBroadcastMessageId
+        threadId: initialBroadcastMessageId,
     });
 }

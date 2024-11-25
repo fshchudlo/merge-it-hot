@@ -14,10 +14,14 @@ const payloadHandlers = new Array<useCases.PullRequestEventHandler>(
     new useCases.CommentDeletedHandler(),
     new useCases.NewCommitAddedHandler(),
     new useCases.PullRequestCompletionHandler(),
-    new useCases.PullRequestReopenedHandler()
+    new useCases.PullRequestReopenedHandler(),
 );
 
-export default async function handlePullRequestEvent(payload: PullRequestEvent, pullRequestChannel: SlackTargetedChannel, broadcastChannel: SlackBroadcastChannel = null) {
+export default async function handlePullRequestEvent(
+    payload: PullRequestEvent,
+    pullRequestChannel: SlackTargetedChannel,
+    broadcastChannel: SlackBroadcastChannel = null,
+) {
     const eventKey = payload.eventKey;
     for (const handler of payloadHandlers) {
         if (handler.canHandle(payload)) {
@@ -29,20 +33,31 @@ export default async function handlePullRequestEvent(payload: PullRequestEvent, 
     }
     switch (eventKey) {
         case "pr:opened":
-            await useCases.broadcastMessageAboutOpenedPR(payload, broadcastChannel);
+            await useCases.broadcastMessageAboutOpenedPR(
+                payload,
+                broadcastChannel,
+            );
             break;
         case "pr:ready_for_review":
         case "pr:converted_to_draft":
-            await useCases.broadcastMessageAboutPRDraftStatusChange(payload, broadcastChannel);
+            await useCases.broadcastMessageAboutPRDraftStatusChange(
+                payload,
+                broadcastChannel,
+            );
             break;
         case "pr:merged":
         case "pr:declined":
         case "pr:deleted":
-            await useCases.broadcastMessageAboutClosedPR(payload, broadcastChannel);
+            await useCases.broadcastMessageAboutClosedPR(
+                payload,
+                broadcastChannel,
+            );
             break;
         case "pr:reopened":
-            await useCases.broadcastMessageAboutReopenedPR(payload, broadcastChannel);
+            await useCases.broadcastMessageAboutReopenedPR(
+                payload,
+                broadcastChannel,
+            );
             break;
     }
 }
-

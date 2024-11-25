@@ -6,9 +6,10 @@ describe("PR declined use-case", () => {
     it("Should send completion message and close the channel on PR declining", async () => {
         const channelMock = new SlackChannelSnapshottingMock();
 
-
-        await handlePullRequestEvent(TestPayloadBuilder.pullRequestDeclined(), channelMock);
-
+        await handlePullRequestEvent(
+            TestPayloadBuilder.pullRequestDeclined(),
+            channelMock,
+        );
 
         expect(channelMock.snapshot).toMatchSnapshot();
     });
@@ -17,10 +18,17 @@ describe("PR declined use-case", () => {
         const channelMock = new SlackChannelSnapshottingMock();
         const broadcastChannelMock = new SlackChannelSnapshottingMock();
 
-        await handlePullRequestEvent(TestPayloadBuilder.pullRequestOpened(), channelMock, broadcastChannelMock);
+        await handlePullRequestEvent(
+            TestPayloadBuilder.pullRequestOpened(),
+            channelMock,
+            broadcastChannelMock,
+        );
 
-        await handlePullRequestEvent(TestPayloadBuilder.pullRequestDeclined(), channelMock, broadcastChannelMock);
-
+        await handlePullRequestEvent(
+            TestPayloadBuilder.pullRequestDeclined(),
+            channelMock,
+            broadcastChannelMock,
+        );
 
         expect(broadcastChannelMock.snapshot).toMatchSnapshot();
     });

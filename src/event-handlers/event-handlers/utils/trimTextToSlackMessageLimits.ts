@@ -1,4 +1,7 @@
-export function trimTextToSlackMessageLimits(text: string, maxMessageLength = 3000): string {
+export function trimTextToSlackMessageLimits(
+    text: string,
+    maxMessageLength = 3000,
+): string {
     if (text.length < maxMessageLength) {
         return text;
     }

@@ -13,15 +13,22 @@ export default class GitHubAPI {
     constructor(
         private readonly appId: number,
         private readonly privateKey: string,
-        private readonly organizationId: number
-    ) { }
+        private readonly organizationId: number,
+    ) {}
 
-    private async executeRequest<T>(url: string, params: AxiosRequestConfig["params"] = null) {
-        const accessToken = await fetchAccessToken(this.appId, this.privateKey, this.organizationId);
+    private async executeRequest<T>(
+        url: string,
+        params: AxiosRequestConfig["params"] = null,
+    ) {
+        const accessToken = await fetchAccessToken(
+            this.appId,
+            this.privateKey,
+            this.organizationId,
+        );
         const config: AxiosRequestConfig = {
             headers: {
-                "Authorization": `Bearer ${accessToken}`,
-                "Accept": "application/vnd.github.v3+json"
+                Authorization: `Bearer ${accessToken}`,
+                Accept: "application/vnd.github.v3+json",
             },
             params,
         };
@@ -29,7 +36,9 @@ export default class GitHubAPI {
         if (response.status === 200) {
             return response.data;
         }
-        throw new Error(`Error executing request for ${url} message: ${response.statusText}`);
+        throw new Error(
+            `Error executing request for ${url} message: ${response.statusText}`,
+        );
     }
 
     async fetchCommitMessage(owner: string, repo: string, commitHash: string) {

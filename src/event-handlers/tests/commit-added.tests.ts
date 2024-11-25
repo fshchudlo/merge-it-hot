@@ -6,9 +6,10 @@ describe("Commit added use-case", () => {
     it("Should send message on PR commit", async () => {
         const channelMock = new SlackChannelSnapshottingMock();
 
-
-        await handlePullRequestEvent(TestPayloadBuilder.pullRequestFromRefUpdated(), channelMock);
-
+        await handlePullRequestEvent(
+            TestPayloadBuilder.pullRequestFromRefUpdated(),
+            channelMock,
+        );
 
         expect(channelMock.snapshot).toMatchSnapshot();
     });

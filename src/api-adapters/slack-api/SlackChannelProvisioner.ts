@@ -4,30 +4,46 @@ import { PullRequestEvent } from "../../event-handlers/event-contracts";
 import { buildChannelName } from "./buildChannelName";
 import { CHANNELS_CACHE } from "./CHANNELS_CACHE";
 
-import { SlackBroadcastChannel, SlackTargetedChannel } from "../../event-handlers/slack-api-ports";
+import {
+    SlackBroadcastChannel,
+    SlackTargetedChannel,
+} from "../../event-handlers/slack-api-ports";
 
 export class SlackChannelProvisioner {
+    constructor(private readonly client: slack.WebClient) {}
 
-    constructor(private readonly client: slack.WebClient) { }
-
-    async findBroadcastChannel(channelName: string, iconEmoji: BotEconEmoji): Promise<SlackBroadcastChannel | null> {
+    async findBroadcastChannel(
+        channelName: string,
+        iconEmoji: BotEconEmoji,
+    ): Promise<SlackBroadcastChannel | null> {
         const channelInfo = await this.findTargetedChannelInfo(channelName);
 
-        return channelInfo ?
-            new SlackWebClientChannel(this.client, channelInfo, iconEmoji)
+        return channelInfo
+            ? new SlackWebClientChannel(this.client, channelInfo, iconEmoji)
             : null;
     }
 
-    async provisionTargetedChannel(payload: PullRequestEvent, iconEmoji: BotEconEmoji, defaultChannelParticipants: string[]): Promise<SlackTargetedChannel> {
+    async provisionTargetedChannel(
+        payload: PullRequestEvent,
+        iconEmoji: BotEconEmoji,
+        defaultChannelParticipants: string[],
+    ): Promise<SlackTargetedChannel> {
         const channelName = buildChannelName(payload.pullRequest);
         const channelInfo = await CHANNELS_CACHE.wrap(channelName, () =>
-            this.setupChannel(channelName, payload, iconEmoji, defaultChannelParticipants)
+            this.setupChannel(
+                channelName,
+                payload,
+                iconEmoji,
+                defaultChannelParticipants,
+            ),
         );
 
         return new SlackWebClientChannel(this.client, channelInfo, iconEmoji);
     }
 
-    async findTargetedChannelInfo(channelName: string): Promise<SlackChannelInfo | null> {
+    async findTargetedChannelInfo(
+        channelName: string,
+    ): Promise<SlackChannelInfo | null> {
         const cachedChannelInfo = await CHANNELS_CACHE.get(channelName);
         if (cachedChannelInfo) {
             return cachedChannelInfo;
@@ -36,7 +52,9 @@ export class SlackChannelProvisioner {
         try {
             return this.findExistingChannel(channelName);
         } catch (error: any) {
-            if (["is_archived", "channel_not_found"].includes(error.data?.error)) {
+            if (
+                ["is_archived", "channel_not_found"].includes(error.data?.error)
+            ) {
                 return null;
             }
 
@@ -45,20 +63,35 @@ export class SlackChannelProvisioner {
     }
 
     /*
-* The order of payloads is not guaranteed, so there can be different scenarios.
-* - For "pr:opened" event, we try to create a new channel by default. But it already may exist if another payload went first.
-* - For other events, we try to find an existing channel. But it may not exist, if "pr:opened" payload wasn't delivered first.
-* - The last point is that channel was archived because PR was merged, but latter the comment had arrived. In this case, we need to unarchive the channel.
-* */
-    private async setupChannel(channelName: string, payload: PullRequestEvent, iconEmoji: BotEconEmoji, defaultChannelParticipants: string[]): Promise<SlackChannelInfo> {
-        const allParticipantsToInvite = [...new Set(
-            [payload.pullRequest.author, ...payload.pullRequest.participants.map(r => r.user)].map(u => u.slackUserId)
-                .concat(defaultChannelParticipants)
-        )];
+     * The order of payloads is not guaranteed, so there can be different scenarios.
+     * - For "pr:opened" event, we try to create a new channel by default. But it already may exist if another payload went first.
+     * - For other events, we try to find an existing channel. But it may not exist, if "pr:opened" payload wasn't delivered first.
+     * - The last point is that channel was archived because PR was merged, but latter the comment had arrived. In this case, we need to unarchive the channel.
+     * */
+    private async setupChannel(
+        channelName: string,
+        payload: PullRequestEvent,
+        iconEmoji: BotEconEmoji,
+        defaultChannelParticipants: string[],
+    ): Promise<SlackChannelInfo> {
+        const allParticipantsToInvite = [
+            ...new Set(
+                [
+                    payload.pullRequest.author,
+                    ...payload.pullRequest.participants.map(r => r.user),
+                ]
+                    .map(u => u.slackUserId)
+                    .concat(defaultChannelParticipants),
+            ),
+        ];
 
         const createChannelWithFallbacks = () => {
             try {
-                return this.createNewChannel(channelName, allParticipantsToInvite, iconEmoji);
+                return this.createNewChannel(
+                    channelName,
+                    allParticipantsToInvite,
+                    iconEmoji,
+                );
             } catch (error: any) {
                 if (error.data?.error !== "name_taken") {
                     throw error;
@@ -97,35 +130,67 @@ export class SlackChannelProvisioner {
         }
     }
 
-    private async unarchiveChannel(channelName: string): Promise<SlackChannelInfo | null> {
+    private async unarchiveChannel(
+        channelName: string,
+    ): Promise<SlackChannelInfo | null> {
         let cursor: string;
         do {
-            const result = await this.client.conversations.list({ exclude_archived: false, types: "private_channel", limit: 1000, cursor });
-            const archivedChannel = result.channels?.find(channel => channel.name === channelName && channel.is_archived);
+            const result = await this.client.conversations.list({
+                exclude_archived: false,
+                types: "private_channel",
+                limit: 1000,
+                cursor,
+            });
+            const archivedChannel = result.channels?.find(
+                channel => channel.name === channelName && channel.is_archived,
+            );
             if (archivedChannel) {
-                await this.client.conversations.unarchive({ channel: archivedChannel.id });
-                return { id: archivedChannel.id, name: channelName } as SlackChannelInfo;
+                await this.client.conversations.unarchive({
+                    channel: archivedChannel.id,
+                });
+                return {
+                    id: archivedChannel.id,
+                    name: channelName,
+                } as SlackChannelInfo;
             }
             cursor = result.response_metadata?.next_cursor;
         } while (cursor);
         return null;
     }
 
-    private async createNewChannel(channelName: string, participants: string[], iconEmoji: BotEconEmoji): Promise<SlackChannelInfo> {
-        const response = await this.client.conversations.create({ name: channelName, is_private: true });
-        const channel = new SlackWebClientChannel(this.client, { id: response.channel.id, name: response.channel.name }, iconEmoji);
+    private async createNewChannel(
+        channelName: string,
+        participants: string[],
+        iconEmoji: BotEconEmoji,
+    ): Promise<SlackChannelInfo> {
+        const response = await this.client.conversations.create({
+            name: channelName,
+            is_private: true,
+        });
+        const channel = new SlackWebClientChannel(
+            this.client,
+            { id: response.channel.id, name: response.channel.name },
+            iconEmoji,
+        );
         await channel.inviteToChannel({ users: participants, force: true });
         return { id: response.channel.id, name: response.channel.name };
     }
 
-    private async findExistingChannel(channelName: string): Promise<SlackChannelInfo | null> {
-        const futureDate = Math.floor((Date.now() + 24 * 60 * 60 * 1000) / 1000); // 24 hours later
+    private async findExistingChannel(
+        channelName: string,
+    ): Promise<SlackChannelInfo | null> {
+        const futureDate = Math.floor(
+            (Date.now() + 24 * 60 * 60 * 1000) / 1000,
+        ); // 24 hours later
         const result = await this.client.chat.scheduleMessage({
             channel: channelName,
             post_at: futureDate,
-            text: "Detecting channel ID. If you see this, something went wrong with the Slack bot setup."
+            text: "Detecting channel ID. If you see this, something went wrong with the Slack bot setup.",
         });
-        await this.client.chat.deleteScheduledMessage({ channel: channelName, scheduled_message_id: result.scheduled_message_id });
+        await this.client.chat.deleteScheduledMessage({
+            channel: channelName,
+            scheduled_message_id: result.scheduled_message_id,
+        });
         return { id: result.channel, name: channelName };
     }
 }
@@ -133,5 +198,5 @@ export class SlackChannelProvisioner {
 export type SlackChannelInfo = {
     id: string;
     name: string;
-}
+};
 export type BotEconEmoji = ":github:";

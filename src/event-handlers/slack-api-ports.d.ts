@@ -6,7 +6,10 @@ export interface SlackBroadcastChannel {
 
     sendMessage(options: SendMessageArguments);
 
-    findPROpenedBroadcastMessageId(prCreationDate: Date, pullRequestTraits: PullRequestSnapshotInSlackMetadata): Promise<string | null>;
+    findPROpenedBroadcastMessageId(
+        prCreationDate: Date,
+        pullRequestTraits: PullRequestSnapshotInSlackMetadata,
+    ): Promise<string | null>;
 }
 export interface SlackTargetedChannel {
     readonly channelInfo: SlackChannelInfo;
@@ -23,45 +26,48 @@ export interface SlackTargetedChannel {
 
     deleteMessage(messageId: string): Promise<void>;
 
-    findLatestPullRequestCommentSnapshot(commentId: number | string): Promise<PullRequestCommentSnapshot | null>;
+    findLatestPullRequestCommentSnapshot(
+        commentId: number | string,
+    ): Promise<PullRequestCommentSnapshot | null>;
 }
 
 export type SendMessageArguments = {
     text?: string;
     threadId?: string;
     editMessageId?: string;
-    replyBroadcast?: boolean,
+    replyBroadcast?: boolean;
     metadata?: {
         eventType: string;
-        eventPayload: { [p: string]: string | number | boolean }
+        eventPayload: { [p: string]: string | number | boolean };
     };
-    blocks?: Block[] | KnownBlock[]
-}
+    blocks?: Block[] | KnownBlock[];
+};
 
 export type PullRequestSnapshotInSlackMetadata = {
-    pullRequestId: string,
-    projectKey: string,
-    repositorySlug: string
-}
+    pullRequestId: string;
+    projectKey: string;
+    repositorySlug: string;
+};
 
 export type PullrequestCommentSnapshotInSlackMetadata = {
     resolvedDate?: number;
     commentId: string;
     commentParentId?: string;
-}
-export type PullRequestCommentSnapshot = PullrequestCommentSnapshotInSlackMetadata & {
-    slackMessageId: string;
-    slackThreadId?: string;
-}
+};
+export type PullRequestCommentSnapshot =
+    PullrequestCommentSnapshotInSlackMetadata & {
+        slackMessageId: string;
+        slackThreadId?: string;
+    };
 export type AddBookmarkArguments = {
     link: string;
     title: string;
     emoji?: string;
-}
+};
 export type InviteToChannelArguments = {
     force: boolean;
     users: string[];
-}
+};
 export type KickFromChannelArguments = {
     users: string[];
-}
+};
