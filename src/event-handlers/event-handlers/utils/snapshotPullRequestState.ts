@@ -9,7 +9,7 @@ export function snapshotPullRequestState(payload: PullRequestGenericEvent) {
         eventPayload: <PullRequestSnapshotInSlackMetadata>{
             pullRequestId: payload.pullRequest.number.toString(),
             projectKey: payload.pullRequest.targetBranch.projectKey,
-            repositorySlug: payload.pullRequest.targetBranch.repositoryName
-        }
+            repositorySlug: payload.pullRequest.targetBranch.repositoryName,
+        },
     };
 }

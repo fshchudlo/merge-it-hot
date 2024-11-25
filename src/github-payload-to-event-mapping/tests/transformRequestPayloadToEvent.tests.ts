@@ -5,22 +5,36 @@ describe("transformRequestPayloadToEvent.tests", () => {
         expect.assertions(1);
 
         try {
-            await transformRequestPayloadToEvent("unknown event type" as any, {
-                action: "unknown action"
-            } as any, null, null);
+            await transformRequestPayloadToEvent(
+                "unknown event type" as any,
+                {
+                    action: "unknown action",
+                } as any,
+                null,
+                null,
+            );
         } catch (error) {
-            expect((error as Error).message).toBe("\"unknown event type\" event type is unknown.");
+            expect((error as Error).message).toBe(
+                '"unknown event type" event type is unknown.',
+            );
         }
     });
     it("Should throw Error on unknown action type", async () => {
         expect.assertions(1);
 
         try {
-            await transformRequestPayloadToEvent("pull_request", {
-                action: "unknown action"
-            } as any, null, null);
+            await transformRequestPayloadToEvent(
+                "pull_request",
+                {
+                    action: "unknown action",
+                } as any,
+                null,
+                null,
+            );
         } catch (error) {
-            expect((error as Error).message).toBe("\"unknown action\" action key is unknown.");
+            expect((error as Error).message).toBe(
+                '"unknown action" action key is unknown.',
+            );
         }
     });
 });

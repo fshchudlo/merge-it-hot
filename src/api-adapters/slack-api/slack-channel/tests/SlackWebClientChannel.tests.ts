@@ -13,24 +13,24 @@ jest.mock("@slack/web-api", () => ({
             kick: jest.fn(),
             archive: jest.fn(),
             unarchive: jest.fn(),
-            history: jest.fn()
+            history: jest.fn(),
         },
         reactions: { add: jest.fn() },
-        chat: { postMessage: jest.fn() }
-    }))
+        chat: { postMessage: jest.fn() },
+    })),
 }));
 
 jest.mock("../../CHANNELS_CACHE", () => ({
     CHANNELS_CACHE: {
-        delete: jest.fn()
-    }
+        delete: jest.fn(),
+    },
 }));
 jest.mock("../../COMMENTS_CACHE", () => ({
     COMMENTS_CACHE: {
         get: jest.fn(),
         set: jest.fn(),
-        deleteWhere: jest.fn()
-    }
+        deleteWhere: jest.fn(),
+    },
 }));
 
 describe("SlackWebClientChannel", () => {
@@ -42,41 +42,55 @@ describe("SlackWebClientChannel", () => {
         // Reset mocks before each test
         slackClient = new WebClient();
         channelInfo = { id: "C123456", name: "test-channel" };
-        channel = new SlackWebClientChannel(slackClient, channelInfo, ":emoji:");
+        channel = new SlackWebClientChannel(
+            slackClient,
+            channelInfo,
+            ":emoji:",
+        );
 
         jest.clearAllMocks();
     });
 
     describe("addBookmark", () => {
         it("should add a bookmark with correct parameters", async () => {
-            await channel.addBookmark({ link: "https://example.com", title: "Example" });
+            await channel.addBookmark({
+                link: "https://example.com",
+                title: "Example",
+            });
 
             expect(slackClient.bookmarks.add).toHaveBeenCalledWith({
                 channel_id: "C123456",
                 link: "https://example.com",
                 title: "Example",
-                type: "link"
+                type: "link",
             });
         });
     });
 
     describe("inviteToChannel", () => {
         it("should invite users to the channel", async () => {
-            await channel.inviteToChannel({ users: ["U123", "U456"], force: true });
+            await channel.inviteToChannel({
+                users: ["U123", "U456"],
+                force: true,
+            });
 
             expect(slackClient.conversations.invite).toHaveBeenCalledWith({
                 channel: "C123456",
                 users: "U123,U456",
-                force: true
+                force: true,
             });
         });
 
         it("should ignore 'already_in_channel' errors", async () => {
-            (slackClient.conversations.invite as jest.Mock).mockRejectedValueOnce({
-                data: { errors: [{ error: "already_in_channel" }] }
+            (
+                slackClient.conversations.invite as jest.Mock
+            ).mockRejectedValueOnce({
+                data: { errors: [{ error: "already_in_channel" }] },
             });
 
-            await expect(channel.inviteToChannel({ users: ["U123"], force: true })).resolves.toBeUndefined();
+            await expect(
+                channel.inviteToChannel({ users: ["U123"], force: true }),
+            ).resolves.toBeUndefined();
         });
     });
 
@@ -87,20 +101,24 @@ describe("SlackWebClientChannel", () => {
             expect(slackClient.conversations.kick).toHaveBeenCalledTimes(2);
             expect(slackClient.conversations.kick).toHaveBeenCalledWith({
                 channel: "C123456",
-                user: "U123"
+                user: "U123",
             });
             expect(slackClient.conversations.kick).toHaveBeenCalledWith({
                 channel: "C123456",
-                user: "U456"
+                user: "U456",
             });
         });
 
         it("should ignore 'not_in_channel' errors", async () => {
-            (slackClient.conversations.kick as jest.Mock).mockRejectedValueOnce({
-                data: { error: "not_in_channel" }
-            });
+            (slackClient.conversations.kick as jest.Mock).mockRejectedValueOnce(
+                {
+                    data: { error: "not_in_channel" },
+                },
+            );
 
-            await expect(channel.kickFromChannel({ users: ["U123"] })).resolves.toBeUndefined();
+            await expect(
+                channel.kickFromChannel({ users: ["U123"] }),
+            ).resolves.toBeUndefined();
         });
     });
 
@@ -108,9 +126,13 @@ describe("SlackWebClientChannel", () => {
         it("should archive the channel and clear caches", async () => {
             await channel.closeChannel();
 
-            expect(slackClient.conversations.archive).toHaveBeenCalledWith({ channel: "C123456" });
+            expect(slackClient.conversations.archive).toHaveBeenCalledWith({
+                channel: "C123456",
+            });
             expect(CHANNELS_CACHE.delete).toHaveBeenCalledWith("test-channel");
-            expect(COMMENTS_CACHE.deleteWhere).toHaveBeenCalledWith(expect.any(Function));
+            expect(COMMENTS_CACHE.deleteWhere).toHaveBeenCalledWith(
+                expect.any(Function),
+            );
         });
     });
 
@@ -121,7 +143,7 @@ describe("SlackWebClientChannel", () => {
             expect(slackClient.reactions.add).toHaveBeenCalledWith({
                 channel: "C123456",
                 timestamp: "1234567890.1234",
-                name: "thumbsup"
+                name: "thumbsup",
             });
         });
     });
@@ -129,39 +151,51 @@ describe("SlackWebClientChannel", () => {
     describe("sendMessage", () => {
         it("should send a message and cache comment snapshot if metadata is present", async () => {
             (slackClient.chat.postMessage as jest.Mock).mockResolvedValue({
-                message: { ts: "1234567890.1234", thread_ts: "1234567890.0000" }
+                message: {
+                    ts: "1234567890.1234",
+                    thread_ts: "1234567890.0000",
+                },
             });
 
             await channel.sendMessage({
                 text: "Hello, world!",
-                metadata: { eventType: "test", eventPayload: { commentId: "123" } },
+                metadata: {
+                    eventType: "test",
+                    eventPayload: { commentId: "123" },
+                },
                 blocks: [],
-                threadId: "1234567890.0000"
+                threadId: "1234567890.0000",
             });
 
             expect(slackClient.chat.postMessage).toHaveBeenCalledWith({
                 channel: "C123456",
                 icon_emoji: ":emoji:",
                 text: "Hello, world!",
-                metadata: { event_type: "test", event_payload: { commentId: "123" } },
+                metadata: {
+                    event_type: "test",
+                    event_payload: { commentId: "123" },
+                },
                 blocks: [],
                 thread_ts: "1234567890.0000",
-                reply_broadcast: undefined
+                reply_broadcast: undefined,
             });
 
             expect(COMMENTS_CACHE.set).toHaveBeenCalledWith("C123456-123", {
                 commentId: "123",
                 slackMessageId: "1234567890.1234",
-                slackThreadId: "1234567890.0000"
+                slackThreadId: "1234567890.0000",
             });
         });
     });
 
     describe("findLatestPullRequestCommentSnapshot", () => {
         it("should return cached comment snapshot if available", async () => {
-            (COMMENTS_CACHE.get as jest.Mock).mockResolvedValue({ commentId: "123" });
+            (COMMENTS_CACHE.get as jest.Mock).mockResolvedValue({
+                commentId: "123",
+            });
 
-            const result = await channel.findLatestPullRequestCommentSnapshot("123");
+            const result =
+                await channel.findLatestPullRequestCommentSnapshot("123");
 
             expect(result).toEqual({ commentId: "123" });
         });
@@ -171,25 +205,30 @@ describe("SlackWebClientChannel", () => {
             (slackClient.conversations.history as jest.Mock).mockResolvedValue({
                 messages: [
                     {
-                        ts: "1234567890.1234", metadata:
-                            {
-                                event_type: SNAPSHOT_COMMENT_STATE_EVENT_TYPE,
-                                event_payload: {
-                                    commentId: "123"
-                                }
-                            }
-                    }],
-                response_metadata: {}
+                        ts: "1234567890.1234",
+                        metadata: {
+                            event_type: SNAPSHOT_COMMENT_STATE_EVENT_TYPE,
+                            event_payload: {
+                                commentId: "123",
+                            },
+                        },
+                    },
+                ],
+                response_metadata: {},
             });
 
-            const result = await channel.findLatestPullRequestCommentSnapshot("123");
+            const result =
+                await channel.findLatestPullRequestCommentSnapshot("123");
 
             expect(result).toEqual({
                 commentId: "123",
                 slackMessageId: "1234567890.1234",
-                slackThreadId: undefined
+                slackThreadId: undefined,
             });
-            expect(COMMENTS_CACHE.set).toHaveBeenCalledWith("C123456-123", result);
+            expect(COMMENTS_CACHE.set).toHaveBeenCalledWith(
+                "C123456-123",
+                result,
+            );
         });
     });
 });

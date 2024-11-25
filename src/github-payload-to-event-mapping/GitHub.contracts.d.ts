@@ -1,70 +1,90 @@
 export type GitHubNotification =
-    GitHubPullRequestBasicNotification
+    | GitHubPullRequestBasicNotification
     | GitHubPullRequestReviewersUpdatedNotification
     | GitHubPullRequestAssigneesUpdatedNotification
     | GitHubPullRequestEditedNotification
     | GitHubPullRequestReviewSubmittedNotification
     | GitHubPullRequestThreadResolutionNotification;
 
-export type GitHubPullRequestBasicNotification = GitHubPullRequestNotificationBasicPayload & {
-    readonly action: "opened" | "closed" | "reopened" | "synchronize" | "ready_for_review" | "converted_to_draft" | "auto_merge_enabled" | "auto_merge_disabled" | "labeled" | "unlabeled" | "locked" | "unlocked" | "milestoned" | "demilestoned";
-};
+export type GitHubPullRequestBasicNotification =
+    GitHubPullRequestNotificationBasicPayload & {
+        readonly action:
+            | "opened"
+            | "closed"
+            | "reopened"
+            | "synchronize"
+            | "ready_for_review"
+            | "converted_to_draft"
+            | "auto_merge_enabled"
+            | "auto_merge_disabled"
+            | "labeled"
+            | "unlabeled"
+            | "locked"
+            | "unlocked"
+            | "milestoned"
+            | "demilestoned";
+    };
 
-export export type GitHubPullRequestReviewersUpdatedNotification = GitHubPullRequestNotificationBasicPayload & {
-    readonly action: "review_requested" | "review_request_removed";
-    readonly requested_reviewer?: GitHubUserPayload;
-    readonly requested_team?: GitHubTeamPayload;
-};
+export type GitHubPullRequestReviewersUpdatedNotification =
+    GitHubPullRequestNotificationBasicPayload & {
+        readonly action: "review_requested" | "review_request_removed";
+        readonly requested_reviewer?: GitHubUserPayload;
+        readonly requested_team?: GitHubTeamPayload;
+    };
 
-export export type GitHubPullRequestAssigneesUpdatedNotification = GitHubPullRequestNotificationBasicPayload & {
-    readonly action: "assigned" | "unassigned";
-    readonly assignee: GitHubUserPayload;
-};
-export export type GitHubPullRequestEditedNotification = GitHubPullRequestNotificationBasicPayload & {
-    readonly action: "edited";
-    readonly changes: {
-        readonly body?: {
-            readonly from: string;
-        }
-        readonly title?: {
-            from: string;
-        }
-        readonly base?: {
-            readonly ref: {
-                from: string;
-            }
-            readonly sha: {
+export type GitHubPullRequestAssigneesUpdatedNotification =
+    GitHubPullRequestNotificationBasicPayload & {
+        readonly action: "assigned" | "unassigned";
+        readonly assignee: GitHubUserPayload;
+    };
+export type GitHubPullRequestEditedNotification =
+    GitHubPullRequestNotificationBasicPayload & {
+        readonly action: "edited";
+        readonly changes: {
+            readonly body?: {
                 readonly from: string;
-            }
-        }
-    }
-};
-
-export export type GitHubPullRequestReviewSubmittedNotification = GitHubPullRequestNotificationBasicPayload & {
-    readonly action: "submitted";
-    readonly review: {
-        state: GitHubPullRequestReviewState;
-        body?: null
+            };
+            readonly title?: {
+                from: string;
+            };
+            readonly base?: {
+                readonly ref: {
+                    from: string;
+                };
+                readonly sha: {
+                    readonly from: string;
+                };
+            };
+        };
     };
-};
 
-export export type GitHubPullRequestCommentNotification = GitHubPullRequestNotificationBasicPayload & {
-    readonly action: GitHubPullRequestCommentActionType;
-    readonly comment: GitHubPullRequestCommentPayload;
-    readonly changes?: {
-        readonly body?: {
-            readonly from: string;
-        }
+export type GitHubPullRequestReviewSubmittedNotification =
+    GitHubPullRequestNotificationBasicPayload & {
+        readonly action: "submitted";
+        readonly review: {
+            state: GitHubPullRequestReviewState;
+            body?: null;
+        };
     };
-};
 
-export export type GitHubPullRequestThreadResolutionNotification = GitHubPullRequestNotificationBasicPayload & {
-    readonly action: "resolved" | "unresolved";
-    readonly thread: {
-        comments: GitHubPullRequestCommentPayload[]
+export type GitHubPullRequestCommentNotification =
+    GitHubPullRequestNotificationBasicPayload & {
+        readonly action: GitHubPullRequestCommentActionType;
+        readonly comment: GitHubPullRequestCommentPayload;
+        readonly changes?: {
+            readonly body?: {
+                readonly from: string;
+            };
+        };
     };
-};
 
+export type GitHubPullRequestThreadResolutionNotification =
+    GitHubPullRequestNotificationBasicPayload & {
+        readonly action: "resolved" | "unresolved";
+        readonly thread: {
+            comments: GitHubPullRequestCommentPayload[];
+        };
+    };
 
 export type GitHubPullRequestNotificationBasicPayload = {
     readonly pull_request: GitHubPullRequestPayload;
@@ -72,8 +92,8 @@ export type GitHubPullRequestNotificationBasicPayload = {
         readonly name: string;
     };
     readonly sender: GitHubUserPayload;
-    readonly organization: { readonly login: string }
-}
+    readonly organization: { readonly login: string };
+};
 
 export type GitHubPullRequestCommentPayload = {
     readonly html_url: string;
@@ -107,9 +127,9 @@ export type GitHubPullRequestPayload = {
     readonly base: GitHubRefPayload;
     readonly merged: boolean;
     readonly review_comments: number;
-}
+};
 export type GitHubTeamPayload = {
-    members_url: string
+    members_url: string;
 };
 export type GitHubUserPayload = {
     readonly login: string;
@@ -122,10 +142,22 @@ export type GitHubRefPayload = {
     readonly repo: {
         readonly name: string;
         readonly full_name: string;
-        readonly owner: GitHubUserPayload
+        readonly owner: GitHubUserPayload;
     };
 };
 
-export type GitHubPullRequestCommentActionType = "created" | "edited" | "deleted";
-export type GitHubPullRequestReviewState = "commented" | "approved" | "changes_requested" | "dismissed";
-export type GitHubPullRequestEventType = "pull_request" | "issue_comment" | "pull_request_review_comment" | "pull_request_review_thread" | "pull_request_review";
+export type GitHubPullRequestCommentActionType =
+    | "created"
+    | "edited"
+    | "deleted";
+export type GitHubPullRequestReviewState =
+    | "commented"
+    | "approved"
+    | "changes_requested"
+    | "dismissed";
+export type GitHubPullRequestEventType =
+    | "pull_request"
+    | "issue_comment"
+    | "pull_request_review_comment"
+    | "pull_request_review_thread"
+    | "pull_request_review";

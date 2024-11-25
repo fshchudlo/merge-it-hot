@@ -3,7 +3,7 @@ export function section(text: string, type: string = "mrkdwn") {
         type: "section",
         text: {
             type: type,
-            text: text
-        }
+            text: text,
+        },
     };
 }

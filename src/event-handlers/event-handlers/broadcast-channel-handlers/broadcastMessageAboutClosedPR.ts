@@ -3,12 +3,19 @@ import { getPullRequestCompletionAction } from "../utils/getPullRequestCompletio
 
 import { SlackBroadcastChannel } from "../../slack-api-ports";
 
-export async function broadcastMessageAboutClosedPR(payload: PullRequestGenericEvent, broadcastChannel: SlackBroadcastChannel) {
-    const initialBroadcastMessageId = await broadcastChannel.findPROpenedBroadcastMessageId(payload.pullRequest.createdAt, {
-        pullRequestId: payload.pullRequest.number.toString(),
-        projectKey: payload.pullRequest.targetBranch.projectKey,
-        repositorySlug: payload.pullRequest.targetBranch.repositoryName
-    });
+export async function broadcastMessageAboutClosedPR(
+    payload: PullRequestGenericEvent,
+    broadcastChannel: SlackBroadcastChannel,
+) {
+    const initialBroadcastMessageId =
+        await broadcastChannel.findPROpenedBroadcastMessageId(
+            payload.pullRequest.createdAt,
+            {
+                pullRequestId: payload.pullRequest.number.toString(),
+                projectKey: payload.pullRequest.targetBranch.projectKey,
+                repositorySlug: payload.pullRequest.targetBranch.repositoryName,
+            },
+        );
     if (!initialBroadcastMessageId) {
         return;
     }
@@ -16,7 +23,10 @@ export async function broadcastMessageAboutClosedPR(payload: PullRequestGenericE
 
     await broadcastChannel.sendMessage({
         text: `${completionAction.emoji} ${completionAction.text}`,
-        threadId: initialBroadcastMessageId
+        threadId: initialBroadcastMessageId,
     });
-    await broadcastChannel.addReaction(initialBroadcastMessageId, completionAction.reaction);
+    await broadcastChannel.addReaction(
+        initialBroadcastMessageId,
+        completionAction.reaction,
+    );
 }

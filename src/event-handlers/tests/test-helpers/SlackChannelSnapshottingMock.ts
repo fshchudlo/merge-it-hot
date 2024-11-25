@@ -1,19 +1,22 @@
-import {
-    SNAPSHOT_PULL_REQUEST_STATE_EVENT_TYPE
-} from "../../event-handlers/utils/snapshotPullRequestState";
+import { SNAPSHOT_PULL_REQUEST_STATE_EVENT_TYPE } from "../../event-handlers/utils/snapshotPullRequestState";
 import { SNAPSHOT_COMMENT_STATE_EVENT_TYPE } from "../../event-handlers/utils";
 import { SlackChannelInfo } from "../../../api-adapters/slack-api/SlackChannelProvisioner";
 import {
-    AddBookmarkArguments, PullRequestCommentSnapshot, PullrequestCommentSnapshotInSlackMetadata,
+    AddBookmarkArguments,
+    PullRequestCommentSnapshot,
+    PullrequestCommentSnapshotInSlackMetadata,
     InviteToChannelArguments,
     KickFromChannelArguments,
     PullRequestSnapshotInSlackMetadata,
     SendMessageArguments,
-    SlackBroadcastChannel, SlackTargetedChannel
+    SlackBroadcastChannel,
+    SlackTargetedChannel,
 } from "../../slack-api-ports";
 
 const messageId = "ABCDE";
-export default class SlackChannelSnapshottingMock implements SlackTargetedChannel, SlackBroadcastChannel {
+export default class SlackChannelSnapshottingMock
+    implements SlackTargetedChannel, SlackBroadcastChannel
+{
     snapshot: {
         addedReactions: any[];
         addedBookmarks: AddBookmarkArguments[];
@@ -36,13 +39,13 @@ export default class SlackChannelSnapshottingMock implements SlackTargetedChanne
             searchedCommentSnapshots: [],
             searchedPrOpenedBroadcastMessages: [],
             sentMessages: [],
-            deleteMessageCalls: []
+            deleteMessageCalls: [],
         };
     }
 
     readonly channelInfo: SlackChannelInfo = {
         id: "12345",
-        name: "test-channel"
+        name: "test-channel",
     };
 
     addBookmark(options: AddBookmarkArguments): Promise<void> {
@@ -69,9 +72,12 @@ export default class SlackChannelSnapshottingMock implements SlackTargetedChanne
         return Promise.resolve();
     }
 
-
     addReaction(messageId: string, reaction: string): Promise<void> {
-        this.snapshot.addedReactions.push({ channelId: this.channelInfo.id, messageId, reaction });
+        this.snapshot.addedReactions.push({
+            channelId: this.channelInfo.id,
+            messageId,
+            reaction,
+        });
         return Promise.resolve();
     }
 
@@ -79,32 +85,57 @@ export default class SlackChannelSnapshottingMock implements SlackTargetedChanne
         this.snapshot.sentMessages.push(options);
     }
 
-    findLatestPullRequestCommentSnapshot(reviewCommentId: number | string): Promise<PullRequestCommentSnapshot | null> {
-        this.snapshot.searchedCommentSnapshots.push({ channelId: this.channelInfo.id, reviewCommentId });
+    findLatestPullRequestCommentSnapshot(
+        reviewCommentId: number | string,
+    ): Promise<PullRequestCommentSnapshot | null> {
+        this.snapshot.searchedCommentSnapshots.push({
+            channelId: this.channelInfo.id,
+            reviewCommentId,
+        });
 
-        const snapshot = (<any>this.snapshot.sentMessages).findLast((m: SendMessageArguments) => m.metadata?.eventType === SNAPSHOT_COMMENT_STATE_EVENT_TYPE && m.metadata?.eventPayload?.commentId === reviewCommentId.toString());
+        const snapshot = (<any>this.snapshot.sentMessages).findLast(
+            (m: SendMessageArguments) =>
+                m.metadata?.eventType === SNAPSHOT_COMMENT_STATE_EVENT_TYPE &&
+                m.metadata?.eventPayload?.commentId ===
+                    reviewCommentId.toString(),
+        );
 
         if (snapshot) {
-            const metadata = <PullrequestCommentSnapshotInSlackMetadata>snapshot.metadata?.eventPayload;
+            const metadata = <PullrequestCommentSnapshotInSlackMetadata>(
+                snapshot.metadata?.eventPayload
+            );
             return Promise.resolve({
                 commentId: metadata.commentId,
                 commentParentId: metadata.commentParentId,
                 resolvedDate: metadata.resolvedDate,
                 slackMessageId: messageId,
-                slackThreadId: snapshot.threadId
+                slackThreadId: snapshot.threadId,
             });
         }
         return Promise.resolve(null);
     }
 
-    findPROpenedBroadcastMessageId(prCreationDate: Date, pullRequestTraits: PullRequestSnapshotInSlackMetadata): Promise<string | null> {
+    findPROpenedBroadcastMessageId(
+        prCreationDate: Date,
+        pullRequestTraits: PullRequestSnapshotInSlackMetadata,
+    ): Promise<string | null> {
         this.snapshot.searchedPrOpenedBroadcastMessages.push({
             channelId: this.channelInfo.id,
             prCreationDate,
-            pullRequestTraits
+            pullRequestTraits,
         });
 
-        const snapshot = (<any>this.snapshot.sentMessages).findLast((m: SendMessageArguments) => m.metadata?.eventType === SNAPSHOT_PULL_REQUEST_STATE_EVENT_TYPE && m.metadata?.eventPayload?.pullRequestId === pullRequestTraits.pullRequestId && m.metadata?.eventPayload?.projectKey === pullRequestTraits.projectKey && m.metadata?.eventPayload?.repositorySlug === pullRequestTraits.repositorySlug);
+        const snapshot = (<any>this.snapshot.sentMessages).findLast(
+            (m: SendMessageArguments) =>
+                m.metadata?.eventType ===
+                    SNAPSHOT_PULL_REQUEST_STATE_EVENT_TYPE &&
+                m.metadata?.eventPayload?.pullRequestId ===
+                    pullRequestTraits.pullRequestId &&
+                m.metadata?.eventPayload?.projectKey ===
+                    pullRequestTraits.projectKey &&
+                m.metadata?.eventPayload?.repositorySlug ===
+                    pullRequestTraits.repositorySlug,
+        );
 
         if (snapshot) {
             return Promise.resolve(messageId);

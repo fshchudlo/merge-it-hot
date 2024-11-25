@@ -3,28 +3,28 @@ import {
     PullRequestGenericEvent,
     PullRequestCommentActionEvent,
     PullRequestModifiedEvent,
-    PullRequestParticipantsUpdatedEvent
+    PullRequestParticipantsUpdatedEvent,
 } from "../../event-contracts";
 
 const authorUser = {
     name: "Test Author",
     isBotUser: false,
-    slackUserId: "000000"
+    slackUserId: "000000",
 };
 const reviewer1User = {
     name: "Test Reviewer 1",
     isBotUser: false,
-    slackUserId: "111111"
+    slackUserId: "111111",
 };
 const reviewer2User = {
     name: "Test Reviewer 2",
     isBotUser: false,
-    slackUserId: "222222"
+    slackUserId: "222222",
 };
 const reviewer3User = {
     name: "Test Reviewer 3",
     isBotUser: false,
-    slackUserId: "333333"
+    slackUserId: "333333",
 };
 
 function getBasicPayload(): PullRequestGenericEvent {
@@ -41,29 +41,31 @@ function getBasicPayload(): PullRequestGenericEvent {
                 branchName: "feature/test-branch",
                 latestCommit: "from-ref-commit-hash",
                 repositoryName: "test-repository",
-                projectKey: "TEST-PROJ"
+                projectKey: "TEST-PROJ",
             },
             targetBranch: {
                 branchName: "main",
                 latestCommit: "to-ref-commit-hash",
                 repositoryName: "test-repository",
-                projectKey: "TEST-PROJ"
+                projectKey: "TEST-PROJ",
             },
             author: { ...authorUser },
-            participants: [{
-                user: { ...reviewer1User },
-                status: "UNAPPROVED"
-            }, {
-                user: { ...reviewer2User },
-                status: "UNAPPROVED"
-            }],
+            participants: [
+                {
+                    user: { ...reviewer1User },
+                    status: "UNAPPROVED",
+                },
+                {
+                    user: { ...reviewer2User },
+                    status: "UNAPPROVED",
+                },
+            ],
             assignees: [],
             links: {
-                self: "https://git.test.com/projects/TEST-PROJ/repos/test-repository/pull-requests/1/overview"
-            }
-        }
+                self: "https://git.test.com/projects/TEST-PROJ/repos/test-repository/pull-requests/1/overview",
+            },
+        },
     };
-
 }
 
 export default class TestPayloadBuilder {
@@ -72,9 +74,9 @@ export default class TestPayloadBuilder {
             ...getBasicPayload(),
             pullRequest: {
                 ...getBasicPayload().pullRequest,
-                isDraft: true
+                isDraft: true,
             },
-            eventKey: "pr:opened"
+            eventKey: "pr:opened",
         };
     }
     static pullRequestIsReadyForReview(): PullRequestEvent {
@@ -82,9 +84,9 @@ export default class TestPayloadBuilder {
             ...getBasicPayload(),
             pullRequest: {
                 ...getBasicPayload().pullRequest,
-                isDraft: false
+                isDraft: false,
             },
-            eventKey: "pr:ready_for_review"
+            eventKey: "pr:ready_for_review",
         };
     }
     static pullRequestIsConvertedToDraft(): PullRequestEvent {
@@ -92,42 +94,42 @@ export default class TestPayloadBuilder {
             ...getBasicPayload(),
             pullRequest: {
                 ...getBasicPayload().pullRequest,
-                isDraft: false
+                isDraft: false,
             },
-            eventKey: "pr:converted_to_draft"
+            eventKey: "pr:converted_to_draft",
         };
     }
     static pullRequestOpened(): PullRequestEvent {
         return {
             ...getBasicPayload(),
-            eventKey: "pr:opened"
+            eventKey: "pr:opened",
         };
     }
 
     static pullRequestMerged(): PullRequestEvent {
         return {
             ...getBasicPayload(),
-            eventKey: "pr:merged"
+            eventKey: "pr:merged",
         };
     }
 
     static pullRequestDeclined(): PullRequestEvent {
         return {
             ...getBasicPayload(),
-            eventKey: "pr:declined"
+            eventKey: "pr:declined",
         };
     }
 
     static pullRequestDeleted(): PullRequestEvent {
         return {
             ...getBasicPayload(),
-            eventKey: "pr:deleted"
+            eventKey: "pr:deleted",
         };
     }
     static pullRequestReopened(): PullRequestEvent {
         return {
             ...getBasicPayload(),
-            eventKey: "pr:reopened"
+            eventKey: "pr:reopened",
         };
     }
 
@@ -135,7 +137,7 @@ export default class TestPayloadBuilder {
         const payload = this.pullRequestCommentAdded() as any;
         return {
             ...payload,
-            eventKey: "pr:comment:deleted"
+            eventKey: "pr:comment:deleted",
         };
     }
 
@@ -145,9 +147,9 @@ export default class TestPayloadBuilder {
             ...payload,
             comment: {
                 ...payload.comment,
-                id: -1
+                id: -1,
             },
-            eventKey: "pr:comment:deleted"
+            eventKey: "pr:comment:deleted",
         };
     }
 
@@ -161,8 +163,8 @@ export default class TestPayloadBuilder {
                 id: 1,
                 text: "Test comment",
                 author: { ...reviewer1User },
-                link: `${payload.pullRequest.links.self}?commentId=1`
-            }
+                link: `${payload.pullRequest.links.self}?commentId=1`,
+            },
         };
     }
 
@@ -173,8 +175,8 @@ export default class TestPayloadBuilder {
             eventKey: "pr:comment:edited",
             comment: {
                 ...payload.comment,
-                text: "Updated comment text"
-            }
+                text: "Updated comment text",
+            },
         };
     }
 
@@ -185,8 +187,8 @@ export default class TestPayloadBuilder {
             eventKey: "pr:comment:edited",
             comment: {
                 ...payload.comment,
-                resolvedAt: new Date(1714381184802)
-            }
+                resolvedAt: new Date(1714381184802),
+            },
         };
     }
 
@@ -197,8 +199,8 @@ export default class TestPayloadBuilder {
             eventKey: "pr:comment:edited",
             comment: {
                 ...payload.comment,
-                resolvedAt: undefined
-            }
+                resolvedAt: undefined,
+            },
         };
     }
 
@@ -210,9 +212,11 @@ export default class TestPayloadBuilder {
             previousDescription: prCreatedPayload.pullRequest.description,
             previousTitle: prCreatedPayload.pullRequest.title,
             previousTargetBranch: {
-                branchName: prCreatedPayload.pullRequest.targetBranch.branchName,
-                latestCommit: prCreatedPayload.pullRequest.targetBranch.latestCommit
-            }
+                branchName:
+                    prCreatedPayload.pullRequest.targetBranch.branchName,
+                latestCommit:
+                    prCreatedPayload.pullRequest.targetBranch.latestCommit,
+            },
         };
     }
 
@@ -226,14 +230,17 @@ export default class TestPayloadBuilder {
             previousTitle: payload.pullRequest.title,
             previousTargetBranch: {
                 branchName: payload.pullRequest.targetBranch.branchName,
-                latestCommit: payload.pullRequest.targetBranch.latestCommit
+                latestCommit: payload.pullRequest.targetBranch.latestCommit,
             },
             pullRequest: {
                 ...payload.pullRequest,
                 title: "New pull request title",
                 description: "New pull request description",
-                targetBranch: { ...payload.pullRequest.targetBranch, branchName: "not-the-main" }
-            }
+                targetBranch: {
+                    ...payload.pullRequest.targetBranch,
+                    branchName: "not-the-main",
+                },
+            },
         };
     }
 
@@ -242,7 +249,7 @@ export default class TestPayloadBuilder {
 
         payload.pullRequest.participants[0] = {
             ...payload.pullRequest.participants[0],
-            status: "NEEDS_WORK"
+            status: "NEEDS_WORK",
         };
 
         return {
@@ -251,8 +258,8 @@ export default class TestPayloadBuilder {
             actor: { ...reviewer1User },
             review: {
                 state: "CHANGES_REQUESTED",
-                comment: null
-            }
+                comment: null,
+            },
         };
     }
 
@@ -260,7 +267,7 @@ export default class TestPayloadBuilder {
         const payload = getBasicPayload();
         payload.pullRequest.participants[0] = {
             ...payload.pullRequest.participants[0],
-            status: "APPROVED"
+            status: "APPROVED",
         };
 
         return {
@@ -269,8 +276,8 @@ export default class TestPayloadBuilder {
             actor: { ...reviewer1User },
             review: {
                 state: "APPROVED",
-                comment: null
-            }
+                comment: null,
+            },
         };
     }
 
@@ -278,7 +285,7 @@ export default class TestPayloadBuilder {
         const payload = getBasicPayload();
         payload.pullRequest.participants[0] = {
             ...payload.pullRequest.participants[0],
-            status: "APPROVED"
+            status: "APPROVED",
         };
 
         return {
@@ -287,8 +294,8 @@ export default class TestPayloadBuilder {
             actor: { ...reviewer1User },
             review: {
                 state: "COMMENTED",
-                comment: "Please, implement x, y, and z"
-            }
+                comment: "Please, implement x, y, and z",
+            },
         };
     }
 
@@ -300,16 +307,16 @@ export default class TestPayloadBuilder {
                 ...payload.pullRequest,
                 participants: payload.pullRequest.participants.map(r => {
                     return {
-                        user: r.user
+                        user: r.user,
                     };
-                })
+                }),
             },
             eventKey: "pr:review:submitted",
             actor: { ...reviewer1User },
             review: {
                 state: "APPROVED",
-                comment: null
-            }
+                comment: null,
+            },
         };
     }
 
@@ -318,7 +325,7 @@ export default class TestPayloadBuilder {
 
         payload.pullRequest.participants[0] = {
             ...payload.pullRequest.participants[0],
-            status: "UNAPPROVED"
+            status: "UNAPPROVED",
         };
 
         return {
@@ -327,8 +334,8 @@ export default class TestPayloadBuilder {
             actor: { ...reviewer1User },
             review: {
                 state: "DISMISSED",
-                comment: null
-            }
+                comment: null,
+            },
         };
     }
 
@@ -338,12 +345,12 @@ export default class TestPayloadBuilder {
             ...basicPayload,
             ...{
                 fromRef: {
-                    latestCommit: "from-ref-updated-hash"
-                }
+                    latestCommit: "from-ref-updated-hash",
+                },
             },
             eventKey: "pr:from_ref_updated",
             latestCommitMessage: `Test comment for ${basicPayload.pullRequest.fromBranch.projectKey}, ${basicPayload.pullRequest.fromBranch.repositoryName}, ${basicPayload.pullRequest.fromBranch.latestCommit}`,
-            latestCommitViewUrl: `${basicPayload.pullRequest.links.self.replace("/overview", "")}/commits/${basicPayload.pullRequest.fromBranch.latestCommit}`
+            latestCommitViewUrl: `${basicPayload.pullRequest.links.self.replace("/overview", "")}/commits/${basicPayload.pullRequest.fromBranch.latestCommit}`,
         };
     }
 
@@ -356,14 +363,17 @@ export default class TestPayloadBuilder {
 
             pullRequest: {
                 ...getBasicPayload().pullRequest,
-                participants: [{
-                    user: { ...reviewer2User },
-                    status: "UNAPPROVED"
-                }, {
-                    user: { ...reviewer3User },
-                    status: "UNAPPROVED"
-                }]
-            }
+                participants: [
+                    {
+                        user: { ...reviewer2User },
+                        status: "UNAPPROVED",
+                    },
+                    {
+                        user: { ...reviewer3User },
+                        status: "UNAPPROVED",
+                    },
+                ],
+            },
         };
     }
 
@@ -373,8 +383,8 @@ export default class TestPayloadBuilder {
             ...payload,
             pullRequest: {
                 ...payload.pullRequest,
-                assignees: payload.removedParticipants.map(p => p)
-            }
+                assignees: payload.removedParticipants.map(p => p),
+            },
         };
     }
 }

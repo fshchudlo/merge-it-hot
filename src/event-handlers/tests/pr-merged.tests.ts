@@ -6,7 +6,10 @@ describe("PR merged use-case", () => {
     it("Should send completion message and close the channel on PR merge", async () => {
         const channelMock = new SlackChannelSnapshottingMock();
 
-        await handlePullRequestEvent(TestPayloadBuilder.pullRequestMerged(), channelMock);
+        await handlePullRequestEvent(
+            TestPayloadBuilder.pullRequestMerged(),
+            channelMock,
+        );
 
         expect(channelMock.snapshot).toMatchSnapshot();
     });
@@ -15,13 +18,18 @@ describe("PR merged use-case", () => {
         const channelMock = new SlackChannelSnapshottingMock();
         const broadcastChannelMock = new SlackChannelSnapshottingMock();
 
-        await handlePullRequestEvent(TestPayloadBuilder.pullRequestOpened(), channelMock, broadcastChannelMock);
+        await handlePullRequestEvent(
+            TestPayloadBuilder.pullRequestOpened(),
+            channelMock,
+            broadcastChannelMock,
+        );
 
-
-        await handlePullRequestEvent(TestPayloadBuilder.pullRequestMerged(), channelMock, broadcastChannelMock);
-
+        await handlePullRequestEvent(
+            TestPayloadBuilder.pullRequestMerged(),
+            channelMock,
+            broadcastChannelMock,
+        );
 
         expect(broadcastChannelMock.snapshot).toMatchSnapshot();
     });
-
 });

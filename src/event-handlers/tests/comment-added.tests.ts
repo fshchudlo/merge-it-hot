@@ -6,9 +6,10 @@ describe("Comment added use-case", () => {
     it("Should send message on PR comment", async () => {
         const channelMock = new SlackChannelSnapshottingMock();
 
-
-        await handlePullRequestEvent(TestPayloadBuilder.pullRequestCommentAdded(), channelMock);
-
+        await handlePullRequestEvent(
+            TestPayloadBuilder.pullRequestCommentAdded(),
+            channelMock,
+        );
 
         expect(channelMock.snapshot).toMatchSnapshot();
     });

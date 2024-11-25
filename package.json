@@ -9,7 +9,7 @@
     "lint": "eslint ./src --fix",
     "test": "jest",
     "test:coverage": "jest --coverage",
-    "format": "prettier ./src",
+    "format": "prettier ./src --write",
     "test:update-snapshots": "jest --updateSnapshot"
   },
   "keywords": [
