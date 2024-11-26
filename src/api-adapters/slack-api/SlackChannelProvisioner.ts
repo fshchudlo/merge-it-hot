@@ -85,9 +85,9 @@ export class SlackChannelProvisioner {
             ),
         ];
 
-        const createChannelWithFallbacks = () => {
+        const createChannelWithFallbacks = async () => {
             try {
-                return this.createNewChannel(
+                return await this.createNewChannel(
                     channelName,
                     allParticipantsToInvite,
                     iconEmoji,
@@ -97,10 +97,10 @@ export class SlackChannelProvisioner {
                     throw error;
                 }
                 try {
-                    return this.findExistingChannel(channelName);
+                    return await this.findExistingChannel(channelName);
                 } catch (innerError: any) {
                     if (innerError.data?.error === "is_archived") {
-                        return this.unarchiveChannel(channelName);
+                        return await this.unarchiveChannel(channelName);
                     }
                     throw innerError;
                 }
@@ -118,13 +118,13 @@ export class SlackChannelProvisioner {
 
         // For other events, try finding the existing channel first, then fall back to creating if not found
         try {
-            return this.findExistingChannel(channelName);
+            return await this.findExistingChannel(channelName);
         } catch (error: any) {
             if (error.data?.error === "channel_not_found") {
-                return createChannelWithFallbacks();
+                return await createChannelWithFallbacks();
             }
             if (error.data?.error === "is_archived") {
-                return this.unarchiveChannel(channelName);
+                return await this.unarchiveChannel(channelName);
             }
             throw error;
         }
@@ -135,6 +135,7 @@ export class SlackChannelProvisioner {
     ): Promise<SlackChannelInfo | null> {
         let cursor: string;
         do {
+            // noinspection JSUnusedAssignment
             const result = await this.client.conversations.list({
                 exclude_archived: false,
                 types: "private_channel",
