@@ -20,7 +20,7 @@ export default async function verifyHMACSignature(
     }
 
     const hmac = crypto.createHmac("sha256", AppConfig.HMAC_SECRET);
-    const digest = "sha256=" + hmac.update((<any>req).rawBody).digest("hex");
+    const digest = "sha256=" + hmac.update(req.rawBody).digest("hex");
 
     if (crypto.timingSafeEqual(Buffer.from(signature), Buffer.from(digest))) {
         next();

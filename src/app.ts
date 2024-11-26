@@ -27,7 +27,7 @@ if (AppConfig.HMAC_SECRET) {
     expressReceiver.router.use(
         bodyParser.json({
             verify: (req: Request, _res: Response, buf: Buffer) => {
-                (<any>req).rawBody = buf.toString();
+                req.rawBody = buf.toString();
             },
             limit: AppConfig.REQUEST_BODY_SIZE_LIMIT,
         } as any),
