@@ -93,6 +93,7 @@ exports[`PR reopened use-case Should send notification to the broadcast channel,
       "threadId": "ABCDE",
     },
   ],
+  "topicUpdates": [],
 }
 `;
 
@@ -126,6 +127,9 @@ exports[`PR reopened use-case Should send reopening message on PR reopening 1`] 
       ],
       "text": ":recycle: Test Author reopened <https://git.test.com/projects/TEST-PROJ/repos/test-repository/pull-requests/1/overview|pull request>",
     },
+  ],
+  "topicUpdates": [
+    "Test pull request title",
   ],
 }
 `;

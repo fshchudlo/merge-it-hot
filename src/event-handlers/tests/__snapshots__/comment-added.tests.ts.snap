@@ -41,5 +41,6 @@ exports[`Comment added use-case Should send message on PR comment 1`] = `
       "threadId": undefined,
     },
   ],
+  "topicUpdates": [],
 }
 `;

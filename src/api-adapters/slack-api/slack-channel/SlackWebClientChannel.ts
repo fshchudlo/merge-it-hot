@@ -43,6 +43,13 @@ export class SlackWebClientChannel
         });
     }
 
+    async setTopic(topic: string): Promise<void> {
+        await this.client.conversations.setTopic({
+            channel: this.channelInfo.id,
+            topic: topic
+        });
+    }
+
     async inviteToChannel(options: InviteToChannelArguments): Promise<void> {
         if ((options.users || []).length === 0) {
             return;
@@ -251,6 +258,7 @@ export class SlackWebClientChannel
             : undefined;
 
         while (true) {
+            // noinspection JSUnusedAssignment
             const response = await this.client.conversations.history({
                 channel: channelId,
                 include_all_metadata: true,

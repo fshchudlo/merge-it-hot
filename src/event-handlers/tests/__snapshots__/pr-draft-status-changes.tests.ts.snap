@@ -80,6 +80,7 @@ exports[`PR draft status change use-cases PR is drafted use-case Should send not
       "threadId": "ABCDE",
     },
   ],
+  "topicUpdates": [],
 }
 `;
 
@@ -146,6 +147,9 @@ exports[`PR draft status change use-cases PR is drafted use-case Should send not
       ],
       "text": ":shushing_face: Test Author converted the pull request back to draft",
     },
+  ],
+  "topicUpdates": [
+    "Test pull request title",
   ],
 }
 `;
@@ -230,6 +234,7 @@ exports[`PR draft status change use-cases PR is ready for review use-case Should
       "threadId": "ABCDE",
     },
   ],
+  "topicUpdates": [],
 }
 `;
 
@@ -296,6 +301,9 @@ exports[`PR draft status change use-cases PR is ready for review use-case Should
       ],
       "text": ":sparkler: Test Author marked the pull request as _ready for review_",
     },
+  ],
+  "topicUpdates": [
+    "Test pull request title",
   ],
 }
 `;

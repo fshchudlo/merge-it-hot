@@ -52,6 +52,9 @@ exports[`PR opened use-case Should add bookmark and invite author and reviewers 
       "text": "Test Author opened <https://git.test.com/projects/TEST-PROJ/repos/test-repository/pull-requests/1/overview|pull request>",
     },
   ],
+  "topicUpdates": [
+    "Test pull request title",
+  ],
 }
 `;
 
@@ -112,5 +115,6 @@ exports[`PR opened use-case Should send notification to the broadcast channel, i
       "text": ":snowboarder: Test Author opened pull request "Test pull request title".",
     },
   ],
+  "topicUpdates": [],
 }
 `;

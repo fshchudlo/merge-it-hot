@@ -11,6 +11,7 @@ exports[`PR modified use-case Should not send message if PR doesn't contain visi
   "searchedCommentSnapshots": [],
   "searchedPrOpenedBroadcastMessages": [],
   "sentMessages": [],
+  "topicUpdates": [],
 }
 `;
 
@@ -92,6 +93,9 @@ exports[`PR modified use-case Should send message when PR modified 1`] = `
       ],
       "text": ":writing_hand: Test Author changed the pull request",
     },
+  ],
+  "topicUpdates": [
+    "New pull request title",
   ],
 }
 `;

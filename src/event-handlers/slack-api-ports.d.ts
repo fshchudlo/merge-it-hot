@@ -16,6 +16,8 @@ export interface SlackTargetedChannel {
 
     addBookmark(options: AddBookmarkArguments): Promise<void>;
 
+    setTopic(topic: string): Promise<void>;
+
     inviteToChannel(options: InviteToChannelArguments): Promise<void>;
 
     kickFromChannel(options: KickFromChannelArguments): Promise<void>;

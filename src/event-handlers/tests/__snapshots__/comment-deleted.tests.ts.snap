@@ -48,6 +48,7 @@ exports[`Comment deleted use-case Should delete message if it was found 1`] = `
       "threadId": undefined,
     },
   ],
+  "topicUpdates": [],
 }
 `;
 
@@ -95,5 +96,6 @@ exports[`Comment deleted use-case Should send deletion notification if the initi
       "text": ":broom: Test Reviewer 1 deleted comment:",
     },
   ],
+  "topicUpdates": [],
 }
 `;

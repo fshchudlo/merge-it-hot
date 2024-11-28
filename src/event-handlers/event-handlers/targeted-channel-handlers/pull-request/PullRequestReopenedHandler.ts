@@ -16,6 +16,7 @@ export class PullRequestReopenedHandler implements PullRequestEventHandler {
         payload: PullRequestGenericEvent,
         slackChannel: SlackTargetedChannel,
     ) {
+        await slackChannel.setTopic(payload.pullRequest.title);
         await slackChannel.sendMessage(buildMessage(payload));
     }
 }

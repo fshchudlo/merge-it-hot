@@ -1,12 +1,12 @@
 import {
     contextBlock,
     divider,
-    section,
+    section
 } from "../../utils/slack-building-blocks";
 import {
     markdownToSlackMarkup,
     reviewPRAction,
-    trimTextToSlackMessageLimits,
+    trimTextToSlackMessageLimits
 } from "../../utils";
 import { PullRequestModifiedEvent } from "../../../event-contracts";
 import { PullRequestEventHandler } from "../../PullRequestEventHandler";
@@ -19,7 +19,7 @@ export class PullRequestModifiedHandler implements PullRequestEventHandler {
 
     public async handle(
         payload: PullRequestModifiedEvent,
-        slackChannel: SlackTargetedChannel,
+        slackChannel: SlackTargetedChannel
     ) {
         const visibleChanges = getPRChangesDescription(payload);
         if (visibleChanges.length == 0) {
@@ -33,9 +33,12 @@ export class PullRequestModifiedHandler implements PullRequestEventHandler {
                 section(messageTitle),
                 ...visibleChanges,
                 divider(),
-                reviewPRAction(payload.pullRequest),
-            ],
+                reviewPRAction(payload.pullRequest)
+            ]
         });
+        if (payload.pullRequest.title != payload.previousTitle) {
+            await slackChannel.setTopic(payload.pullRequest.title);
+        }
     }
 }
 
@@ -55,8 +58,8 @@ function getPRChangesDescription(payload: PullRequestModifiedEvent) {
         addDivider();
         changesDescription.push(
             section(
-                `Target is changed to \`${pullRequest.targetBranch.branchName}\``,
-            ),
+                `Target is changed to \`${pullRequest.targetBranch.branchName}\``
+            )
         );
     }
     if (pullRequest.title != payload.previousTitle) {
@@ -71,9 +74,9 @@ function getPRChangesDescription(payload: PullRequestModifiedEvent) {
             changesDescription.push(
                 contextBlock(
                     trimTextToSlackMessageLimits(
-                        markdownToSlackMarkup(pullRequest.description),
-                    ),
-                ),
+                        markdownToSlackMarkup(pullRequest.description)
+                    )
+                )
             );
         } else {
             changesDescription.push(section("Description is deleted."));

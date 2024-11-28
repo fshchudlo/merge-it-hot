@@ -122,5 +122,6 @@ exports[`PR review submitted use-case Should send message on PR review submit 1`
       "text": ":traffic_light: Test Reviewer 1 approved <https://git.test.com/projects/TEST-PROJ/repos/test-repository/pull-requests/1/overview|pull request>.",
     },
   ],
+  "topicUpdates": [],
 }
 `;

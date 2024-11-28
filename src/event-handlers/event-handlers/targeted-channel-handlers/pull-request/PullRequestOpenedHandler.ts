@@ -27,6 +27,7 @@ export class PullRequestOpenedHandler implements PullRequestEventHandler {
         slackChannel: SlackTargetedChannel,
     ) {
         await setChannelBookmark(payload, slackChannel);
+        await slackChannel.setTopic(payload.pullRequest.title);
         await slackChannel.sendMessage(buildInvitationMessage(payload));
     }
 }

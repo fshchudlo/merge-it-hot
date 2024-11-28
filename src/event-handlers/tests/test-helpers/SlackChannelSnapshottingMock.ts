@@ -20,6 +20,7 @@ export default class SlackChannelSnapshottingMock
     snapshot: {
         addedReactions: any[];
         addedBookmarks: AddBookmarkArguments[];
+        topicUpdates: string[];
         closeChannelCalls: string[];
         invitesToChannels: InviteToChannelArguments[];
         kicksFromChannels: KickFromChannelArguments[];
@@ -33,6 +34,7 @@ export default class SlackChannelSnapshottingMock
         this.snapshot = {
             addedReactions: [],
             addedBookmarks: [],
+            topicUpdates: [],
             closeChannelCalls: [],
             invitesToChannels: [],
             kicksFromChannels: [],
@@ -50,6 +52,11 @@ export default class SlackChannelSnapshottingMock
 
     addBookmark(options: AddBookmarkArguments): Promise<void> {
         this.snapshot.addedBookmarks.push(options);
+        return Promise.resolve();
+    }
+
+    setTopic(topic: string): Promise<void> {
+        this.snapshot.topicUpdates.push(topic);
         return Promise.resolve();
     }
 

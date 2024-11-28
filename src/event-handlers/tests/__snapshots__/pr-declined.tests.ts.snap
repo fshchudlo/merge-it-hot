@@ -17,6 +17,7 @@ exports[`PR declined use-case Should send completion message and close the chann
       "text": ":no_entry_sign: Pull request was declined by Test Author.",
     },
   ],
+  "topicUpdates": [],
 }
 `;
 
@@ -97,5 +98,6 @@ exports[`PR declined use-case Should send notification to the broadcast channel,
       "threadId": "ABCDE",
     },
   ],
+  "topicUpdates": [],
 }
 `;

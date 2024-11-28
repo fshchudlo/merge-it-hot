@@ -76,6 +76,7 @@ exports[`Comment edited use-case Should edit initial message on PR comment edit 
       "threadId": "ABCDE",
     },
   ],
+  "topicUpdates": [],
 }
 `;
 
@@ -125,6 +126,7 @@ exports[`Comment edited use-case Should send generic message if initial comment 
       "threadId": undefined,
     },
   ],
+  "topicUpdates": [],
 }
 `;
 
@@ -236,5 +238,6 @@ exports[`Comment edited use-case Should send message on comment resolving and re
       "threadId": "ABCDE",
     },
   ],
+  "topicUpdates": [],
 }
 `;
