@@ -1,3 +1,8 @@
+# Dev assets
+.git
+.github
+.gitignore
+
 # IDE's files
 .vscode
 .idea
@@ -40,3 +45,6 @@ node_modules/
 # project-specific directories
 dist
 e2e-tests
+assets
+.env.example
+build-and-publish.sh
