@@ -1,0 +1,23 @@
+version: '3.8'
+services:
+  postgres:
+    image: postgres
+    container_name: "merge-it-hot-postgres"
+    restart: always
+    ports:
+      - "8432:5432"
+    networks:
+        - merge_it_hot_network
+    environment:
+      POSTGRES_DB: merge-it-hot
+      POSTGRES_USER: merge-it-hot
+      POSTGRES_PASSWORD: "CHANGE-ME!"
+    volumes:
+      - merge_it_hot_postgres_data:/var/lib/postgresql/data
+
+volumes:
+  merge_it_hot_postgres_data:
+
+networks:
+  merge_it_hot_network:
+    driver: bridge

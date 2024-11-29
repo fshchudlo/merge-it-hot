@@ -6,6 +6,7 @@ export const AppConfig = {
     HMAC_SECRET: process.env.HMAC_SECRET as string,
     REQUEST_BODY_SIZE_LIMIT: 1024 * 200,
 
+    SLACK_WORKSPACE_ID: process.env.SLACK_WORKSPACE_ID as string,
     SLACK_SIGNING_SECRET: process.env.SLACK_SIGNING_SECRET as string,
     SLACK_BOT_TOKEN: process.env.SLACK_BOT_TOKEN,
     SLACK_BOT_PORT: parseInt(process.env.SLACK_BOT_PORT, 10) || 8080,

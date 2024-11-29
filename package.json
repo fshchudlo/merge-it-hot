@@ -10,7 +10,10 @@
     "test": "jest",
     "test:coverage": "jest --coverage",
     "format": "prettier ./src --write",
-    "test:update-snapshots": "jest --updateSnapshot"
+    "test:update-snapshots": "jest --updateSnapshot",
+    "docker:setup": "docker-compose -p merge-it-hot -f assets/docker-compose.yml up -d",
+    "docker:destroy": "docker-compose -p merge-it-hot -f assets/docker-compose.yml down -v",
+    "docker:e2e": "docker-compose -p merge-it-hot -f assets/docker-compose.yml -f assets/docker-compose.e2e.yml up"
   },
   "keywords": [
     "github",

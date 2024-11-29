@@ -1,0 +1,40 @@
+version: '3.8'
+services:
+  merge-it-hot:
+    depends_on:
+      - postgres
+    build:
+      context: ../
+      dockerfile: Dockerfile
+    image: merge-it-hot-webhook-listener
+    pull_policy: never
+    container_name: "merge-it-hot-webhook-listener"
+    restart: no
+    command: npm run start
+
+    ports:
+      - "8080:8080"
+    networks:
+      - merge_it_hot_network
+
+    environment:
+      - NODE_ENV=development
+      - SLACK_BOT_PORT=8080
+
+      - DB_HOST=postgres
+      - DB_PORT=8432
+      - DB_PASSWORD=CHANGE-ME!
+      - DB_USERNAME=merge-it-hot
+      - DB_NAME=merge-it-hot
+
+      - GITHUB_APP_ID=${GITHUB_APP_ID}
+      - GITHUB_APP_PRIVATE_KEY=${GITHUB_APP_PRIVATE_KEY}
+      - HMAC_SECRET=${HMAC_SECRET}
+
+      - SLACK_WORKSPACE_ID=${SLACK_WORKSPACE_ID}
+      - SLACK_BOT_TOKEN=${SLACK_BOT_TOKEN}
+      - SLACK_SIGNING_SECRET=${SLACK_SIGNING_SECRET}
+
+      - OPENED_PRS_BROADCAST_CHANNEL=${OPENED_PRS_BROADCAST_CHANNEL}
+      - DIAGNOSTIC_CHANNEL=${DIAGNOSTIC_CHANNEL}
+      - DEFAULT_CHANNEL_PARTICIPANTS=${DEFAULT_CHANNEL_PARTICIPANTS}
