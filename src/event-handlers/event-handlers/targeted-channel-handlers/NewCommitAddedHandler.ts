@@ -4,7 +4,7 @@ import { PullRequestFromBranchUpdatedEvent } from "../../event-contracts";
 import { PullRequestEventHandler } from "../PullRequestEventHandler";
 import {
     SendMessageArguments,
-    SlackTargetedChannel,
+    SlackTargetedChannel
 } from "../../slack-api-ports";
 
 export class NewCommitAddedHandler implements PullRequestEventHandler {
@@ -14,28 +14,26 @@ export class NewCommitAddedHandler implements PullRequestEventHandler {
 
     async handle(
         payload: PullRequestFromBranchUpdatedEvent,
-        slackChannel: SlackTargetedChannel,
+        slackChannel: SlackTargetedChannel
     ) {
         await slackChannel.sendMessage(buildSlackMessage(payload));
     }
 }
 
 function buildSlackMessage(
-    payload: PullRequestFromBranchUpdatedEvent,
+    payload: PullRequestFromBranchUpdatedEvent
 ): SendMessageArguments {
     const messageTitle = `:new: ${payload.actor.name} added ${link(payload.latestCommitViewUrl, "new commit")}.`;
 
     const commentSection = payload.latestCommitMessage
-        ? section(
-              `Commit message: \n${quote(markdownToSlackMarkup(payload.latestCommitMessage))}`,
-          )
+        ? section(`Commit message: \n${quote(markdownToSlackMarkup(payload.latestCommitMessage))}`)
         : null;
     return {
         text: messageTitle,
         blocks: [
             section(messageTitle),
             commentSection,
-            reviewPRAction(payload.pullRequest),
-        ].filter(s => !!s),
+            reviewPRAction(payload.pullRequest)
+        ].filter(s => !!s)
     };
 }

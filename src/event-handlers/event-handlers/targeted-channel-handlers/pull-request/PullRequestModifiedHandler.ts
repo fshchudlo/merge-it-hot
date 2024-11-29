@@ -5,8 +5,7 @@ import {
 } from "../../utils/slack-building-blocks";
 import {
     markdownToSlackMarkup,
-    reviewPRAction,
-    trimTextToSlackMessageLimits
+    reviewPRAction
 } from "../../utils";
 import { PullRequestModifiedEvent } from "../../../event-contracts";
 import { PullRequestEventHandler } from "../../PullRequestEventHandler";
@@ -72,11 +71,7 @@ function getPRChangesDescription(payload: PullRequestModifiedEvent) {
         if (pullRequest.description) {
             changesDescription.push(section("Updated description:"));
             changesDescription.push(
-                contextBlock(
-                    trimTextToSlackMessageLimits(
-                        markdownToSlackMarkup(pullRequest.description)
-                    )
-                )
+                contextBlock(markdownToSlackMarkup(pullRequest.description))
             );
         } else {
             changesDescription.push(section("Description is deleted."));

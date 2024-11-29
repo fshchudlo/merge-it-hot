@@ -3,18 +3,17 @@ import {
     section,
     divider,
     contextBlock,
-    italic,
+    italic
 } from "../../utils/slack-building-blocks";
 import {
     markdownToSlackMarkup,
-    reviewPRAction,
-    trimTextToSlackMessageLimits,
+    reviewPRAction
 } from "../../utils";
 import { PullRequestGenericEvent } from "../../../event-contracts";
 import { PullRequestEventHandler } from "../../PullRequestEventHandler";
 import {
     SendMessageArguments,
-    SlackTargetedChannel,
+    SlackTargetedChannel
 } from "../../../slack-api-ports";
 
 export class PullRequestOpenedHandler implements PullRequestEventHandler {
@@ -24,7 +23,7 @@ export class PullRequestOpenedHandler implements PullRequestEventHandler {
 
     public async handle(
         payload: PullRequestGenericEvent,
-        slackChannel: SlackTargetedChannel,
+        slackChannel: SlackTargetedChannel
     ) {
         await setChannelBookmark(payload, slackChannel);
         await slackChannel.setTopic(payload.pullRequest.title);
@@ -34,27 +33,25 @@ export class PullRequestOpenedHandler implements PullRequestEventHandler {
 
 async function setChannelBookmark(
     payload: PullRequestGenericEvent,
-    slackChannel: SlackTargetedChannel,
+    slackChannel: SlackTargetedChannel
 ) {
     await slackChannel.addBookmark({
         link: payload.pullRequest.links.self,
         emoji: ":git:",
-        title: "Review Pull Request",
+        title: "Review Pull Request"
     });
 }
 
 function buildInvitationMessage(
-    payload: PullRequestGenericEvent,
+    payload: PullRequestGenericEvent
 ): SendMessageArguments {
     const prStateName = payload.pullRequest.isDraft
         ? `${italic("draft")} pull request`
         : "pull request";
 
     const messageTitle = `${payload.actor.name} opened ${link(payload.pullRequest.links.self, prStateName)}`;
-    const descriptionText = trimTextToSlackMessageLimits(
-        markdownToSlackMarkup(
-            payload.pullRequest.description ?? payload.pullRequest.title,
-        ),
+    const descriptionText = markdownToSlackMarkup(
+        payload.pullRequest.description ?? payload.pullRequest.title
     );
     return {
         text: messageTitle,
@@ -63,7 +60,7 @@ function buildInvitationMessage(
             divider(),
             contextBlock(descriptionText),
             divider(),
-            reviewPRAction(payload.pullRequest),
-        ],
+            reviewPRAction(payload.pullRequest)
+        ]
     };
 }

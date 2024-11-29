@@ -1,9 +1,8 @@
+import { textBlock } from "./textBlock";
+
 export function section(text: string, type: string = "mrkdwn") {
     return {
         type: "section",
-        text: {
-            type: type,
-            text: text,
-        },
+        text: textBlock(text, type)
     };
 }

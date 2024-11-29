@@ -1,15 +1,14 @@
 import { PullRequestCommentActionEvent } from "../../../event-contracts";
 import {
     markdownToSlackMarkup,
-    snapshotCommentState,
-    trimTextToSlackMessageLimits,
+    snapshotCommentState
 } from "../../utils";
 import { link, quote, section } from "../../utils/slack-building-blocks";
 import { PullRequestEventHandler } from "../../PullRequestEventHandler";
 import {
     PullRequestCommentSnapshot,
     SendMessageArguments,
-    SlackTargetedChannel,
+    SlackTargetedChannel
 } from "../../../slack-api-ports";
 import { buildCommentAddedMessage } from "./buildCommentAddedMessage";
 
@@ -20,11 +19,11 @@ export class CommentEditedHandler implements PullRequestEventHandler {
 
     async handle(
         payload: PullRequestCommentActionEvent,
-        slackChannel: SlackTargetedChannel,
+        slackChannel: SlackTargetedChannel
     ) {
         const commentSnapshot =
             await slackChannel.findLatestPullRequestCommentSnapshot(
-                payload.comment.id,
+                payload.comment.id
             );
         const userAction = getCommentAction(payload, commentSnapshot);
         if (commentSnapshot && userAction.isTextOnlyChange) {
@@ -32,12 +31,12 @@ export class CommentEditedHandler implements PullRequestEventHandler {
             await slackChannel.sendMessage({
                 ...message,
                 editMessageId: commentSnapshot.slackMessageId,
-                replyBroadcast: undefined,
+                replyBroadcast: undefined
             });
         } else {
             const message = buildCommentChangedMessage(
                 payload,
-                commentSnapshot,
+                commentSnapshot
             );
             await slackChannel.sendMessage(message);
         }
@@ -46,13 +45,11 @@ export class CommentEditedHandler implements PullRequestEventHandler {
 
 function buildCommentChangedMessage(
     payload: PullRequestCommentActionEvent,
-    commentSnapshot: PullRequestCommentSnapshot,
+    commentSnapshot: PullRequestCommentSnapshot
 ): SendMessageArguments {
     const userAction = getCommentAction(payload, commentSnapshot);
     const messageTitle = `${userAction.emoji} ${payload.actor.name} ${link(payload.comment.link, userAction.title)}:`;
-    const commentText = trimTextToSlackMessageLimits(
-        quote(markdownToSlackMarkup(payload.comment.text)),
-    );
+    const commentText = quote(markdownToSlackMarkup(payload.comment.text));
 
     return {
         text: messageTitle,
@@ -60,13 +57,13 @@ function buildCommentChangedMessage(
         metadata: snapshotCommentState(payload),
         threadId:
             commentSnapshot?.slackThreadId || commentSnapshot?.slackMessageId,
-        replyBroadcast: commentSnapshot ? true : undefined,
+        replyBroadcast: commentSnapshot ? true : undefined
     };
 }
 
 function getCommentAction(
     payload: PullRequestCommentActionEvent,
-    previousCommentSnapshot: PullRequestCommentSnapshot,
+    previousCommentSnapshot: PullRequestCommentSnapshot
 ) {
     if (previousCommentSnapshot) {
         if (
@@ -75,7 +72,7 @@ function getCommentAction(
         ) {
             return {
                 title: `resolved thread`,
-                emoji: ":white_check_mark:",
+                emoji: ":white_check_mark:"
             };
         }
         if (
@@ -84,13 +81,13 @@ function getCommentAction(
         ) {
             return {
                 title: `reopened thread`,
-                emoji: ":repeat:",
+                emoji: ":repeat:"
             };
         }
     }
     return {
         title: `edited comment`,
         isTextOnlyChange: true,
-        emoji: ":writing_hand:",
+        emoji: ":writing_hand:"
     };
 }

@@ -5,8 +5,7 @@ import {
 } from "../../../slack-api-ports";
 import {
     snapshotCommentState,
-    trimTextToSlackMessageLimits,
-    markdownToSlackMarkup,
+    markdownToSlackMarkup
 } from "../../utils";
 import { link, quote, section } from "../../utils/slack-building-blocks";
 
@@ -19,9 +18,7 @@ export function buildCommentAddedMessage(
         ? ":left_speech_bubble:"
         : `:loudspeaker:`;
     const messageTitle = `${emoji} ${payload.actor.name} ${link(payload.comment.link, action)}:`;
-    const commentText = trimTextToSlackMessageLimits(
-        quote(markdownToSlackMarkup(payload.comment.text)),
-    );
+    const commentText = quote(markdownToSlackMarkup(payload.comment.text));
 
     return {
         text: messageTitle,

@@ -1,14 +1,13 @@
 import {
     snapshotCommentState,
-    trimTextToSlackMessageLimits,
-    markdownToSlackMarkup,
+    markdownToSlackMarkup
 } from "../../utils";
 import { quote, section } from "../../utils/slack-building-blocks";
 import { PullRequestCommentActionEvent } from "../../../event-contracts";
 import { PullRequestEventHandler } from "../../PullRequestEventHandler";
 import {
     SendMessageArguments,
-    SlackTargetedChannel,
+    SlackTargetedChannel
 } from "../../../slack-api-ports";
 
 export class CommentDeletedHandler implements PullRequestEventHandler {
@@ -18,16 +17,16 @@ export class CommentDeletedHandler implements PullRequestEventHandler {
 
     async handle(
         payload: PullRequestCommentActionEvent,
-        slackChannel: SlackTargetedChannel,
+        slackChannel: SlackTargetedChannel
     ) {
         const previousCommentSnapshot =
             await slackChannel.findLatestPullRequestCommentSnapshot(
-                payload.comment.id,
+                payload.comment.id
             );
 
         if (previousCommentSnapshot) {
             await slackChannel.deleteMessage(
-                previousCommentSnapshot.slackMessageId,
+                previousCommentSnapshot.slackMessageId
             );
         } else {
             const message = buildSlackMessage(payload);
@@ -37,15 +36,13 @@ export class CommentDeletedHandler implements PullRequestEventHandler {
 }
 
 function buildSlackMessage(
-    payload: PullRequestCommentActionEvent,
+    payload: PullRequestCommentActionEvent
 ): SendMessageArguments {
     const messageTitle = `:broom: ${payload.actor.name} deleted comment:`;
-    const commentText = trimTextToSlackMessageLimits(
-        quote(markdownToSlackMarkup(payload.comment.text)),
-    );
+    const commentText = quote(markdownToSlackMarkup(payload.comment.text));
     return {
         text: messageTitle,
         blocks: [section(messageTitle), section(commentText)],
-        metadata: snapshotCommentState(payload),
+        metadata: snapshotCommentState(payload)
     };
 }
