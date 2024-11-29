@@ -12,6 +12,9 @@ export class OrganizationSettings {
     @Column("text", { array: true, default: "{}" })
     defaultChannelParticipants: string[];
 
+    @Column("text", { array: true, default: "{}" })
+    repositoriesToExclude: string[];
+
     @Column({ type: "varchar", nullable: true })
     openedPRsBroadcastChannel: string | null;
 
