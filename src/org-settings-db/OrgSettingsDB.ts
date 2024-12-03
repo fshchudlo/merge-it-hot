@@ -18,7 +18,7 @@ class OrgSettingsDataSource extends DataSource {
             migrations: ["src/org-settings-db/migrations/*.ts"],
             migrationsRun: true,
             ssl: {
-                rejectUnauthorized: false // Match IntelliJ's "Trust server certificate" option
+                rejectUnauthorized: false
             },
             logging: !AppConfig.IS_PRODUCTION
         });
