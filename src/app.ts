@@ -1,3 +1,7 @@
+import "reflect-metadata";
+
+import { OrgSettingsDB } from "./org-settings-db/OrgSettingsDB";
+
 import { App, ExpressReceiver } from "@slack/bolt";
 import { AppConfig } from "./app.config";
 import express, { NextFunction, Request } from "express";
@@ -12,12 +16,12 @@ import { SlackWebClientUserIdResolver } from "./api-adapters/slack-api/SlackWebC
 import { getSlackChannelInfo } from "./web-api/route-handlers/slack-channel/getSlackChannelInfo";
 
 const expressReceiver = new ExpressReceiver({
-    signingSecret: AppConfig.SLACK_SIGNING_SECRET,
+    signingSecret: AppConfig.SLACK_SIGNING_SECRET
 });
 
 const slackApp = new App({
     token: AppConfig.SLACK_BOT_TOKEN,
-    receiver: expressReceiver,
+    receiver: expressReceiver
 });
 
 const slackChannelFactory = new SlackChannelProvisioner(slackApp.client);
@@ -29,12 +33,12 @@ if (AppConfig.HMAC_SECRET) {
             verify: (req: Request, _res: Response, buf: Buffer) => {
                 req.rawBody = buf.toString();
             },
-            limit: AppConfig.REQUEST_BODY_SIZE_LIMIT,
-        } as any),
+            limit: AppConfig.REQUEST_BODY_SIZE_LIMIT
+        } as any)
     );
 } else {
     expressReceiver.router.use(
-        express.json({ limit: AppConfig.REQUEST_BODY_SIZE_LIMIT }),
+        express.json({ limit: AppConfig.REQUEST_BODY_SIZE_LIMIT })
     );
 }
 expressReceiver.router.use(measureRequestDuration);
@@ -48,9 +52,9 @@ expressReceiver.router.post(
             res,
             next,
             slackChannelFactory,
-            userIdResolver,
+            userIdResolver
         );
-    },
+    }
 );
 
 expressReceiver.router.get("/metrics", async (req, res) => {
@@ -61,13 +65,13 @@ expressReceiver.router.get(
     "/slack-channel",
     async (req, res, next: NextFunction) => {
         return await getSlackChannelInfo(req, res, next, slackChannelFactory);
-    },
+    }
 );
 
 expressReceiver.router.get("/health", async (req, res) => {
     return res.status(200).json({
         status: "UP",
-        timestamp: new Date().toISOString(),
+        timestamp: new Date().toISOString()
     });
 });
 
@@ -76,18 +80,20 @@ expressReceiver.router.use(
         error: any,
         req: express.Request,
         res: express.Response,
-        next: NextFunction,
+        next: NextFunction
     ) => {
         return handleError(error, res, next, slackApp.client);
-    },
+    }
 );
 
-expressReceiver.app.listen(
-    AppConfig.SLACK_BOT_PORT,
-    AppConfig.SLACK_BOT_HOST,
-    () => {
-        console.log(
-            `⚡️ Merge-it-hot app is running on ${AppConfig.SLACK_BOT_HOST}:${AppConfig.SLACK_BOT_PORT}!`,
-        );
-    },
-);
+OrgSettingsDB.initialize().then(() => {
+    expressReceiver.app.listen(
+        AppConfig.SLACK_BOT_PORT,
+        AppConfig.SLACK_BOT_HOST,
+        () => {
+            console.log(
+                `⚡️ Merge-it-hot app is running on ${AppConfig.SLACK_BOT_HOST}:${AppConfig.SLACK_BOT_PORT}!`
+            );
+        }
+    );
+});
