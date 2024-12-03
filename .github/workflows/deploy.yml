@@ -17,6 +17,6 @@ jobs:
           port: 22
           script: |
             cd app/merge-it-hot
-            docker compose pull
+            docker compose pull --policy always --ignore-pull-failures
             docker compose down
             docker compose up -d
