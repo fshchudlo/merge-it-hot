@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Set up SSH
+      - name: Deploy application on remote server
         uses: appleboy/ssh-action@v0.1.7
         with:
           host: ${{ vars.SERVER_IP }}
@@ -19,4 +19,4 @@ jobs:
             cd app/merge-it-hot
             docker compose pull
             docker compose down
-            docker-compose up -d
+            docker compose up -d
