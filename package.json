@@ -17,9 +17,9 @@
     "migration:run": "ts-node ./node_modules/typeorm/cli.js migration:run -d src/org-settings-db/OrgSettingsDB.ts",
     "migration:revert": "ts-node ./node_modules/typeorm/cli.js migration:revert -d src/org-settings-db/OrgSettingsDB.ts",
 
-    "docker:setup": "docker-compose -p merge-it-hot -f assets/docker-compose.yml up -d",
-    "docker:destroy": "docker-compose -p merge-it-hot -f assets/docker-compose.yml down -v",
-    "docker:start": "docker-compose -p merge-it-hot -f assets/docker-compose.yml -f assets/docker-compose.e2e.yml up --build"
+    "docker:setup": "docker compose -p merge-it-hot -f assets/third-parties-compose.yml up -d",
+    "docker:destroy": "docker compose -p merge-it-hot -f assets/third-parties-compose.yml down -v",
+    "docker:start": "docker compose -p merge-it-hot -f assets/third-parties-compose.yml -f assets/merge-it-hot-compose.yml up --build"
   },
   "keywords": [
     "github",

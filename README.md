@@ -33,10 +33,10 @@ Built on top of [Slack bolt API](https://slack.dev/bolt-js/tutorial/getting-star
   should be installed.
 - Fill `http-client.env.json` file with parameters you find relevant. If you want to use real data, consider creating
   your own `http-client.private.env.json` config. It is already added to the `.gitignore`
-- Fill [docker-compose.e2e.yml](assets/docker-compose.e2e.yml) `environment` section with relevant values. You can put
+- Fill [merge-it-hot-compose.yml](assets/merge-it-hot-compose.yml) `environment` section with relevant values. You can put
   `.env` file to the assets directory as well
   your own `http-client.private.env.json` config. It is already added to the `.gitignore`
-- Run ```npm run docker:e2e``` to start the service
+- Run ```npm run docker:start``` to start the service
 - Run ```ijhttp .e2e-tests/e2e-test-requests.http``` from the project root directory.
 
 ### Running the service
