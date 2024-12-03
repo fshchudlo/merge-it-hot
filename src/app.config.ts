@@ -3,6 +3,7 @@ import { PullRequestEvent } from "./event-handlers/event-contracts";
 
 export const AppConfig = {
     NODE_ENV: process.env.NODE_ENV,
+    IS_PRODUCTION: process.env.NODE_ENV === "production",
     SLACK_BOT_HOST: process.env.SLACK_BOT_HOST || "0.0.0.0",
     REQUEST_BODY_SIZE_LIMIT: 1024 * 200,
 
