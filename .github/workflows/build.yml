@@ -20,11 +20,8 @@ jobs:
         password: ${{ secrets.DOCKER_TOKEN }}
 
     - name: Build and tag Docker image
-      run: |
-        docker build . -t tabakov/merge-it-hot:latest
-        docker tag tabakov/merge-it-hot:latest tabakov/merge-it-hot:${{ github.sha }}
-
-    - name: Push Docker image to Docker Hub
-      run: |
-        docker push tabakov/merge-it-hot:latest
-        docker push tabakov/merge-it-hot:${{ github.sha }}
+      uses: docker/build-push-action@v4
+      with:
+        context: .
+        push: true
+        tags: ${{ vars.DOCKER_REPOSITORY_NAME }}/merge-it-hot:latest
