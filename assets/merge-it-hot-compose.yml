@@ -1,4 +1,3 @@
-version: '3.8'
 services:
   merge-it-hot:
     depends_on:
@@ -22,7 +21,7 @@ services:
       - SLACK_BOT_PORT=8080
 
       - DB_HOST=postgres
-      - DB_PORT=8432
+      - DB_PORT=5432
       - DB_PASSWORD=CHANGE-ME!
       - DB_USERNAME=merge-it-hot
       - DB_NAME=merge-it-hot
