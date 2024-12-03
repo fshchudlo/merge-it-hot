@@ -17,9 +17,7 @@ class OrgSettingsDataSource extends DataSource {
             synchronize: false,
             migrations: ["src/org-settings-db/migrations/*.ts"],
             migrationsRun: true,
-            ssl: {
-                rejectUnauthorized: false
-            },
+            ssl: false, //temporary disable for checking on staging
             logging: !AppConfig.IS_PRODUCTION
         });
     }
