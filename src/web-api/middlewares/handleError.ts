@@ -18,11 +18,8 @@ export default async function handleError(
     if (res.headersSent) {
         return next(error);
     } else {
-        res.status(500).send(
-            AppConfig.NODE_ENV == "development"
-                ? errorMessage
-                : "Internal server error",
-        );
+        // Since responses are only visible in GitHub App admin panel, we can safely send the error details in the response
+        res.status(500).send(errorMessage);
     }
 }
 

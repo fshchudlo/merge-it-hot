@@ -1,6 +1,6 @@
 import "reflect-metadata";
 
-import { OrgSettingsDB } from "./org-settings-db/OrgSettingsDB";
+import { OrgSettingsDB } from "./api-adapters/organization-settings/OrgSettingsDB";
 
 import { App, ExpressReceiver } from "@slack/bolt";
 import { AppConfig } from "./app.config";
@@ -14,6 +14,7 @@ import bodyParser from "body-parser";
 import verifyHMACSignature from "./web-api/middlewares/verifyHMACSignature";
 import { SlackWebClientUserIdResolver } from "./api-adapters/slack-api/SlackWebClientUserIdResolver";
 import { getSlackChannelInfo } from "./web-api/route-handlers/slack-channel/getSlackChannelInfo";
+import { OrganizationSettingsProvider } from "./api-adapters/organization-settings/OrganizationSettingsProvider";
 
 const expressReceiver = new ExpressReceiver({
     signingSecret: AppConfig.SLACK_SIGNING_SECRET
@@ -87,13 +88,17 @@ expressReceiver.router.use(
 );
 
 OrgSettingsDB.initialize().then(() => {
-    expressReceiver.app.listen(
-        AppConfig.SLACK_BOT_PORT,
-        AppConfig.SLACK_BOT_HOST,
-        () => {
-            console.log(
-                `⚡️ Merge-it-hot app is running on ${AppConfig.SLACK_BOT_HOST}:${AppConfig.SLACK_BOT_PORT}!`
-            );
-        }
-    );
+    slackApp.start({
+        port: AppConfig.SLACK_BOT_PORT,
+        host: AppConfig.SLACK_BOT_HOST
+    }).then(async () => {
+        await OrganizationSettingsProvider.provisionFromGithubInstallations(
+            AppConfig.SLACK_WORKSPACE_ID,
+            AppConfig.GITHUB_APP_ID,
+            AppConfig.GITHUB_APP_PRIVATE_KEY
+        );
+        console.log(
+            `⚡️ Merge-it-hot app is running on ${AppConfig.SLACK_BOT_HOST}:${AppConfig.SLACK_BOT_PORT}!`
+        );
+    });
 });

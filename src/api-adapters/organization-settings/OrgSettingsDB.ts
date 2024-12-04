@@ -1,5 +1,5 @@
 import { DataSource } from "typeorm";
-import { AppConfig } from "../app.config";
+import { AppConfig } from "../../app.config";
 import { SnakeNamingStrategy } from "typeorm-naming-strategies";
 import { OrganizationSettings } from "./entities/OrganizationSettings";
 
@@ -15,9 +15,9 @@ class OrgSettingsDataSource extends DataSource {
             entities: [OrganizationSettings],
             namingStrategy: new SnakeNamingStrategy(),
             synchronize: false,
-            migrations: ["src/org-settings-db/migrations/*.ts"],
+            migrations: ["src/api-adapters/organization-settings/migrations/*.ts"],
             migrationsRun: true,
-            ssl: false, //temporary disable for checking on staging
+            ssl: AppConfig.IS_PRODUCTION ? { rejectUnauthorized: false } : false,
             logging: !AppConfig.IS_PRODUCTION
         });
     }

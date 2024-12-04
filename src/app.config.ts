@@ -1,8 +1,6 @@
 import "dotenv/config";
-import { PullRequestEvent } from "./event-handlers/event-contracts";
 
 export const AppConfig = {
-    NODE_ENV: process.env.NODE_ENV,
     IS_PRODUCTION: process.env.NODE_ENV === "production",
     SLACK_BOT_HOST: process.env.SLACK_BOT_HOST || "0.0.0.0",
     REQUEST_BODY_SIZE_LIMIT: 1024 * 200,
@@ -20,10 +18,7 @@ export const AppConfig = {
         DB_NAME: process.env.DB_NAME
     },
 
-
     DIAGNOSTIC_CHANNEL: process.env.DIAGNOSTIC_CHANNEL,
-    DEFAULT_CHANNEL_PARTICIPANTS: process.env.DEFAULT_CHANNEL_PARTICIPANTS?.split(",").map(u => u.trim()) || [],
-
 
     GITHUB_APP_ID: +process.env.GITHUB_APP_ID,
     GITHUB_APP_PRIVATE_KEY: process.env.GITHUB_APP_PRIVATE_KEY!.replace(
@@ -31,26 +26,4 @@ export const AppConfig = {
         "\n"
     ),
     HMAC_SECRET: process.env.HMAC_SECRET as string,
-
-    /*
-     * You can implement any other logic depending on the granularity level you need
-     * */
-    getOpenedPRBroadcastChannel(payload: PullRequestEvent): string | null {
-        const projectKey = payload.pullRequest.targetBranch.projectKey;
-        let channelName = null;
-
-        if (payload.pullRequest.author.isBotUser) {
-            channelName =
-                process.env[
-                    `${projectKey.toUpperCase()}_BOT_OPENED_PRS_BROADCAST_CHANNEL`
-                    ] ?? process.env.BOT_OPENED_PRS_BROADCAST_CHANNEL;
-        }
-        if (!channelName) {
-            channelName =
-                process.env[
-                    `${projectKey.toUpperCase()}_OPENED_PRS_BROADCAST_CHANNEL`
-                    ] ?? process.env.OPENED_PRS_BROADCAST_CHANNEL;
-        }
-        return channelName ?? null;
-    }
 };

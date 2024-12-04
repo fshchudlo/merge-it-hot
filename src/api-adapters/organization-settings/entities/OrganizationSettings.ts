@@ -7,7 +7,10 @@ export class OrganizationSettings {
     slackWorkspaceId: string;
 
     @PrimaryColumn()
-    githubOrganizationId: string;
+    githubOrganizationId: number;
+
+    @PrimaryColumn()
+    githubOrganizationLogin: string;
 
     @Column("text", { array: true, default: "{}" })
     defaultChannelParticipants: string[];
