@@ -1,12 +1,12 @@
 import {
     GitHubPullRequestCommentActionType,
-    GitHubPullRequestCommentNotification,
+    GitHubPullRequestCommentNotification
 } from "../GitHub.contracts";
 import { SlackUserIdResolver } from "../SlackUserIdResolver";
 import { mapPayloadGenericPart } from "./mapPayloadGenericPart";
 import {
     PullRequestCommentActionEvent,
-    IgnoredEvent,
+    IgnoredEvent
 } from "../../event-handlers/event-contracts";
 import mapGitHubUserToSlackUser from "./mapGitHubUserToSlackUser";
 import GitHubAPI from "../../api-adapters/github-api/GitHubAPI";
@@ -14,16 +14,13 @@ import GitHubAPI from "../../api-adapters/github-api/GitHubAPI";
 export async function transformPullRequestCommentPayload(
     notification: GitHubPullRequestCommentNotification,
     userIdResolver: SlackUserIdResolver,
-    githubAPI: GitHubAPI,
+    githubAPI: GitHubAPI
 ): Promise<PullRequestCommentActionEvent | IgnoredEvent> {
     const action = notification.action;
 
-    if (
-        notification.pull_request.state != "open" &&
-        notification.sender.type === "Bot"
-    ) {
+    if (notification.pull_request.state != "open" && notification.sender.type === "Bot") {
         return {
-            eventKey: "ignored_event",
+            eventKey: "ignored_event"
         };
     }
 
@@ -31,7 +28,7 @@ export async function transformPullRequestCommentPayload(
         ...(await mapPayloadGenericPart(
             notification,
             userIdResolver,
-            githubAPI,
+            githubAPI
         )),
         eventKey: mapGitHubCommentActionToEventKey(action),
         comment: {
@@ -40,17 +37,17 @@ export async function transformPullRequestCommentPayload(
             text: notification.comment.body,
             author: await mapGitHubUserToSlackUser(
                 notification.comment.user,
-                userIdResolver,
+                userIdResolver
             ),
             resolvedAt: null,
-            link: notification.comment.html_url,
+            link: notification.comment.html_url
         },
-        previousComment: notification.changes?.body?.from,
+        previousComment: notification.changes?.body?.from
     } as PullRequestCommentActionEvent;
 }
 
 function mapGitHubCommentActionToEventKey(
-    action: GitHubPullRequestCommentActionType,
+    action: GitHubPullRequestCommentActionType
 ): string {
     switch (action) {
         case "created":

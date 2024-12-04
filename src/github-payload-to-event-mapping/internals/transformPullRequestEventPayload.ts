@@ -133,6 +133,11 @@ export async function transformPullRequestEventPayload(
                 latestCommitViewUrl: `${notification.pull_request.html_url}/commits/${notification.pull_request.head.sha}`,
             } as PullRequestFromBranchUpdatedEvent;
         case "edited":
+            if (notification.pull_request.state != "open" && notification.sender.type === "Bot") {
+                return {
+                    eventKey: "ignored_event"
+                };
+            }
             return {
                 ...(await mapPayloadGenericPart(
                     notification,

@@ -33,10 +33,14 @@ export class OrganizationSettingsProvider {
         });
     }
 
-    static async provisionFromGithubInstallations(slackWorkSpaceId: string, githubAppId: number, githubPrivateKey: string) {
+    static async provisionFromGithubInstallations(slackWorkspaceId: string, githubAppId: number, githubPrivateKey: string) {
         const installations = await getAppInstallations(githubAppId, githubPrivateKey);
         for (const installation of installations) {
-            await OrganizationSettingsProvider.fetch(slackWorkSpaceId, installation.organizationId, installation.organizationLogin);
+            await OrganizationSettingsProvider.fetch(slackWorkspaceId, installation.organizationId, installation.organizationLogin);
         }
+    }
+
+    static async getSettingsForWorkspace(slackWorkspaceId: string) {
+        return await settingsRepository.find({ where: { slackWorkspaceId } });
     }
 }
