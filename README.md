@@ -54,7 +54,7 @@ Built on top of [Slack bolt API](https://slack.dev/bolt-js/tutorial/getting-star
 
 - This project uses [TypeORM](https://typeorm.io/migrations) for database migrations. After modifying the schema, you
   can apply migrations using
-  ```npm run migration:generate ./src/org-settings-db/migrations/<MIGRATION NAME>```
+  ```npm run migration:generate ./src/api-adapters/organization-settings/migrations/<MIGRATION NAME>```
 - Migrations are automatically applied when the app starts, so no manual intervention is typically needed.
 - You can manage migrations process on your own with `npm run migration:run` and `npm run migration:revert` commands.
 

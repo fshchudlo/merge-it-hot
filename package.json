@@ -13,9 +13,9 @@
     "test:coverage": "jest --coverage",
     "test:update-snapshots": "jest --updateSnapshot",
 
-    "migration:generate": "ts-node ./node_modules/typeorm/cli.js migration:generate -d src/org-settings-db/OrgSettingsDB.ts",
-    "migration:run": "ts-node ./node_modules/typeorm/cli.js migration:run -d src/org-settings-db/OrgSettingsDB.ts",
-    "migration:revert": "ts-node ./node_modules/typeorm/cli.js migration:revert -d src/org-settings-db/OrgSettingsDB.ts",
+    "migration:generate": "ts-node ./node_modules/typeorm/cli.js migration:generate -d src/api-adapters/organization-settings/OrgSettingsDB.ts",
+    "migration:run": "ts-node ./node_modules/typeorm/cli.js migration:run -d src/api-adapters/organization-settings/OrgSettingsDB.ts",
+    "migration:revert": "ts-node ./node_modules/typeorm/cli.js migration:revert -d src/api-adapters/organization-settings/OrgSettingsDB.ts",
 
     "docker:init": "docker compose -p merge-it-hot -f assets/third-parties-compose.yml up -d",
     "docker:destroy": "docker compose -p merge-it-hot -f assets/third-parties-compose.yml down -v",

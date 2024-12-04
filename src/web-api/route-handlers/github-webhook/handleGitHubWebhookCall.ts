@@ -6,13 +6,14 @@ import handlePullRequestEvent from "../../../event-handlers/handlePullRequestEve
 import { SlackUserIdResolver } from "../../../github-payload-to-event-mapping/SlackUserIdResolver";
 import GitHubAPI from "../../../api-adapters/github-api/GitHubAPI";
 import { GitHubPullRequestEventType } from "../../../github-payload-to-event-mapping/GitHub.contracts";
+import { OrganizationSettingsProvider } from "../../../api-adapters/organization-settings/OrganizationSettingsProvider";
 
 export async function handleGitHubWebhookCall(
     req: Request,
     res: Response,
     next: NextFunction,
     slackChannelFactory: SlackChannelProvisioner,
-    slackUserIdResolver: SlackUserIdResolver,
+    slackUserIdResolver: SlackUserIdResolver
 ) {
     try {
         const eventType = req.headers["x-github-event"] as string;
@@ -20,11 +21,11 @@ export async function handleGitHubWebhookCall(
             [
                 "installation_repositories",
                 "new_permissions_accepted",
-                "installation",
+                "installation"
             ].includes(eventType)
         ) {
             console.log(
-                `${eventType} event triggered for the installation: ${req.body.installation.account.login} ${req.body.installation.account.type.toLowerCase()}`,
+                `${eventType} event triggered for the installation: ${req.body.installation.account.login} ${req.body.installation.account.type.toLowerCase()}`
             );
             res.sendStatus(200);
             return;
@@ -32,47 +33,38 @@ export async function handleGitHubWebhookCall(
 
         if (!req.body?.organization?.id) {
             throw new Error(
-                "Organization ID is missing in the request payload",
+                "Organization ID is missing in the request payload"
             );
         }
         const githubAPI = new GitHubAPI(
             AppConfig.GITHUB_APP_ID,
             AppConfig.GITHUB_APP_PRIVATE_KEY,
-            +req.body.organization.id,
+            +req.body.organization.id
         );
 
         const payload = await transformRequestPayloadToEvent(
             eventType as GitHubPullRequestEventType,
             req.body,
             slackUserIdResolver,
-            githubAPI,
+            githubAPI
         );
         if (payload.eventKey === "ignored_event") {
             res.sendStatus(200);
             return;
         }
 
-        const broadcastChannelName =
-            AppConfig.getOpenedPRBroadcastChannel(payload);
-        const broadcastChannel = broadcastChannelName
-            ? await slackChannelFactory.findBroadcastChannel(
-                  broadcastChannelName,
-                  ":github:",
-              )
-            : null;
+        const organizationSettings = await OrganizationSettingsProvider.fetch(AppConfig.SLACK_WORKSPACE_ID, req.body.organization.id, req.body.organization.login);
 
-        const targetedChannel =
-            await slackChannelFactory.provisionTargetedChannel(
-                payload,
-                ":github:",
-                AppConfig.DEFAULT_CHANNEL_PARTICIPANTS,
-            );
+        const broadcastChannelName = payload.pullRequest.author.isBotUser ? organizationSettings.openedBotPRsBroadcastChannel : organizationSettings.openedPRsBroadcastChannel;
+        const broadcastChannel = broadcastChannelName ? await slackChannelFactory.findBroadcastChannel(broadcastChannelName, ":github:") : null;
 
-        await handlePullRequestEvent(
+        const targetedChannel = await slackChannelFactory.provisionTargetedChannel(
             payload,
-            targetedChannel,
-            broadcastChannel,
+            ":github:",
+            organizationSettings.defaultChannelParticipants
         );
+
+        await handlePullRequestEvent(payload, targetedChannel, broadcastChannel);
 
         res.sendStatus(200);
     } catch (error) {
