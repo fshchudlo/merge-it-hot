@@ -13,7 +13,7 @@ Built on top of [Slack bolt API](https://slack.dev/bolt-js/tutorial/getting-star
 - Easy as ```npm run test```. Unit tests are not tied to Slack or GitHub, thus, you can run without real setup.
 - Since I'm a lazy guy, tests use snapshots. You can update them by running ```npm run test:update-snapshots```
 
-### Running app
+### Running an app
 
 - Create [your own Slack application](https://slack.dev/bolt-js/tutorial/getting-started#create-an-app)
   and [obtain required tokens](https://tools.slack.dev/bolt-js/getting-started/#tokens-and-installing-apps) to the
@@ -23,11 +23,12 @@ Built on top of [Slack bolt API](https://slack.dev/bolt-js/tutorial/getting-star
 > assign all the required oauth scopes.
 
 - Create the copy of [env.example](env.example) file, name it `.env` and provide relevant config values.
+- Run ```npm run docker:init``` to configure Postgres
 - Run ```npm run start```
 
 ### Running e2e-tests with an app
 
-- e2e tests will require real Slack and GitHub connections. Please refer to [Running app](#running-app)
+- e2e tests will require real Slack and GitHub connections. Please refer to [Running an app](#running-an-app)
   section above.
 - e2e-tests are implemented with [HTTP Client CLI](https://www.jetbrains.com/help/idea/http-client-cli.html). Thus, it
   should be installed.
