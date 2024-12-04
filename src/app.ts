@@ -14,14 +14,9 @@ import verifyHMACSignature from "./web-api/middlewares/verifyHMACSignature";
 import { SlackWebClientUserIdResolver } from "./api-adapters/slack-api/SlackWebClientUserIdResolver";
 import { getSlackChannelInfo } from "./web-api/route-handlers/slack-channel/getSlackChannelInfo";
 import { OrganizationSettingsProvider } from "./api-adapters/organization-settings/OrganizationSettingsProvider";
-import { App } from "@slack/bolt";
+import { slackApp } from "./slackApp";
 
 
-export const slackApp = new App({
-    token: AppConfig.SLACK_BOT_TOKEN,
-    appToken: AppConfig.SLACK_APP_TOKEN,
-    socketMode: true
-});
 const slackChannelFactory = new SlackChannelProvisioner(slackApp.client);
 const userIdResolver = new SlackWebClientUserIdResolver(slackApp.client);
 
