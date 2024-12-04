@@ -8,6 +8,7 @@ export const AppConfig = {
     SLACK_WORKSPACE_ID: process.env.SLACK_WORKSPACE_ID as string,
     SLACK_SIGNING_SECRET: process.env.SLACK_SIGNING_SECRET as string,
     SLACK_BOT_TOKEN: process.env.SLACK_BOT_TOKEN,
+    SLACK_APP_TOKEN: process.env.SLACK_APP_TOKEN,
     SLACK_BOT_PORT: parseInt(process.env.SLACK_BOT_PORT, 10) || 8080,
 
     OrgSettingsDB: {
