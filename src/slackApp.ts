@@ -6,7 +6,7 @@ import { OrganizationSettingsProvider } from "./api-adapters/organization-settin
 import { OrganizationSettings } from "./api-adapters/organization-settings/entities/OrganizationSettings";
 import { LogLevel } from "@slack/logger";
 import { ModalView } from "@slack/types";
-import { section } from "./slack-building-blocks";
+import { section } from "@slack-building-blocks";
 import { renderOrganizationSettingsList } from "./slack-actions/slack-bot-home-page/renderOrganizationSettingsList";
 import { ActionKeys } from "./slack-actions/actionKeys";
 

@@ -7,7 +7,7 @@ import {
     snapshotCommentState,
     markdownToSlackMarkup
 } from "../../utils";
-import { link, quote, section } from "../../../../slack-building-blocks";
+import { link, quote, section } from "@slack-building-blocks";
 
 export function buildCommentAddedMessage(
     payload: PullRequestCommentActionEvent,

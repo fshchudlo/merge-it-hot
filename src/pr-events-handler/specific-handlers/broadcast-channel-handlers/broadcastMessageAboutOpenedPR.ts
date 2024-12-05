@@ -3,7 +3,7 @@ import {
     section,
     contextBlock,
     italic,
-} from "../../../slack-building-blocks";
+} from "@slack-building-blocks";
 import { snapshotPullRequestState } from "../utils";
 import { PullRequestGenericEvent } from "../../event-contracts";
 import {

@@ -1,4 +1,4 @@
-import { link, section } from "../../../../slack-building-blocks";
+import { link, section } from "@slack-building-blocks";
 import { reviewPRAction } from "../../utils";
 import { PullRequestGenericEvent } from "../../../event-contracts";
 import { PullRequestEventHandler } from "../../PullRequestEventHandler";
