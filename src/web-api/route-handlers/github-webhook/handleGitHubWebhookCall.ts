@@ -54,6 +54,10 @@ export async function handleGitHubWebhookCall(
         }
 
         const organizationSettings = await OrganizationSettingsProvider.fetch(AppConfig.SLACK_WORKSPACE_ID, req.body.organization.id, req.body.organization.login);
+        if (organizationSettings.repositoriesToExclude.includes(payload.pullRequest.targetBranch.repositoryName)) {
+            res.sendStatus(200);
+            return;
+        }
 
         const broadcastChannelName = payload.pullRequest.author.isBotUser ? organizationSettings.openedBotPRsBroadcastChannel : organizationSettings.openedPRsBroadcastChannel;
         const broadcastChannel = broadcastChannelName ? await slackChannelFactory.findBroadcastChannel(broadcastChannelName, ":github:") : null;
