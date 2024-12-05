@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { SlackChannelProvisioner } from "../../../api-adapters/slack-api/SlackChannelProvisioner";
 import { transformRequestPayloadToEvent } from "../../../github-payload-to-event-mapping/transformRequestPayloadToEvent";
 import { AppConfig } from "../../../app.config";
-import handlePullRequestEvent from "../../../event-handlers/handlePullRequestEvent";
+import handlePullRequestEvent from "../../../pr-events-handler/handlePullRequestEvent";
 import { SlackUserIdResolver } from "../../../github-payload-to-event-mapping/SlackUserIdResolver";
 import GitHubAPI from "../../../api-adapters/github-api/GitHubAPI";
 import { GitHubPullRequestEventType } from "../../../github-payload-to-event-mapping/GitHub.contracts";

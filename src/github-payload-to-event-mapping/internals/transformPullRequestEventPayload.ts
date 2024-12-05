@@ -9,7 +9,7 @@ import {
     PullRequestModifiedEvent,
     PullRequestParticipantsUpdatedEvent,
     PullRequestEvent,
-} from "../../event-handlers/event-contracts";
+} from "../../pr-events-handler/event-contracts";
 import { transformPullRequestReviewRequestedPayload } from "./transformPullRequestReviewRequestedPayload";
 import mapGitHubUserToSlackUser from "./mapGitHubUserToSlackUser";
 

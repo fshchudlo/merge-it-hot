@@ -6,7 +6,9 @@ import { OrganizationSettingsProvider } from "./api-adapters/organization-settin
 import { OrganizationSettings } from "./api-adapters/organization-settings/entities/OrganizationSettings";
 import { LogLevel } from "@slack/logger";
 import { ModalView } from "@slack/types";
-import { section } from "./event-handlers/event-handlers/utils/slack-building-blocks";
+import { section } from "./slack-building-blocks";
+import { renderOrganizationSettingsList } from "./slack-actions/slack-bot-home-page/renderOrganizationSettingsList";
+import { ActionKeys } from "./slack-actions/actionKeys";
 
 
 export const slackApp = new App({
@@ -16,64 +18,10 @@ export const slackApp = new App({
     socketMode: true
 });
 
-slackApp.event("app_home_opened", async ({ event, client }) => {
-        if (event.tab != "home") {
-            return;
-        }
-        try {
-            const settings = await OrganizationSettingsProvider.provisionAllFromGithubInstallations(
-                AppConfig.SLACK_WORKSPACE_ID,
-                AppConfig.GITHUB_APP_ID,
-                AppConfig.GITHUB_APP_PRIVATE_KEY
-            );
-            await client.views.publish({
-                user_id: event.user,
-                view: {
-                    type: "home",
-                    blocks: [
-                        {
-                            type: "header",
-                            text: {
-                                type: "plain_text",
-                                text: `Configure your preferences for the GitHub Organizations below:`,
-                                emoji: true
-                            }
-                        },
-                        ...settings
-                            .flatMap(organizationSettings => {
-                                return [
-                                    {
-                                        type: "divider"
-                                    },
-                                    {
-                                        "type": "section",
-                                        "text": {
-                                            "type": "mrkdwn",
-                                            "text": `*${organizationSettings.githubOrganizationLogin}*`
-                                        },
-                                        "accessory": {
-                                            "type": "button",
-                                            "text": {
-                                                "type": "plain_text",
-                                                "text": "Configure",
-                                                "emoji": true
-                                            },
-                                            "value": `${organizationSettings.githubOrganizationId}`,
-                                            "action_id": "configure_organization"
-                                        }
-                                    }
-                                ];
-                            })
-                    ]
-                }
-            });
-        } catch (error) {
-            console.error(error);
-        }
-    }
-);
 
-slackApp.action("configure_organization", async ({ ack, body }: any) => {
+slackApp.event("app_home_opened", renderOrganizationSettingsList);
+
+slackApp.action(ActionKeys.OPEN_ORGANIZATION_SETTINGS_MODAL, async ({ ack, body }: any) => {
     await ack();
     const organizationSettings = await OrganizationSettingsProvider.findByKey(body.team_id, body.actions[0].value);
     await slackApp.client.views.open({

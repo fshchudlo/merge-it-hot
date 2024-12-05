@@ -7,7 +7,7 @@ import { mapPayloadGenericPart } from "./mapPayloadGenericPart";
 import {
     PullRequestReviewState,
     PullRequestReviewSubmittedEvent,
-} from "../../event-handlers/event-contracts";
+} from "../../pr-events-handler/event-contracts";
 import GitHubAPI from "../../api-adapters/github-api/GitHubAPI";
 
 export async function transformPullRequestReviewPayload(
