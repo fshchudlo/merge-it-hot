@@ -2,10 +2,10 @@ import { AppHomeOpenedEvent } from "@slack/types/dist/events/app";
 import { AllMiddlewareArgs } from "@slack/bolt";
 import { OrganizationSettingsProvider } from "../../api-adapters/organization-settings/OrganizationSettingsProvider";
 import { AppConfig } from "../../app.config";
-import { ActionKeys } from "../actionKeys";
+import { ActionKeys } from "../ActionKeys";
 import { button, divider, header, section } from "@slack-building-blocks";
 
-export async function renderOrganizationSettingsList({ event, client }: { event: AppHomeOpenedEvent } & AllMiddlewareArgs) {
+export async function renderOrganizationsList({ event, client }: { event: AppHomeOpenedEvent } & AllMiddlewareArgs) {
     if (event.tab != "home") {
         return;
     }
