@@ -12,7 +12,7 @@
     "moduleResolution": "node",
     "outDir": "./dist",
     "typeRoots": [
-      "./src/types",
+      "./types",
       "./node_modules/@types",
       "./src/pr-events-handler/event-contracts"
     ]
