@@ -6,7 +6,7 @@ import { SlackUserIdResolver } from "../SlackUserIdResolver";
 import {
     PullRequestGenericEvent,
     ParticipantPayload,
-} from "../../event-handlers/event-contracts";
+} from "../../pr-events-handler/event-contracts";
 import mapGitHubUserToSlackUser from "./mapGitHubUserToSlackUser";
 import GitHubAPI from "../../api-adapters/github-api/GitHubAPI";
 

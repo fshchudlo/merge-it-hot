@@ -7,7 +7,7 @@ import { mapPayloadGenericPart } from "./mapPayloadGenericPart";
 import {
     PullRequestCommentActionEvent,
     IgnoredEvent
-} from "../../event-handlers/event-contracts";
+} from "../../pr-events-handler/event-contracts";
 import mapGitHubUserToSlackUser from "./mapGitHubUserToSlackUser";
 import GitHubAPI from "../../api-adapters/github-api/GitHubAPI";
 

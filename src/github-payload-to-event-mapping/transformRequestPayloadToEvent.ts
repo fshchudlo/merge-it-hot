@@ -1,7 +1,7 @@
 import {
     IgnoredEvent,
     PullRequestEvent,
-} from "../event-handlers/event-contracts";
+} from "../pr-events-handler/event-contracts";
 import { SlackUserIdResolver } from "./SlackUserIdResolver";
 import GitHubAPI from "../api-adapters/github-api/GitHubAPI";
 import {

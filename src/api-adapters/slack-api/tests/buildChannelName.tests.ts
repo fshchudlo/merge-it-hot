@@ -1,5 +1,5 @@
 import { buildChannelName } from "../buildChannelName";
-import { PullRequestPayload } from "../../../event-handlers/event-contracts";
+import { PullRequestPayload } from "../../../pr-events-handler/event-contracts";
 
 describe("buildChannelName", () => {
     it("should generate the correct channel name", () => {
