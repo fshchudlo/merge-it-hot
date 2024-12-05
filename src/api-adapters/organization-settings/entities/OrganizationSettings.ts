@@ -4,13 +4,13 @@ import { Column, Entity, PrimaryColumn } from "typeorm";
 @Entity()
 export class OrganizationSettings {
     @PrimaryColumn()
-    slackWorkspaceId: string;
+    readonly slackWorkspaceId: string;
 
     @PrimaryColumn()
-    githubOrganizationId: number;
+    readonly githubOrganizationId: number;
 
     @PrimaryColumn()
-    githubOrganizationLogin: string;
+    readonly githubOrganizationLogin: string;
 
     @Column("text", { array: true, default: "{}" })
     defaultChannelParticipants: string[];

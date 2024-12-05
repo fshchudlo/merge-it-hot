@@ -13,7 +13,6 @@ import bodyParser from "body-parser";
 import verifyHMACSignature from "./web-api/middlewares/verifyHMACSignature";
 import { SlackWebClientUserIdResolver } from "./api-adapters/slack-api/SlackWebClientUserIdResolver";
 import { getSlackChannelInfo } from "./web-api/route-handlers/slack-channel/getSlackChannelInfo";
-import { OrganizationSettingsProvider } from "./api-adapters/organization-settings/OrganizationSettingsProvider";
 import { slackApp } from "./slackApp";
 
 
@@ -82,22 +81,6 @@ webApp.use(
 );
 
 OrgSettingsDB.initialize().then(() => {
-    slackApp.start({
-        port: AppConfig.SLACK_BOT_PORT,
-        host: AppConfig.SLACK_BOT_HOST
-    }).then(async () => {
-        await OrganizationSettingsProvider.provisionFromGithubInstallations(
-            AppConfig.SLACK_WORKSPACE_ID,
-            AppConfig.GITHUB_APP_ID,
-            AppConfig.GITHUB_APP_PRIVATE_KEY
-        );
-        console.log(
-            `⚡️ Merge-it-hot app is running on ${AppConfig.SLACK_BOT_HOST}:${AppConfig.SLACK_BOT_PORT}!`
-        );
-    });
-});
-
-OrgSettingsDB.initialize().then(() => {
     slackApp.start()
         .then(() => {
             console.log(`⚡️ Slack bot is running in Socket Mode!`);
@@ -109,16 +92,4 @@ OrgSettingsDB.initialize().then(() => {
     webApp.listen(AppConfig.SLACK_BOT_PORT, AppConfig.SLACK_BOT_HOST, () => {
         console.log(`🌐 Web API is running on port ${AppConfig.SLACK_BOT_PORT}`);
     });
-
-    OrganizationSettingsProvider.provisionFromGithubInstallations(
-        AppConfig.SLACK_WORKSPACE_ID,
-        AppConfig.GITHUB_APP_ID,
-        AppConfig.GITHUB_APP_PRIVATE_KEY
-    )
-        .then(() => {
-            console.log(`✅ Organization settings provisioned.`);
-        })
-        .catch((err) => {
-            console.error("Error during provisioning:", err);
-        });
 });

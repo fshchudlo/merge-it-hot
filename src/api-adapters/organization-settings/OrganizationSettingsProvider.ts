@@ -9,7 +9,7 @@ const settingsCache: ReturnType<typeof createCache> = createCache();
 
 export class OrganizationSettingsProvider {
     public static async fetch(slackWorkspaceId: string, githubOrganizationId: number, githubOrganizationLogin: string): Promise<OrganizationSettings> {
-        const cacheKey = `${slackWorkspaceId}-${githubOrganizationId}`;
+        const cacheKey = this.getCacheKey(slackWorkspaceId, githubOrganizationId);
 
         return await settingsCache.wrap(cacheKey, async () => {
             let settings = await settingsRepository.findOne({ where: { slackWorkspaceId, githubOrganizationId } });
@@ -33,14 +33,31 @@ export class OrganizationSettingsProvider {
         });
     }
 
-    static async provisionFromGithubInstallations(slackWorkspaceId: string, githubAppId: number, githubPrivateKey: string) {
+    static async provisionAllFromGithubInstallations(slackWorkspaceId: string, githubAppId: number, githubPrivateKey: string) {
         const installations = await getAppInstallations(githubAppId, githubPrivateKey);
-        for (const installation of installations) {
-            await OrganizationSettingsProvider.fetch(slackWorkspaceId, installation.organizationId, installation.organizationLogin);
-        }
+        await Promise.all(
+            installations.map(installation =>
+                OrganizationSettingsProvider.fetch(slackWorkspaceId, installation.organizationId, installation.organizationLogin)
+            )
+        );
+        return await settingsRepository.find({ where: { slackWorkspaceId }, order: { githubOrganizationLogin: "ASC" } });
     }
 
-    static async getSettingsForWorkspace(slackWorkspaceId: string) {
-        return await settingsRepository.find({ where: { slackWorkspaceId } });
+    static async findByKey(slackWorkspaceId: string, githubOrganizationId: number) {
+        return await settingsRepository.findOne({ where: { slackWorkspaceId, githubOrganizationId } });
+    }
+
+    static async update(slackWorkspaceId: string, githubOrganizationId: number, settings: Partial<OrganizationSettings>) {
+        const dbSettings = await settingsRepository.findOne({ where: { slackWorkspaceId, githubOrganizationId } });
+        dbSettings.defaultChannelParticipants = settings.defaultChannelParticipants || [];
+        dbSettings.repositoriesToExclude = settings.repositoriesToExclude || [];
+        dbSettings.openedPRsBroadcastChannel = settings.openedPRsBroadcastChannel;
+        dbSettings.openedBotPRsBroadcastChannel = settings.openedBotPRsBroadcastChannel;
+        await settingsRepository.save(dbSettings);
+        await settingsCache.del(this.getCacheKey(slackWorkspaceId, githubOrganizationId));
+    }
+
+    private static getCacheKey(slackWorkspaceId: string, githubOrganizationId: number) {
+        return `${slackWorkspaceId}-${githubOrganizationId}`;
     }
 }
