@@ -9,7 +9,7 @@ import {
     IgnoredEvent
 } from "../../pr-events-handler/event-contracts";
 import mapGitHubUserToSlackUser from "./mapGitHubUserToSlackUser";
-import GitHubAPI from "../../api-adapters/github-api/GitHubAPI";
+import { GitHubAPI } from "../GitHubAPI.port";
 
 export async function transformPullRequestCommentPayload(
     notification: GitHubPullRequestCommentNotification,

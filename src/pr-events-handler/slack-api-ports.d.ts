@@ -1,5 +1,5 @@
 import { Block, KnownBlock } from "@slack/bolt";
-import { SlackChannelInfo } from "../api-adapters/slack-api/SlackChannelProvisioner";
+
 
 export interface SlackBroadcastChannel {
     addReaction(messageId: string, reaction: string): Promise<void>;

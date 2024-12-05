@@ -4,7 +4,7 @@ import { transformRequestPayloadToEvent } from "../../../github-payload-to-event
 import { AppConfig } from "../../../app.config";
 import handlePullRequestEvent from "../../../pr-events-handler/handlePullRequestEvent";
 import { SlackUserIdResolver } from "../../../github-payload-to-event-mapping/SlackUserIdResolver";
-import GitHubAPI from "../../../api-adapters/github-api/GitHubAPI";
+import GitHubWebAPIAdapter from "../../../api-adapters/github-api/GitHubWebAPIAdapter";
 import { GitHubPullRequestEventType } from "../../../github-payload-to-event-mapping/GitHub.contracts";
 import { OrganizationSettingsProvider } from "../../../api-adapters/organization-settings/OrganizationSettingsProvider";
 
@@ -36,7 +36,7 @@ export async function handleGitHubWebhookCall(
                 "Organization ID is missing in the request payload"
             );
         }
-        const githubAPI = new GitHubAPI(
+        const githubAPI = new GitHubWebAPIAdapter(
             AppConfig.GITHUB_APP_ID,
             AppConfig.GITHUB_APP_PRIVATE_KEY,
             +req.body.organization.id

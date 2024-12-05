@@ -3,7 +3,6 @@ import {
     PullRequestEvent,
 } from "../pr-events-handler/event-contracts";
 import { SlackUserIdResolver } from "./SlackUserIdResolver";
-import GitHubAPI from "../api-adapters/github-api/GitHubAPI";
 import {
     GitHubNotification,
     GitHubPullRequestCommentNotification,
@@ -15,6 +14,7 @@ import { transformPullRequestEventPayload } from "./internals/transformPullReque
 import { transformPullRequestCommentPayload } from "./internals/transformPullRequestCommentPayload";
 import { transformPullRequestReviewThreadPayload } from "./internals/transformPullRequestReviewThreadPayload";
 import { transformPullRequestReviewPayload } from "./internals/transformPullRequestReviewPayload";
+import { GitHubAPI } from "./GitHubAPI.port";
 
 export async function transformRequestPayloadToEvent(
     eventType: GitHubPullRequestEventType,
