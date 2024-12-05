@@ -7,4 +7,5 @@ export * from "./italic";
 export * from "./link";
 export * from "./quote";
 export * from "./section";
-export * from "./textBlock";
+export * from "./mrkdwnText";
+export * from "./plainText";

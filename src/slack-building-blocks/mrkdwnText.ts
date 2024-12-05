@@ -1,10 +1,10 @@
 import { trimTextToSlackMessageLimits } from "./trimTextToSlackMessageLimits";
-import { PlainTextElement } from "@slack/types";
 import { MrkdwnElement } from "@slack/types/dist/block-kit/composition-objects";
 
-export function textBlock(text: string, type: "plain_text" | "mrkdwn" = "mrkdwn"): PlainTextElement | MrkdwnElement {
+export function mrkdwnText(text: string): MrkdwnElement {
     return {
-        type: type,
+        type: "mrkdwn",
         text: trimTextToSlackMessageLimits(text)
     };
 }
+
