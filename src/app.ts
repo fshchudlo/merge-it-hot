@@ -5,7 +5,7 @@ import { OrgSettingsDB } from "./api-adapters/organization-settings/OrgSettingsD
 import { AppConfig } from "./app.config";
 import express, { NextFunction, Request } from "express";
 import { SlackChannelProvisioner } from "./api-adapters/slack-api/SlackChannelProvisioner";
-import measureRequestDuration from "./app.metrics";
+import measureRequestDuration from "./web-api/middlewares/measureRequestDuration";
 import handleError from "./web-api/middlewares/handleError";
 import { register } from "prom-client";
 import { handleGitHubWebhookCall } from "./web-api/route-handlers/github-webhook/handleGitHubWebhookCall";
