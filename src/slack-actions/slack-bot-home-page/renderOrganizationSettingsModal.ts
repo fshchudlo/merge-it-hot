@@ -3,6 +3,8 @@ import { slackApp } from "../../slackApp";
 import { OrganizationSettings } from "../../api-adapters/organization-settings/entities/OrganizationSettings";
 import { ModalView } from "@slack/types";
 import { ActionKeys } from "../ActionKeys";
+import { plainText } from "@slack-building-blocks";
+
 
 export async function renderOrganizationSettingsModal({ ack, body }: any) {
     await ack();
@@ -18,10 +20,7 @@ function buildOrganizationSettingsModalForm(organizationSettings: OrganizationSe
     return {
         type: "modal",
         callback_id: `${ActionKeys.SAVE_ORGANIZATION_SETTINGS_PREFIX}${actionId}`,
-        title: {
-            type: "plain_text",
-            text: "Configure Organization"
-        },
+        title: plainText("Configure Organization"),
         submit: {
             type: "plain_text",
             text: "Submit",
@@ -31,17 +30,11 @@ function buildOrganizationSettingsModalForm(organizationSettings: OrganizationSe
             {
                 type: "input",
                 block_id: `defaultChannelParticipants`,
-                label: {
-                    type: "plain_text",
-                    text: "Default PR Channel Participants"
-                },
+                label: plainText("Default PR Channel Participants"),
                 element: {
                     type: "multi_users_select",
                     action_id: `defaultChannelParticipants`,
-                    placeholder: {
-                        type: "plain_text",
-                        text: "Select users"
-                    },
+                    placeholder: plainText("Select users"),
                     initial_users: organizationSettings.defaultChannelParticipants || []
                 },
                 optional: true
@@ -49,17 +42,11 @@ function buildOrganizationSettingsModalForm(organizationSettings: OrganizationSe
             {
                 type: "input",
                 block_id: `openedPRsBroadcastChannel`,
-                label: {
-                    type: "plain_text",
-                    text: "Opened PRs Broadcast Channel"
-                },
+                label: plainText("Opened PRs Broadcast Channel"),
                 element: {
                     type: "channels_select",
                     action_id: `openedPRsBroadcastChannel`,
-                    placeholder: {
-                        type: "plain_text",
-                        text: "Select a channel"
-                    },
+                    placeholder: plainText("Select a channel"),
                     initial_channel: organizationSettings.openedPRsBroadcastChannel || undefined
                 },
                 optional: true
@@ -67,17 +54,11 @@ function buildOrganizationSettingsModalForm(organizationSettings: OrganizationSe
             {
                 type: "input",
                 block_id: `openedBotPRsBroadcastChannel`,
-                label: {
-                    type: "plain_text",
-                    text: "Opened Bot PRs Broadcast Channel"
-                },
+                label: plainText("Opened Bot PRs Broadcast Channel"),
                 element: {
                     type: "channels_select",
                     action_id: `openedBotPRsBroadcastChannel`,
-                    placeholder: {
-                        type: "plain_text",
-                        text: "Select a channel"
-                    },
+                    placeholder: plainText("Select a channel"),
                     initial_channel: organizationSettings.openedBotPRsBroadcastChannel || undefined
                 },
                 optional: true
