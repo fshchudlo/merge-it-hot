@@ -1,6 +1,5 @@
 import { GitHubNotification } from "../GitHub.contracts";
 import { SlackUserIdResolver } from "../SlackUserIdResolver";
-import GitHubAPI from "../../api-adapters/github-api/GitHubAPI";
 import { mapPayloadGenericPart } from "./mapPayloadGenericPart";
 import {
     PullRequestFromBranchUpdatedEvent,
@@ -12,6 +11,7 @@ import {
 } from "../../pr-events-handler/event-contracts";
 import { transformPullRequestReviewRequestedPayload } from "./transformPullRequestReviewRequestedPayload";
 import mapGitHubUserToSlackUser from "./mapGitHubUserToSlackUser";
+import { GitHubAPI } from "../GitHubAPI.port";
 
 export async function transformPullRequestEventPayload(
     notification: GitHubNotification,

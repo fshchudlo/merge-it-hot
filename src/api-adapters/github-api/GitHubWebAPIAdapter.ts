@@ -1,5 +1,6 @@
 import axios, { AxiosRequestConfig } from "axios";
 import { fetchAccessToken } from "./GitHubCredentialsHelper";
+import { GitHubAPI } from "../../github-payload-to-event-mapping/GitHubAPI.port";
 
 type CommitResponse = {
     commit: {
@@ -7,7 +8,7 @@ type CommitResponse = {
     };
 };
 
-export default class GitHubAPI {
+export default class GitHubWebAPIAdapter implements GitHubAPI {
     private readonly baseUrl = "https://api.github.com";
 
     constructor(

@@ -8,7 +8,7 @@ import {
     PullRequestReviewState,
     PullRequestReviewSubmittedEvent,
 } from "../../pr-events-handler/event-contracts";
-import GitHubAPI from "../../api-adapters/github-api/GitHubAPI";
+import { GitHubAPI } from "../GitHubAPI.port";
 
 export async function transformPullRequestReviewPayload(
     notification: GitHubPullRequestReviewSubmittedNotification,

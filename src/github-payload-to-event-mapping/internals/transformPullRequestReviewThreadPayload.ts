@@ -3,7 +3,7 @@ import { SlackUserIdResolver } from "../SlackUserIdResolver";
 import { mapPayloadGenericPart } from "./mapPayloadGenericPart";
 import { PullRequestCommentActionEvent } from "../../pr-events-handler/event-contracts";
 import mapGitHubUserToSlackUser from "./mapGitHubUserToSlackUser";
-import GitHubAPI from "../../api-adapters/github-api/GitHubAPI";
+import { GitHubAPI } from "../GitHubAPI.port";
 
 export async function transformPullRequestReviewThreadPayload(
     notification: GitHubNotification,

@@ -5,8 +5,8 @@ import {
 import { SlackUserIdResolver } from "../SlackUserIdResolver";
 import { mapPayloadGenericPart } from "./mapPayloadGenericPart";
 import { PullRequestParticipantsUpdatedEvent } from "../../pr-events-handler/event-contracts";
-import GitHubAPI from "../../api-adapters/github-api/GitHubAPI";
 import mapGitHubUserToSlackUser from "./mapGitHubUserToSlackUser";
+import { GitHubAPI } from "../GitHubAPI.port";
 
 export async function transformPullRequestReviewRequestedPayload(
     notification: GitHubPullRequestReviewersUpdatedNotification,
