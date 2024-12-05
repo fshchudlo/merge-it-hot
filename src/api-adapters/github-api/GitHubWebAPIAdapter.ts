@@ -32,7 +32,7 @@ export default class GitHubWebAPIAdapter implements GitHubAPI {
         return this.executeRequest<T>(apiUrl);
     }
 
-    private async getFullList(url: string, params: any = undefined): Promise<any[]> {
+    private async getFullList<T>(url: string, params: any = undefined): Promise<T[]> {
         const pageSize = params?.per_page ?? 100;
         const requestParams = {
             page: params?.page ?? 1,
@@ -42,7 +42,7 @@ export default class GitHubWebAPIAdapter implements GitHubAPI {
 
         const result: any[] = [];
         while (true) {
-            const response = await this.executeRequest<any[]>(url, requestParams);
+            const response = await this.executeRequest<T[]>(url, requestParams);
 
             result.push(...response);
 
