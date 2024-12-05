@@ -16,11 +16,11 @@ export async function renderOrganizationSettingsModal({ ack, body }: any) {
 }
 
 function buildOrganizationSettingsModalForm(organizationSettings: OrganizationSettings): ModalView {
-    const actionId = organizationSettings.githubOrganizationId;
     return {
         type: "modal",
-        callback_id: `${ActionKeys.SAVE_ORGANIZATION_SETTINGS_PREFIX}${actionId}`,
+        callback_id: ActionKeys.SAVE_ORGANIZATION_SETTINGS,
         title: plainText("Configure Organization"),
+        private_metadata: organizationSettings.githubOrganizationId + "",
         submit: {
             type: "plain_text",
             text: "Submit",
@@ -60,6 +60,20 @@ function buildOrganizationSettingsModalForm(organizationSettings: OrganizationSe
                     action_id: `openedBotPRsBroadcastChannel`,
                     placeholder: plainText("Select a channel"),
                     initial_channel: organizationSettings.openedBotPRsBroadcastChannel || undefined
+                },
+                optional: true
+            },
+            {
+                type: "input",
+                block_id: "external_select_block",
+                label: plainText("Repositories to exclude from processing"),
+                element: {
+                    type: "multi_external_select",
+                    action_id: ActionKeys.GET_REPOSITORIES_TO_EXCLUDE_DROPDOWN_OPTIONS,
+                    placeholder: plainText("Type at least 3 symbols..."),
+                    min_query_length: 3,
+                    initial_options: organizationSettings.repositoriesToExclude
+                        .map(r => ({ text: plainText(r), value: r })) || []
                 },
                 optional: true
             }

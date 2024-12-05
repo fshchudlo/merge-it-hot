@@ -7,6 +7,7 @@ import { renderOrganizationsList } from "./slack-actions/slack-bot-home-page/ren
 import { ActionKeys } from "./slack-actions/ActionKeys";
 import { renderOrganizationSettingsModal } from "./slack-actions/slack-bot-home-page/renderOrganizationSettingsModal";
 import { saveOrganizationSettings } from "./slack-actions/slack-bot-home-page/saveOrganizationSettings";
+import { getOrganizationRepositoriesDropdownOptions } from "./slack-actions/slack-bot-home-page/getOrganizationRepositoriesDropdownOptions";
 
 
 export const slackApp = new App({
@@ -18,4 +19,5 @@ export const slackApp = new App({
 
 slackApp.event("app_home_opened", renderOrganizationsList);
 slackApp.action(ActionKeys.OPEN_ORGANIZATION_SETTINGS_MODAL, renderOrganizationSettingsModal);
-slackApp.view(new RegExp(`${ActionKeys.SAVE_ORGANIZATION_SETTINGS_PREFIX}\\d+`), saveOrganizationSettings);
+slackApp.view(ActionKeys.SAVE_ORGANIZATION_SETTINGS, saveOrganizationSettings);
+slackApp.options(ActionKeys.GET_REPOSITORIES_TO_EXCLUDE_DROPDOWN_OPTIONS, getOrganizationRepositoriesDropdownOptions);
