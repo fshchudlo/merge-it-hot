@@ -1,5 +1,5 @@
 import { AnyBlock } from "@slack/types";
-import { section, textBlock } from "@slack-building-blocks";
+import { plainText, section } from "@slack-building-blocks";
 import { OrganizationSettingsProvider } from "../../api-adapters/organization-settings/OrganizationSettingsProvider";
 
 export async function saveOrganizationSettings({ ack, body, view }: any) {
@@ -8,7 +8,7 @@ export async function saveOrganizationSettings({ ack, body, view }: any) {
             response_action: "update",
             view: {
                 type: "modal",
-                title: textBlock(title, "plain_text"),
+                title: plainText(title),
                 blocks: blocks
             }
         });
