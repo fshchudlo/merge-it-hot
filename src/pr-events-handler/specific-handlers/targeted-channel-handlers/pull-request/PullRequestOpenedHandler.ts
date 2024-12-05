@@ -4,7 +4,7 @@ import {
     divider,
     contextBlock,
     italic
-} from "../../../../slack-building-blocks";
+} from "@slack-building-blocks";
 import {
     markdownToSlackMarkup,
     reviewPRAction

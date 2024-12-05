@@ -4,7 +4,7 @@ import {
     link,
     quote,
     section,
-} from "../../../../slack-building-blocks";
+} from "@slack-building-blocks";
 import { markdownToSlackMarkup } from "../../utils";
 import {
     PullRequestEvent,

@@ -1,4 +1,4 @@
-import { italic, section } from "../../../../slack-building-blocks";
+import { italic, section } from "@slack-building-blocks";
 import { PullRequestGenericEvent } from "../../../event-contracts";
 import { PullRequestEventHandler } from "../../PullRequestEventHandler";
 import {

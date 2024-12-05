@@ -1,6 +1,6 @@
 import { PullRequestGenericEvent } from "../../event-contracts";
 import { SlackBroadcastChannel } from "../../slack-api-ports";
-import { link, section } from "../../../slack-building-blocks";
+import { link, section } from "@slack-building-blocks";
 import { reviewPRAction } from "../utils";
 
 export async function broadcastMessageAboutReopenedPR(

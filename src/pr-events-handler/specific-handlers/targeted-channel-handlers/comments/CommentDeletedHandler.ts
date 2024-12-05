@@ -2,7 +2,7 @@ import {
     snapshotCommentState,
     markdownToSlackMarkup
 } from "../../utils";
-import { quote, section } from "../../../../slack-building-blocks";
+import { quote, section } from "@slack-building-blocks";
 import { PullRequestCommentActionEvent } from "../../../event-contracts";
 import { PullRequestEventHandler } from "../../PullRequestEventHandler";
 import {

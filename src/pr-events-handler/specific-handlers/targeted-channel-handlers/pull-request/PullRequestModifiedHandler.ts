@@ -2,7 +2,7 @@ import {
     contextBlock,
     divider,
     section
-} from "../../../../slack-building-blocks";
+} from "@slack-building-blocks";
 import {
     markdownToSlackMarkup,
     reviewPRAction

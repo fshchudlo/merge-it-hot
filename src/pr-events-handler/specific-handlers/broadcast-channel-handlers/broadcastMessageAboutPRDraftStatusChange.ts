@@ -1,7 +1,7 @@
 import { PullRequestGenericEvent } from "../../event-contracts";
 
 import { SlackBroadcastChannel } from "../../slack-api-ports";
-import { italic, section } from "../../../slack-building-blocks";
+import { italic, section } from "@slack-building-blocks";
 
 export async function broadcastMessageAboutPRDraftStatusChange(
     payload: PullRequestGenericEvent,
