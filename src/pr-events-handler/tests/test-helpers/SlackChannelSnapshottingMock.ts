@@ -1,6 +1,5 @@
 import { SNAPSHOT_PULL_REQUEST_STATE_EVENT_TYPE } from "../../specific-handlers/utils/snapshotPullRequestState";
 import { SNAPSHOT_COMMENT_STATE_EVENT_TYPE } from "../../specific-handlers/utils";
-import { SlackChannelInfo } from "../../../api-adapters/slack-api/SlackChannelProvisioner";
 import {
     AddBookmarkArguments,
     PullRequestCommentSnapshot,
@@ -10,7 +9,7 @@ import {
     PullRequestSnapshotInSlackMetadata,
     SendMessageArguments,
     SlackBroadcastChannel,
-    SlackTargetedChannel,
+    SlackTargetedChannel, SlackChannelInfo
 } from "../../slack-api-ports";
 
 const messageId = "ABCDE";

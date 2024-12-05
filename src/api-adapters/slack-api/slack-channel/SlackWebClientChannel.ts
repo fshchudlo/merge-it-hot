@@ -1,7 +1,6 @@
 import * as slack from "@slack/web-api";
 import { SNAPSHOT_COMMENT_STATE_EVENT_TYPE } from "../../../pr-events-handler/specific-handlers/utils";
 import { SNAPSHOT_PULL_REQUEST_STATE_EVENT_TYPE } from "../../../pr-events-handler/specific-handlers/utils/snapshotPullRequestState";
-import { SlackChannelInfo } from "../SlackChannelProvisioner";
 import { CHANNELS_CACHE } from "../CHANNELS_CACHE";
 import { COMMENTS_CACHE } from "../COMMENTS_CACHE";
 import {
@@ -13,7 +12,7 @@ import {
     PullRequestSnapshotInSlackMetadata,
     SendMessageArguments,
     SlackBroadcastChannel,
-    SlackTargetedChannel,
+    SlackTargetedChannel, SlackChannelInfo
 } from "../../../pr-events-handler/slack-api-ports";
 import { MessageElement } from "@slack/web-api/dist/types/response/ConversationsHistoryResponse";
 

@@ -5,8 +5,8 @@ import { buildChannelName } from "./buildChannelName";
 import { CHANNELS_CACHE } from "./CHANNELS_CACHE";
 
 import {
-    SlackBroadcastChannel,
-    SlackTargetedChannel,
+    SlackBroadcastChannel, SlackChannelInfo,
+    SlackTargetedChannel
 } from "../../pr-events-handler/slack-api-ports";
 
 export class SlackChannelProvisioner {
@@ -195,9 +195,4 @@ export class SlackChannelProvisioner {
         return { id: result.channel, name: channelName };
     }
 }
-
-export type SlackChannelInfo = {
-    id: string;
-    name: string;
-};
 export type BotEconEmoji = ":github:";

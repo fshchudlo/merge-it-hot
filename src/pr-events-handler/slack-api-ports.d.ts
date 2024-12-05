@@ -73,3 +73,7 @@ export type InviteToChannelArguments = {
 export type KickFromChannelArguments = {
     users: string[];
 };
+export type SlackChannelInfo = {
+    id: string;
+    name: string;
+};
