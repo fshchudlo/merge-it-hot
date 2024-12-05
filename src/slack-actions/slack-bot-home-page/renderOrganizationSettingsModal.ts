@@ -3,7 +3,7 @@ import { slackApp } from "../../slackApp";
 import { OrganizationSettings } from "../../api-adapters/organization-settings/entities/OrganizationSettings";
 import { ModalView } from "@slack/types";
 import { ActionKeys } from "../ActionKeys";
-import { plainText } from "@slack-building-blocks";
+import { bold, contextBlock, plainText } from "@slack-building-blocks";
 
 
 export async function renderOrganizationSettingsModal({ ack, body }: any) {
@@ -39,6 +39,7 @@ function buildOrganizationSettingsModalForm(organizationSettings: OrganizationSe
                 },
                 optional: true
             },
+            contextBlock("Users to add to each PR channel in addition to those already assigned as reviewers."),
             {
                 type: "input",
                 block_id: `openedPRsBroadcastChannel`,
@@ -51,6 +52,7 @@ function buildOrganizationSettingsModalForm(organizationSettings: OrganizationSe
                 },
                 optional: true
             },
+            contextBlock("The channel for broadcasting messages about opened PRs, keeping your team informed about all opened PRs."),
             {
                 type: "input",
                 block_id: `openedBotPRsBroadcastChannel`,
@@ -63,6 +65,7 @@ function buildOrganizationSettingsModalForm(organizationSettings: OrganizationSe
                 },
                 optional: true
             },
+            contextBlock(`The channel for broadcasting messages about PRs opened ${bold("only by bots")}.`),
             {
                 type: "input",
                 block_id: "external_select_block",
@@ -76,7 +79,8 @@ function buildOrganizationSettingsModalForm(organizationSettings: OrganizationSe
                         .map(r => ({ text: plainText(r), value: r })) || []
                 },
                 optional: true
-            }
+            },
+            contextBlock(`Repositories from which you ${bold("do not want")} to receive PR notifications.`),
         ]
     };
 }
