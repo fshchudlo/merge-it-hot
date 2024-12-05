@@ -2,9 +2,9 @@
   "name": "merge-it-hot",
   "version": "1.0.0",
   "description": "An application for reflecting GitHub Pull Requests events to the Slack channels for PR author and all of participants.",
-  "main": "src/app.ts",
+  "main": "src/webApp.ts",
   "scripts": {
-    "start": "ts-node src/app.ts",
+    "start": "ts-node src/webApp.ts",
     "build": "tsc -p tsconfig.json",
     "lint": "eslint ./src --fix",
     "format": "prettier ./src --write",
