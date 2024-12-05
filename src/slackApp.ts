@@ -5,6 +5,8 @@ import { App } from "@slack/bolt";
 import { OrganizationSettingsProvider } from "./api-adapters/organization-settings/OrganizationSettingsProvider";
 import { OrganizationSettings } from "./api-adapters/organization-settings/entities/OrganizationSettings";
 import { LogLevel } from "@slack/logger";
+import { ModalView } from "@slack/types";
+import { section } from "./event-handlers/event-handlers/utils/slack-building-blocks";
 
 
 export const slackApp = new App({
@@ -19,7 +21,11 @@ slackApp.event("app_home_opened", async ({ event, client }) => {
             return;
         }
         try {
-            const settings = await OrganizationSettingsProvider.getSettingsForWorkspace((<any>event.view).team_id);
+            const settings = await OrganizationSettingsProvider.provisionAllFromGithubInstallations(
+                AppConfig.SLACK_WORKSPACE_ID,
+                AppConfig.GITHUB_APP_ID,
+                AppConfig.GITHUB_APP_PRIVATE_KEY
+            );
             await client.views.publish({
                 user_id: event.user,
                 view: {
@@ -33,7 +39,31 @@ slackApp.event("app_home_opened", async ({ event, client }) => {
                                 emoji: true
                             }
                         },
-                        ...settings.flatMap(setting => generateOrgSettingsControls(setting))
+                        ...settings
+                            .flatMap(organizationSettings => {
+                                return [
+                                    {
+                                        type: "divider"
+                                    },
+                                    {
+                                        "type": "section",
+                                        "text": {
+                                            "type": "mrkdwn",
+                                            "text": `*${organizationSettings.githubOrganizationLogin}*`
+                                        },
+                                        "accessory": {
+                                            "type": "button",
+                                            "text": {
+                                                "type": "plain_text",
+                                                "text": "Configure",
+                                                "emoji": true
+                                            },
+                                            "value": `${organizationSettings.githubOrganizationId}`,
+                                            "action_id": "configure_organization"
+                                        }
+                                    }
+                                ];
+                            })
                     ]
                 }
             });
@@ -43,99 +73,107 @@ slackApp.event("app_home_opened", async ({ event, client }) => {
     }
 );
 
-const generateOrgSettingsControls = (organizationSettings: OrganizationSettings) => {
-    const actionId = organizationSettings.githubOrganizationId;
-    return [
-        {
-            type: "section",
-            text: {
-                type: "mrkdwn",
-                text: `*${organizationSettings.githubOrganizationLogin}*`
-            }
-        },
-        {
-            type: "divider"
-        },
-        {
-            type: "input",
-            block_id: `defaultChannelParticipants_${actionId}`,
-            label: {
-                type: "plain_text",
-                text: "Default PR Channel Participants"
-            },
-            element: {
-                type: "multi_users_select",
-                action_id: `defaultChannelParticipants_action_${actionId}`,
-                placeholder: {
-                    type: "plain_text",
-                    text: "Select users"
-                },
-                initial_users: organizationSettings.defaultChannelParticipants || []
-            }
-        },
-        {
-            type: "input",
-            block_id: `openedPRsBroadcastChannel_${actionId}`,
-            label: {
-                type: "plain_text",
-                text: "Opened PRs Broadcast Channel"
-            },
-            element: {
-                type: "channels_select",
-                action_id: `openedPRsBroadcastChannel_action_${actionId}`,
-                placeholder: {
-                    type: "plain_text",
-                    text: "Select a channel"
-                },
-                initial_channel: organizationSettings.openedPRsBroadcastChannel || undefined
-            }
-        },
-        {
-            type: "input",
-            block_id: `openedBotPRsBroadcastChannel_${actionId}`,
-            label: {
-                type: "plain_text",
-                text: "Opened Bot PRs Broadcast Channel"
-            },
-            element: {
-                type: "channels_select",
-                action_id: `openedBotPRsBroadcastChannel_action_${actionId}`,
-                placeholder: {
-                    type: "plain_text",
-                    text: "Select a channel"
-                },
-                initial_channel: organizationSettings.openedBotPRsBroadcastChannel || undefined
-            }
-        },
-        {
-            type: "actions",
-            block_id: `save_button_${actionId}`,
-            elements: [
-                {
-                    type: "button",
-                    action_id: `save_organization_settings`,
-                    text: {
-                        type: "plain_text",
-                        text: "Save"
-                    },
-                    style: "primary",
-                    value: `${actionId}`
-                }
-            ]
-        }
-    ];
-};
-
-slackApp.action("save_organization_settings", async ({ ack, body }: any) => {
+slackApp.action("configure_organization", async ({ ack, body }: any) => {
     await ack();
-    const organizationId = body.actions[0].value;
-    const form = Object.keys(body.view.state.values)
-        .filter((k: string) => k.endsWith(organizationId))
-        .reduce((accumulator: any, blockKey: string) => {
-            Object.keys(body.view.state.values[blockKey])
-                .filter((k: string) => k.endsWith(organizationId))
-                .forEach((actionKey: string) => accumulator[actionKey.replace(`_action_${organizationId}`, "")] = body.view.state.values[blockKey][actionKey]);
+    const organizationSettings = await OrganizationSettingsProvider.findByKey(body.team_id, body.actions[0].value);
+    await slackApp.client.views.open({
+        trigger_id: body.trigger_id,
+        view: buildOrganizationSettingsModalForm(organizationSettings)
+    });
+});
+
+slackApp.view(/save_organization_settings-\d+/, async ({ ack, body, view }: any) => {
+    const respond = async (title: string, ...blocks: any[]): Promise<void> => {
+        await ack({
+            response_action: "update",
+            view: {
+                type: "modal",
+                title: { type: "plain_text", text: title },
+                blocks: blocks
+            }
+        });
+    };
+
+    const organizationId = view.callback_id.split("-")[1];
+    const updatedValues = Object.values(body.view.state.values).flatMap(block => Object.entries(block))
+        .reduce((accumulator: any, fieldEntry: any) => {
+            accumulator[fieldEntry[0]] = fieldEntry[1].selected_users || fieldEntry[1].selected_channel || null;
             return accumulator;
         }, {});
-    console.log("Action Payload:", JSON.stringify(form, null, 2));
+    await OrganizationSettingsProvider.update(body.team.id, organizationId, updatedValues);
+    await respond("Success", section(":thumbsup: Organization settings updated successfully."));
 });
+
+
+function buildOrganizationSettingsModalForm(organizationSettings: OrganizationSettings): ModalView {
+    const actionId = organizationSettings.githubOrganizationId;
+    return {
+        type: "modal",
+        callback_id: `save_organization_settings-${actionId}`,
+        title: {
+            type: "plain_text",
+            text: "Configure Organization"
+        },
+        submit: {
+            type: "plain_text",
+            text: "Submit",
+            emoji: true
+        },
+        blocks: [
+            {
+                type: "input",
+                block_id: `defaultChannelParticipants`,
+                label: {
+                    type: "plain_text",
+                    text: "Default PR Channel Participants"
+                },
+                element: {
+                    type: "multi_users_select",
+                    action_id: `defaultChannelParticipants`,
+                    placeholder: {
+                        type: "plain_text",
+                        text: "Select users"
+                    },
+                    initial_users: organizationSettings.defaultChannelParticipants || []
+                },
+                optional: true
+            },
+            {
+                type: "input",
+                block_id: `openedPRsBroadcastChannel`,
+                label: {
+                    type: "plain_text",
+                    text: "Opened PRs Broadcast Channel"
+                },
+                element: {
+                    type: "channels_select",
+                    action_id: `openedPRsBroadcastChannel`,
+                    placeholder: {
+                        type: "plain_text",
+                        text: "Select a channel"
+                    },
+                    initial_channel: organizationSettings.openedPRsBroadcastChannel || undefined
+                },
+                optional: true
+            },
+            {
+                type: "input",
+                block_id: `openedBotPRsBroadcastChannel`,
+                label: {
+                    type: "plain_text",
+                    text: "Opened Bot PRs Broadcast Channel"
+                },
+                element: {
+                    type: "channels_select",
+                    action_id: `openedBotPRsBroadcastChannel`,
+                    placeholder: {
+                        type: "plain_text",
+                        text: "Select a channel"
+                    },
+                    initial_channel: organizationSettings.openedBotPRsBroadcastChannel || undefined
+                },
+                optional: true
+            }
+        ]
+    };
+}
