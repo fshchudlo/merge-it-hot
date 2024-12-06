@@ -1,7 +1,6 @@
 # merge-it-hot
 
-Bot to keep code review participants on the same field by broadcasting pull requests events to the Slack.
-Built on top of [Slack bolt API](https://slack.dev/bolt-js/tutorial/getting-started)
+[Slack Bot](https://slack.dev/bolt-js/tutorial/getting-started) that keeps code review participants in the loop by sending pull requests notifications to the Slack.
 
 ### Configuring dev environment
 
@@ -10,21 +9,18 @@ Built on top of [Slack bolt API](https://slack.dev/bolt-js/tutorial/getting-star
 
 ### Running unit tests
 
-- Easy as ```npm run test```. Unit tests are not tied to Slack or GitHub, thus, you can run without real setup.
+- Easy as ```npm run test```. Unit tests are not tied to Slack or GitHub, thus, you can run them in isolation.
 - Since I'm a lazy guy, tests use snapshots. You can update them by running ```npm run test:update-snapshots```
 
 ### Running an app
 
-- Create [your own Slack application](https://slack.dev/bolt-js/tutorial/getting-started#create-an-app)
-  and [obtain required tokens](https://tools.slack.dev/bolt-js/getting-started/#tokens-and-installing-apps) to the
-  project env variables
-
+- Create [your own Slack application](https://slack.dev/bolt-js/tutorial/getting-started#create-an-app) and [obtain required tokens](https://tools.slack.dev/bolt-js/getting-started/#tokens-and-installing-apps) to the project env variables
 > 💡 You can use [slack_app_manifest.yml](assets/slack_app_manifest.yml) file as a basis to create an app and
 > assign all the required oauth scopes.
-
-- Create the copy of [env.example](env.example) file, name it `.env` and provide relevant config values.
 - Run ```npm run docker:init``` to configure Postgres
-- Run ```npm run start```
+- Run ```npm run start``` to start an app
+- Open [merge-it-hot-compose.yml](assets/merge-it-hot-compose.yml) `environment` section and provide relevant tokens
+- Create the copy of [env.example](env.example) file, name it `.env` and provide relevant config values.
 
 ### Running e2e-tests with an app
 
@@ -54,7 +50,7 @@ Built on top of [Slack bolt API](https://slack.dev/bolt-js/tutorial/getting-star
 
 - This project uses [TypeORM](https://typeorm.io/migrations) for database migrations. After modifying the schema, you
   can apply migrations using
-  ```npm run migration:generate ./src/api-adapters/organization-settings/migrations/<MIGRATION NAME>```
+  ```npm run migration:generate ./src/api-adapters/organization-settings-provider/migrations/<MIGRATION NAME>```
 - Migrations are automatically applied when the app starts, so no manual intervention is typically needed.
 - You can manage migrations process on your own with `npm run migration:run` and `npm run migration:revert` commands.
 

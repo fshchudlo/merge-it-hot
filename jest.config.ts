@@ -12,7 +12,7 @@ const config: Config.InitialOptions = {
         './**/*.test[s].ts',
     ],
     moduleNameMapper: {
-        '^@slack-building-blocks$': '<rootDir>/src/slack-building-blocks'
+        '^@slack-building-blocks$': '<rootDir>/src/@slack-building-blocks'
     },
 };
 
