@@ -10,7 +10,6 @@ export async function getSlackUserId(
         return null;
     }
     if (user.type === "Bot") {
-        console.warn(`The user is bot, skipping searching him in Slack`);
         return null;
     }
     const userId = await userIdResolver.getUserId(
