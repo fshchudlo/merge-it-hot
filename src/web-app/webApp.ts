@@ -80,7 +80,7 @@ webApp.use(
     }
 );
 
-OrgSettingsDB.initialize().then(() => {
+OrgSettingsDB.initialize().then(async () => {
     slackApp.start()
         .then(() => {
             console.log(`⚡️ Slack bot is running in Socket Mode!`);

@@ -12,13 +12,13 @@ export class OrganizationSettingsProvider {
         const cacheKey = this.getCacheKey(slackWorkspaceId, githubOrganizationId);
 
         return await settingsCache.wrap(cacheKey, async () => {
-            let settings = await settingsRepository.findOne({ where: { slackWorkspaceId, githubOrganizationId } });
+            const settings = await settingsRepository.findOne({ where: { slackWorkspaceId, githubOrganizationId } });
 
             if (settings) {
                 return settings;
             }
 
-            settings = settingsRepository.create({
+            return {
                 slackWorkspaceId,
                 githubOrganizationId,
                 githubOrganizationLogin,
@@ -26,18 +26,19 @@ export class OrganizationSettingsProvider {
                 openedBotPRsBroadcastChannel: null,
                 openedPRsBroadcastChannel: null,
                 repositoriesToExclude: []
-            });
-
-            await settingsRepository.save(settings);
-            return settings;
+            };
         });
     }
 
     static async provisionAllFromGithubInstallations(slackWorkspaceId: string, githubAppId: number, githubPrivateKey: string) {
         const installations = await getAppInstallations(githubAppId, githubPrivateKey);
+        // TODO: After implementing normal installation workflow we should replace this to a simple query
         await Promise.all(
-            installations.map(installation =>
-                OrganizationSettingsProvider.fetch(slackWorkspaceId, installation.organizationId, installation.organizationLogin)
+            installations.map(async installation => {
+                    const settings = await OrganizationSettingsProvider.fetch(slackWorkspaceId, installation.organizationId, installation.organizationLogin);
+                    await settingsRepository.save(settings);
+                    return settings;
+                }
             )
         );
         return await settingsRepository.find({ where: { slackWorkspaceId }, order: { githubOrganizationLogin: "ASC" } });

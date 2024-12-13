@@ -17,13 +17,7 @@ export async function handleGitHubWebhookCall(
 ) {
     try {
         const eventType = req.headers["x-github-event"] as string;
-        if (
-            [
-                "installation_repositories",
-                "new_permissions_accepted",
-                "installation"
-            ].includes(eventType)
-        ) {
+        if (["installation_repositories", "new_permissions_accepted", "installation"].includes(eventType)) {
             console.log(
                 `${eventType} event triggered for the installation: ${req.body.installation.account.login} ${req.body.installation.account.type.toLowerCase()}`
             );
@@ -32,9 +26,7 @@ export async function handleGitHubWebhookCall(
         }
 
         if (!req.body?.organization?.id) {
-            throw new Error(
-                "Organization ID is missing in the request payload"
-            );
+            throw new Error("Organization ID is missing in the request payload");
         }
         const githubAPI = new GitHubWebAPIAdapter(
             AppConfig.GITHUB_APP_ID,
