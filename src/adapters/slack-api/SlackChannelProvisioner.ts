@@ -15,52 +15,35 @@ export class SlackChannelProvisioner {
     constructor(private readonly client: slack.WebClient) {
     }
 
-    async findBroadcastChannel(
-        channelName: string,
-        iconEmoji: BotEconEmoji
-    ): Promise<SlackBroadcastChannel | null> {
-        const channelInfo = await this.findTargetedChannelInfo(channelName);
-
+    async findBroadcastChannel(channelName: string, iconEmoji: BotEconEmoji): Promise<SlackBroadcastChannel | null> {
+        const channelInfo = await this.tryFindChannel(channelName);
         return channelInfo
             ? new SlackWebClientBroadcastChannel(this.client, channelInfo, iconEmoji)
             : null;
     }
 
-    async provisionTargetedChannel(
-        payload: PullRequestEvent,
-        iconEmoji: BotEconEmoji,
-        defaultChannelParticipants: string[]
-    ): Promise<SlackTargetedChannel> {
+    async provisionTargetedChannel(payload: PullRequestEvent, iconEmoji: BotEconEmoji, defaultChannelParticipants: string[]): Promise<SlackTargetedChannel> {
         const channelName = buildChannelName(payload.pullRequest);
-        const channelInfo = await CHANNELS_CACHE.wrap(channelName, () =>
-            this.setupChannel(
-                channelName,
-                payload,
-                iconEmoji,
-                defaultChannelParticipants
-            )
+        const channelInfo = await CHANNELS_CACHE.wrap(channelName, async () => {
+                return this.setupChannel(channelName, payload, iconEmoji, defaultChannelParticipants);
+            }
         );
 
         return new SlackWebClientTargetedChannel(this.client, channelInfo, iconEmoji);
     }
 
-    async findTargetedChannelInfo(
-        channelName: string
-    ): Promise<SlackChannelInfo | null> {
+    async tryFindChannel(channelName: string): Promise<SlackChannelInfo | null> {
         const cachedChannelInfo = await CHANNELS_CACHE.get(channelName);
         if (cachedChannelInfo) {
             return cachedChannelInfo;
         }
 
         try {
-            return this.findExistingChannel(channelName);
+            return await this.findExistingChannel(channelName);
         } catch (error: any) {
-            if (
-                ["is_archived", "channel_not_found"].includes(error.data?.error)
-            ) {
+            if (["is_archived", "channel_not_found"].includes(error.data?.error)) {
                 return null;
             }
-
             throw error;
         }
     }
@@ -90,11 +73,7 @@ export class SlackChannelProvisioner {
 
         const createChannelWithFallbacks = async () => {
             try {
-                return await this.createNewChannel(
-                    channelName,
-                    allParticipantsToInvite,
-                    iconEmoji
-                );
+                return await this.createNewChannel(channelName, allParticipantsToInvite, iconEmoji);
             } catch (error: any) {
                 if (error.data?.error !== "name_taken") {
                     throw error;
@@ -103,7 +82,7 @@ export class SlackChannelProvisioner {
                     return await this.findExistingChannel(channelName);
                 } catch (innerError: any) {
                     if (innerError.data?.error === "is_archived") {
-                        return await this.unarchiveChannel(channelName);
+                        return await this.tryUnarchiveChannel(channelName);
                     }
                     throw innerError;
                 }
@@ -115,7 +94,7 @@ export class SlackChannelProvisioner {
         }
 
         if (payload.eventKey === "pr:reopened") {
-            const channel = await this.unarchiveChannel(channelName);
+            const channel = await this.tryUnarchiveChannel(channelName);
             return channel || createChannelWithFallbacks();
         }
 
@@ -127,15 +106,13 @@ export class SlackChannelProvisioner {
                 return await createChannelWithFallbacks();
             }
             if (error.data?.error === "is_archived") {
-                return await this.unarchiveChannel(channelName);
+                return await this.tryUnarchiveChannel(channelName);
             }
             throw error;
         }
     }
 
-    private async unarchiveChannel(
-        channelName: string
-    ): Promise<SlackChannelInfo | null> {
+    private async tryUnarchiveChannel(channelName: string): Promise<SlackChannelInfo | null> {
         let cursor: string;
         do {
             // noinspection JSUnusedAssignment
@@ -162,30 +139,19 @@ export class SlackChannelProvisioner {
         return null;
     }
 
-    private async createNewChannel(
-        channelName: string,
-        participants: string[],
-        iconEmoji: BotEconEmoji
-    ): Promise<SlackChannelInfo> {
+    private async createNewChannel(channelName: string, participants: string[], iconEmoji: BotEconEmoji): Promise<SlackChannelInfo> {
         const response = await this.client.conversations.create({
             name: channelName,
             is_private: true
         });
-        const channel = new SlackWebClientTargetedChannel(
-            this.client,
-            { id: response.channel.id, name: response.channel.name },
-            iconEmoji
-        );
-        await channel.inviteToChannel({ users: participants, force: true });
-        return { id: response.channel.id, name: response.channel.name };
+        const channelInfo = { id: response.channel.id, name: response.channel.name };
+        await new SlackWebClientTargetedChannel(this.client, channelInfo, iconEmoji)
+            .inviteToChannel({ users: participants, force: true });
+        return channelInfo;
     }
 
-    private async findExistingChannel(
-        channelName: string
-    ): Promise<SlackChannelInfo | null> {
-        const futureDate = Math.floor(
-            (Date.now() + 24 * 60 * 60 * 1000) / 1000
-        ); // 24 hours later
+    private async findExistingChannel(channelName: string): Promise<SlackChannelInfo | null> {
+        const futureDate = Math.floor((Date.now() + 24 * 60 * 60 * 1000) / 1000); // 24 hours later
         const result = await this.client.chat.scheduleMessage({
             channel: channelName,
             post_at: futureDate,

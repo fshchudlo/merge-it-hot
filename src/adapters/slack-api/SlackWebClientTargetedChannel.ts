@@ -59,14 +59,14 @@ export class SlackWebClientTargetedChannel implements SlackTargetedChannel {
                 force: true
             });
         } catch (error: any) {
-            if (
-                !(error.data.errors || [error.data.error]).every(
-                    (innerError: any) =>
-                        innerError.error === "already_in_channel"
-                )
-            ) {
-                throw error;
+            const errorsToIgnore = ["user_not_found", "already_in_channel"];
+            if (errorsToIgnore.includes(error.data?.error)) {
+                return;
             }
+            if (error.data.errors.all((e: any) => errorsToIgnore.includes(e.error))) {
+                return;
+            }
+            throw error;
         }
     }
 

@@ -17,7 +17,7 @@ export async function getSlackUserId(
     );
     if (!userId) {
         console.warn(
-            `Could not find Slack user ${user.login} by email. Returning login instead of Slack User Id`
+            `Could not find Slack user "${user.login}" by email. Returning login instead of Slack User Id`
         );
         return getUserNameFromGitHubLogin(user.login);
     }

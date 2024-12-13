@@ -25,8 +25,7 @@ export async function getSlackChannelInfo(
             projectKey: <string>projectKey,
         });
 
-        const channelInfo =
-            await slackChannelFactory.findTargetedChannelInfo(channelName);
+        const channelInfo = await slackChannelFactory.tryFindChannel(channelName);
 
         channelInfo ? res.send(channelInfo) : res.sendStatus(404);
     } catch (error) {
