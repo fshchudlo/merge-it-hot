@@ -62,12 +62,11 @@ export class SlackChannelProvisioner {
     ): Promise<SlackChannelInfo> {
         const allParticipantsToInvite = [
             ...new Set(
-                [
-                    payload.pullRequest.author,
-                    ...payload.pullRequest.participants.map(r => r.user)
-                ]
-                    .map(u => u.slackUserId)
-                    .concat(defaultChannelParticipants)
+                defaultChannelParticipants.concat([
+                        payload.pullRequest.author,
+                        ...payload.pullRequest.participants.map(r => r.user)
+                    ].map(u => u.slackUserId)
+                )
             )
         ];
 
@@ -146,7 +145,7 @@ export class SlackChannelProvisioner {
         });
         const channelInfo = { id: response.channel.id, name: response.channel.name };
         await new SlackWebClientTargetedChannel(this.client, channelInfo, iconEmoji)
-            .inviteToChannel({ users: participants, force: true });
+            .inviteToChannel(...participants);
         return channelInfo;
     }
 

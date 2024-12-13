@@ -4,8 +4,6 @@ import {
     AddBookmarkArguments,
     PullRequestCommentSnapshot,
     PullrequestCommentSnapshotInSlackMetadata,
-    InviteToChannelArguments,
-    KickFromChannelArguments,
     SlackChannelInfo
 } from "../../ports/SlackTargetedChannel";
 import { SlackBroadcastChannel, PullRequestSnapshotInSlackMetadata } from "../../ports/SlackBroadcastChannel";
@@ -21,8 +19,8 @@ export default class SlackChannelSnapshottingMock
         addedBookmarks: AddBookmarkArguments[];
         topicUpdates: string[];
         closeChannelCalls: string[];
-        invitesToChannels: InviteToChannelArguments[];
-        kicksFromChannels: KickFromChannelArguments[];
+        invitesToChannels: string[][];
+        kicksFromChannels: string[][];
         searchedCommentSnapshots: any[];
         searchedPrOpenedBroadcastMessages: any[];
         sentMessages: SendMessageArguments[];
@@ -59,13 +57,13 @@ export default class SlackChannelSnapshottingMock
         return Promise.resolve();
     }
 
-    inviteToChannel(options: InviteToChannelArguments): Promise<void> {
-        this.snapshot.invitesToChannels.push(options);
+    inviteToChannel(...userIds: string[]): Promise<void> {
+        this.snapshot.invitesToChannels.push(userIds);
         return Promise.resolve();
     }
 
-    kickFromChannel(options: KickFromChannelArguments): Promise<void> {
-        this.snapshot.kicksFromChannels.push(options);
+    kickFromChannel(...userIds: string[]): Promise<void> {
+        this.snapshot.kicksFromChannels.push(userIds);
         return Promise.resolve();
     }
 

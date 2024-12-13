@@ -6,8 +6,6 @@ import {
     AddBookmarkArguments,
     PullRequestCommentSnapshot,
     PullrequestCommentSnapshotInSlackMetadata,
-    InviteToChannelArguments,
-    KickFromChannelArguments,
     SlackChannelInfo
 } from "../../core/ports/SlackTargetedChannel";
 import { SlackTargetedChannel } from "../../core/ports/SlackTargetedChannel";
@@ -48,14 +46,14 @@ export class SlackWebClientTargetedChannel implements SlackTargetedChannel {
         });
     }
 
-    async inviteToChannel(options: InviteToChannelArguments): Promise<void> {
-        if ((options.users || []).length === 0) {
+    async inviteToChannel(...userIds: string[]): Promise<void> {
+        if ((userIds || []).length === 0) {
             return;
         }
         try {
             await this.client.conversations.invite({
                 channel: this.channelInfo.id,
-                users: options.users.join(","),
+                users: userIds.join(","),
                 force: true
             });
         } catch (error: any) {
@@ -63,16 +61,16 @@ export class SlackWebClientTargetedChannel implements SlackTargetedChannel {
             if (errorsToIgnore.includes(error.data?.error)) {
                 return;
             }
-            if (error.data.errors.all((e: any) => errorsToIgnore.includes(e.error))) {
+            if (error.data.errors.every((e: any) => errorsToIgnore.includes(e.error))) {
                 return;
             }
             throw error;
         }
     }
 
-    async kickFromChannel(options: KickFromChannelArguments): Promise<void> {
+    async kickFromChannel(...userIds: string[]): Promise<void> {
         await Promise.all(
-            options.users.map(async userId => {
+            userIds.map(async userId => {
                 try {
                     await this.client.conversations.kick({
                         channel: this.channelInfo.id,

@@ -7,9 +7,9 @@ export interface SlackTargetedChannel {
 
     setTopic(topic: string): Promise<void>;
 
-    inviteToChannel(options: InviteToChannelArguments): Promise<void>;
+    inviteToChannel(...userIds: string[]): Promise<void>;
 
-    kickFromChannel(options: KickFromChannelArguments): Promise<void>;
+    kickFromChannel(...userIds: string[]): Promise<void>;
 
     closeChannel(): Promise<void>;
 
@@ -41,11 +41,4 @@ export type AddBookmarkArguments = {
     link: string;
     title: string;
     emoji?: string;
-};
-export type InviteToChannelArguments = {
-    force: boolean;
-    users: string[];
-};
-export type KickFromChannelArguments = {
-    users: string[];
 };

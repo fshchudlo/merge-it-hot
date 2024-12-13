@@ -7,19 +7,14 @@ exports[`Participants updated use-case Should add and remove users from channel 
   "closeChannelCalls": [],
   "deleteMessageCalls": [],
   "invitesToChannels": [
-    {
-      "force": true,
-      "users": [
-        "333333",
-      ],
-    },
+    [
+      "333333",
+    ],
   ],
   "kicksFromChannels": [
-    {
-      "users": [
-        "111111",
-      ],
-    },
+    [
+      "111111",
+    ],
   ],
   "searchedCommentSnapshots": [],
   "searchedPrOpenedBroadcastMessages": [],
@@ -35,12 +30,9 @@ exports[`Participants updated use-case Should not delete removed reviewer if he 
   "closeChannelCalls": [],
   "deleteMessageCalls": [],
   "invitesToChannels": [
-    {
-      "force": true,
-      "users": [
-        "333333",
-      ],
-    },
+    [
+      "333333",
+    ],
   ],
   "kicksFromChannels": [],
   "searchedCommentSnapshots": [],
