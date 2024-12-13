@@ -15,7 +15,7 @@ class OrgSettingsDataSource extends DataSource {
             entities: [OrganizationSettings],
             namingStrategy: new SnakeNamingStrategy(),
             synchronize: false,
-            migrations: ["src/api-adapters/organization-settings-provider/migrations/*.ts"],
+            migrations: ["src/adapters/organization-settings-provider/migrations/*.ts"],
             migrationsRun: true,
             ssl: AppConfig.IS_PRODUCTION ? { rejectUnauthorized: false } : false,
             logging: !AppConfig.IS_PRODUCTION
