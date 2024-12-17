@@ -22,7 +22,9 @@ export type GitHubPullRequestBasicNotification =
         | "locked"
         | "unlocked"
         | "milestoned"
-        | "demilestoned";
+        | "demilestoned"
+        | "enqueued"
+        | "dequeued";
 };
 
 export type GitHubPullRequestReviewersUpdatedNotification =

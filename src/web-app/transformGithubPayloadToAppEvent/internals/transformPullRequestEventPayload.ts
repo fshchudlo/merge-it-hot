@@ -28,6 +28,8 @@ export async function transformPullRequestEventPayload(
         case "unlocked":
         case "milestoned":
         case "demilestoned":
+        case "dequeued":
+        case "enqueued":
             return {
                 eventKey: "ignored_event",
             };
