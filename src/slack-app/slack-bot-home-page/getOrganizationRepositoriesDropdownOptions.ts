@@ -1,8 +1,8 @@
 import { SlackOptionsMiddlewareArgs } from "@slack/bolt";
-import GitHubWebAPIAdapter from "../../adapters/github-api/GitHubWebAPIAdapter";
-import { AppConfig } from "../../app.config";
 import { OrganizationSettingsProvider } from "../../adapters/organization-settings-provider/OrganizationSettingsProvider";
 import { PlainTextOption } from "@slack/types";
+import { GithubRepositoriesCache } from "./internals/GithubRepositoriesCache";
+import createOrganizationGitHubAPI from "./internals/createOrganizationGitHubAPI";
 
 export async function getOrganizationRepositoriesDropdownOptions({ options, ack, body }: SlackOptionsMiddlewareArgs<"block_suggestion">) {
     try {
@@ -12,13 +12,9 @@ export async function getOrganizationRepositoriesDropdownOptions({ options, ack,
 
         const organization = await OrganizationSettingsProvider.findByKey(workspaceId, organizationId);
 
-        const githubAPI = new GitHubWebAPIAdapter(
-            AppConfig.GITHUB_APP_ID,
-            AppConfig.GITHUB_APP_PRIVATE_KEY,
-            organizationId
-        );
+        const allRepositories = await GithubRepositoriesCache.fetchOrganizationRepositories(organization.githubOrganizationLogin, createOrganizationGitHubAPI(organizationId));
 
-        const repositories = (await githubAPI.getRepositories(organization.githubOrganizationLogin))
+        const repositories = allRepositories
             .filter(repo => repo.name.toLowerCase().includes(userInput.toLowerCase()))
             .map(repo => ({
                 text: {

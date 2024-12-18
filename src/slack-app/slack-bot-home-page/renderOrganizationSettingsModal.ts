@@ -4,11 +4,23 @@ import { OrganizationSettings } from "../../adapters/organization-settings-provi
 import { ModalView } from "@slack/types";
 import { SlackActionKeys } from "../SlackActionKeys";
 import { bold, contextBlock, plainText } from "@slack-building-blocks";
+import { GithubRepositoriesCache } from "./internals/GithubRepositoriesCache";
+import createOrganizationGitHubAPI from "./internals/createOrganizationGitHubAPI";
 
 
 export async function renderOrganizationSettingsModal({ ack, body }: any) {
     await ack();
     const organizationSettings = await OrganizationSettingsProvider.findByKey(body.team_id, body.actions[0].value);
+
+    /*Precache values as this request can be time-consuming for large organizations.
+    The Slack API has low tolerance for prolonged operations, so caching helps prevent timeouts.
+     */
+    GithubRepositoriesCache.fetchOrganizationRepositories(
+        organizationSettings.githubOrganizationLogin,
+        createOrganizationGitHubAPI(organizationSettings.githubOrganizationId)
+    ).then(() => {
+    });
+
     await slackApp.client.views.open({
         trigger_id: body.trigger_id,
         view: buildOrganizationSettingsModalForm(organizationSettings)
@@ -80,7 +92,7 @@ function buildOrganizationSettingsModalForm(organizationSettings: OrganizationSe
                 },
                 optional: true
             },
-            contextBlock(`Repositories from which you ${bold("do not want")} to receive PR notifications.`),
+            contextBlock(`Repositories from which you ${bold("do not want")} to receive PR notifications.`)
         ]
     };
 }
