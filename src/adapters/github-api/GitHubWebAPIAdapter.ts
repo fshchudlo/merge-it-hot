@@ -1,6 +1,7 @@
 import axios, { AxiosRequestConfig } from "axios";
 import { fetchAccessToken } from "./internals/GitHubCredentialsHelper";
 import { GitHubAPI } from "../../web-app/transformGithubPayloadToAppEvent/ports/GitHubAPI";
+import { GitHubRepositoriesAPI } from "../../slack-app/slack-bot-home-page/ports/GitHubRepositoriesAPI";
 
 type CommitResponse = {
     commit: {
@@ -8,7 +9,7 @@ type CommitResponse = {
     };
 };
 
-export default class GitHubWebAPIAdapter implements GitHubAPI {
+export default class GitHubWebAPIAdapter implements GitHubAPI, GitHubRepositoriesAPI {
     private readonly baseUrl = "https://api.github.com";
 
     constructor(
