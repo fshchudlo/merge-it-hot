@@ -57,12 +57,12 @@ webApp.get("/metrics", async (req, res) => {
 });
 webApp.get(
     "/slack-channel",
-    async (req, res, next: NextFunction) => {
+    async (req, res, next: NextFunction): Promise<any> => {
         return await getSlackChannelInfo(req, res, next, slackChannelFactory);
     }
 );
 
-webApp.get("/health", async (req, res) => {
+webApp.get("/health", async (req, res): Promise<any> => {
     return res.status(200).json({
         status: "UP",
         timestamp: new Date().toISOString()
