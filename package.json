@@ -30,6 +30,7 @@
   "license": "Apache 2.0",
   "dependencies": {
     "@slack/bolt": "^4.2.0",
+    "@types/express": "^5.0.0",
     "axios": "^1.7.9",
     "cache-manager": "^6.3.2",
     "dotenv": "^16.4.7",
