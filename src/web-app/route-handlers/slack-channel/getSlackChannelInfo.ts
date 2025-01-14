@@ -11,7 +11,7 @@ export async function getSlackChannelInfo(
     const { pullRequestId, repositorySlug, projectKey } = req.query;
 
     if (!pullRequestId || !repositorySlug || !projectKey) {
-        return res
+        res
             .status(400)
             .send(
                 'Please, specify valid "pullRequestId", "repositorySlug" and "projectKey" as query parameters.',
