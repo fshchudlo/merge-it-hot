@@ -61,7 +61,7 @@ export class SlackWebClientTargetedChannel implements SlackTargetedChannel {
             if (errorsToIgnore.includes(error.data?.error)) {
                 return;
             }
-            if (error.data.errors.every((e: any) => errorsToIgnore.includes(e.error))) {
+            if (error.data?.errors?.every((e: any) => errorsToIgnore.includes(e.error))) {
                 return;
             }
             throw error;
