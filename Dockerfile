@@ -2,9 +2,10 @@ FROM node:lts-alpine
 
 RUN adduser -S appuser
 
-USER appuser
-
 WORKDIR /app
+RUN chown appuser /app
+
+USER appuser
 
 COPY package*.json ./
 RUN npm ci

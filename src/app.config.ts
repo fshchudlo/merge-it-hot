@@ -3,7 +3,7 @@ import "dotenv/config";
 export const AppConfig = {
     IS_PRODUCTION: process.env.NODE_ENV === "production",
     SLACK_BOT_HOST: process.env.SLACK_BOT_HOST || "0.0.0.0",
-    REQUEST_BODY_SIZE_LIMIT: 1024 * 200,
+    REQUEST_BODY_SIZE_LIMIT: 1024 * 400,
 
     SLACK_WORKSPACE_ID: process.env.SLACK_WORKSPACE_ID as string,
     SLACK_SIGNING_SECRET: process.env.SLACK_SIGNING_SECRET as string,
