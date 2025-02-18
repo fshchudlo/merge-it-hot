@@ -1,5 +1,5 @@
 import SlackChannelSnapshottingMock from "./test-helpers/SlackChannelSnapshottingMock";
-import TestPayloadBuilder from "./test-helpers/TestPayloadBuilder";
+import TestPayloadBuilder, { nonReviewerUser, reviewer1User } from "./test-helpers/TestPayloadBuilder";
 import handlePullRequestEvent from "../handlePullRequestEvent";
 
 describe("PR review submitted use-case", () => {
@@ -28,5 +28,23 @@ describe("PR review submitted use-case", () => {
         );
 
         expect(channelMock.snapshot).toMatchSnapshot();
+    });
+
+    it("Should invite the reviewer to the channel if they are not participate yet", async () => {
+        const channelMock = new SlackChannelSnapshottingMock();
+
+        await handlePullRequestEvent(
+            TestPayloadBuilder.pullRequestNeedsWork(reviewer1User),
+            channelMock,
+        );
+
+        expect(channelMock.snapshot.invitesToChannels).toEqual([]);
+
+        await handlePullRequestEvent(
+            TestPayloadBuilder.pullRequestNeedsWork(nonReviewerUser),
+            channelMock,
+        );
+
+        expect(channelMock.snapshot.invitesToChannels).toEqual([[nonReviewerUser.slackUserId]]);
     });
 });
