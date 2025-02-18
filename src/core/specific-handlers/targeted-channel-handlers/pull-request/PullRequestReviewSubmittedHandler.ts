@@ -14,6 +14,7 @@ import {
 import { PullRequestEventHandler } from "../../PullRequestEventHandler";
 import { SlackTargetedChannel } from "../../../ports/SlackTargetedChannel";
 import { SendMessageArguments } from "../../../ports/SendMessageArguments";
+import isPullRequestParticipant from "../../internals/isPullRequestParticipant";
 
 export class PullRequestReviewSubmittedHandler
     implements PullRequestEventHandler
@@ -27,6 +28,9 @@ export class PullRequestReviewSubmittedHandler
         slackChannel: SlackTargetedChannel,
     ) {
         await slackChannel.sendMessage(buildSlackMessage(payload));
+        if(false === isPullRequestParticipant(payload, payload.actor)) {
+            await slackChannel.inviteToChannel(payload.actor.slackUserId);
+        }
     }
 }
 

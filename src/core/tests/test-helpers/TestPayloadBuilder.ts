@@ -6,25 +6,30 @@ import {
     PullRequestParticipantsUpdatedEvent,
 } from "../../event-contracts";
 
-const authorUser = {
+export const authorUser = {
     name: "Test Author",
     isBotUser: false,
     slackUserId: "000000",
 };
-const reviewer1User = {
+export const reviewer1User = {
     name: "Test Reviewer 1",
     isBotUser: false,
     slackUserId: "111111",
 };
-const reviewer2User = {
+export const reviewer2User = {
     name: "Test Reviewer 2",
     isBotUser: false,
     slackUserId: "222222",
 };
-const reviewer3User = {
+export const reviewer3User = {
     name: "Test Reviewer 3",
     isBotUser: false,
     slackUserId: "333333",
+};
+export const nonReviewerUser = {
+    name: "Non Reviewer User",
+    isBotUser: false,
+    slackUserId: "444444",
 };
 
 function getBasicPayload(): PullRequestGenericEvent {
@@ -153,7 +158,7 @@ export default class TestPayloadBuilder {
         };
     }
 
-    static pullRequestCommentAdded(): PullRequestCommentActionEvent {
+    static pullRequestCommentAdded(user = reviewer1User): PullRequestCommentActionEvent {
         const payload = getBasicPayload();
         return {
             ...getBasicPayload(),
@@ -162,7 +167,7 @@ export default class TestPayloadBuilder {
             comment: {
                 id: 1,
                 text: "Test comment",
-                author: { ...reviewer1User },
+                author: { ...user },
                 link: `${payload.pullRequest.links.self}?commentId=1`,
             },
         };
@@ -244,7 +249,7 @@ export default class TestPayloadBuilder {
         };
     }
 
-    static pullRequestNeedsWork(): PullRequestEvent {
+    static pullRequestNeedsWork(user = reviewer1User): PullRequestEvent {
         const payload = getBasicPayload();
 
         payload.pullRequest.participants[0] = {
@@ -255,7 +260,7 @@ export default class TestPayloadBuilder {
         return {
             ...payload,
             eventKey: "pr:review:submitted",
-            actor: { ...reviewer1User },
+            actor: { ...user },
             review: {
                 state: "CHANGES_REQUESTED",
                 comment: null,
@@ -339,10 +344,13 @@ export default class TestPayloadBuilder {
         };
     }
 
-    static pullRequestFromRefUpdated(): PullRequestEvent {
+    static pullRequestFromRefUpdated(user = authorUser): PullRequestEvent {
         const basicPayload = getBasicPayload();
         return {
             ...basicPayload,
+            ...{
+                actor: user
+            },
             ...{
                 fromRef: {
                     latestCommit: "from-ref-updated-hash",

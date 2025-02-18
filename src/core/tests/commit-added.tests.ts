@@ -1,5 +1,5 @@
 import SlackChannelSnapshottingMock from "./test-helpers/SlackChannelSnapshottingMock";
-import TestPayloadBuilder from "./test-helpers/TestPayloadBuilder";
+import TestPayloadBuilder, { authorUser, nonReviewerUser } from "./test-helpers/TestPayloadBuilder";
 import handlePullRequestEvent from "../handlePullRequestEvent";
 
 describe("Commit added use-case", () => {
@@ -12,5 +12,22 @@ describe("Commit added use-case", () => {
         );
 
         expect(channelMock.snapshot).toMatchSnapshot();
+    });
+    it("Should invite the committer to the channel if they are not participate yet", async () => {
+        const channelMock = new SlackChannelSnapshottingMock();
+
+        await handlePullRequestEvent(
+            TestPayloadBuilder.pullRequestFromRefUpdated(authorUser),
+            channelMock,
+        );
+
+        expect(channelMock.snapshot.invitesToChannels).toEqual([]);
+
+        await handlePullRequestEvent(
+            TestPayloadBuilder.pullRequestFromRefUpdated(nonReviewerUser),
+            channelMock,
+        );
+
+        expect(channelMock.snapshot.invitesToChannels).toEqual([[nonReviewerUser.slackUserId]]);
     });
 });
