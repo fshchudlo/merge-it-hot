@@ -2,7 +2,7 @@ import { PullRequestCommentActionEvent } from "../../../event-contracts";
 import { PullRequestEventHandler } from "../../PullRequestEventHandler";
 import { buildCommentAddedMessage } from "./buildCommentAddedMessage";
 import { SlackTargetedChannel } from "../../../ports/SlackTargetedChannel";
-import isPullRequestParticipant from "../../internals/isPullRequestParticipant";
+import shouldBeAddedAsParticipant from "../../internals/shouldBeAddedAsParticipant";
 
 export class CommentAddedHandler implements PullRequestEventHandler {
     canHandle(payload: PullRequestCommentActionEvent) {
@@ -24,7 +24,7 @@ export class CommentAddedHandler implements PullRequestEventHandler {
         );
         await slackChannel.sendMessage(message);
 
-        if(false === isPullRequestParticipant(payload, payload.comment.author)) {
+        if(shouldBeAddedAsParticipant(payload, payload.comment.author)) {
             await slackChannel.inviteToChannel(payload.comment.author.slackUserId);
         }
     }
