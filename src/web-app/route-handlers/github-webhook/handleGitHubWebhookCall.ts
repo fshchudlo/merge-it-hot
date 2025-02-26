@@ -1,11 +1,11 @@
 import { NextFunction, Request, Response } from "express";
 import { SlackChannelProvisioner } from "../../../adapters/slack-api/SlackChannelProvisioner";
-import { transformGithubPayloadToAppEvent } from "../../transformGithubPayloadToAppEvent/transformGithubPayloadToAppEvent";
+import { transformGithubPayloadToAppEvent } from "./transformGithubPayloadToAppEvent/transformGithubPayloadToAppEvent";
 import { AppConfig } from "../../../app.config";
-import handlePullRequestEvent from "../../../core/handlePullRequestEvent";
-import { SlackUserIdResolver } from "../../transformGithubPayloadToAppEvent/ports/SlackUserIdResolver";
+import handlePullRequestEvent from "../../notification-handlers/handlePullRequestEvent";
+import { SlackUserIdResolver } from "./transformGithubPayloadToAppEvent/ports/SlackUserIdResolver";
 import GitHubWebAPIAdapter from "../../../adapters/github-api/GitHubWebAPIAdapter";
-import { GitHubPullRequestEventType } from "../../transformGithubPayloadToAppEvent/GitHubAPI.contracts";
+import { GitHubPullRequestEventType } from "./transformGithubPayloadToAppEvent/GitHubAPI.contracts";
 import { OrganizationSettingsProvider } from "../../../adapters/organization-settings-provider/OrganizationSettingsProvider";
 
 export async function handleGitHubWebhookCall(
@@ -26,32 +26,30 @@ export async function handleGitHubWebhookCall(
         }
 
         if (!req.body?.organization?.id) {
+            // noinspection ExceptionCaughtLocallyJS
             throw new Error("Organization ID is missing in the request payload");
         }
-        const githubAPI = new GitHubWebAPIAdapter(
-            AppConfig.GITHUB_APP_ID,
-            AppConfig.GITHUB_APP_PRIVATE_KEY,
-            +req.body.organization.id
-        );
+        const githubAPI = new GitHubWebAPIAdapter(AppConfig.GITHUB_APP_ID, AppConfig.GITHUB_APP_PRIVATE_KEY, +req.body.organization.id);
 
-        const payload = await transformGithubPayloadToAppEvent(
-            eventType as GitHubPullRequestEventType,
-            req.body,
-            slackUserIdResolver,
-            githubAPI
-        );
+        const payload = await transformGithubPayloadToAppEvent(eventType as GitHubPullRequestEventType, req.body, slackUserIdResolver, githubAPI);
         if (payload.eventKey === "ignored_event") {
             res.sendStatus(200);
             return;
         }
 
-        const organizationSettings = await OrganizationSettingsProvider.fetch(AppConfig.SLACK_WORKSPACE_ID, req.body.organization.id, req.body.organization.login);
+        const organizationSettings = await OrganizationSettingsProvider.fetch(
+            AppConfig.SLACK_WORKSPACE_ID,
+            req.body.organization.id,
+            req.body.organization.login
+        );
         if (organizationSettings.repositoriesToExclude.includes(payload.pullRequest.targetBranch.repositoryName)) {
             res.sendStatus(200);
             return;
         }
 
-        const broadcastChannelName = payload.pullRequest.author.isBotUser ? organizationSettings.openedBotPRsBroadcastChannel : organizationSettings.openedPRsBroadcastChannel;
+        const broadcastChannelName = payload.pullRequest.author.isBotUser
+            ? organizationSettings.openedBotPRsBroadcastChannel
+            : organizationSettings.openedPRsBroadcastChannel;
         const broadcastChannel = broadcastChannelName ? await slackChannelFactory.findBroadcastChannel(broadcastChannelName, ":github:") : null;
 
         const targetedChannel = await slackChannelFactory.provisionTargetedChannel(payload, ":github:", organizationSettings.defaultChannelParticipants);

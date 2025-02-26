@@ -1,7 +1,7 @@
 /*
  * Gets the user login in the format "john-doe_company name" and returns "John Doe"
  * */
-import { GitHubUserPayload } from "../GitHubAPI.contracts";
+import { GitHubUserPayload } from "../../GitHubAPI.contracts";
 
 export function formatUsername(user: GitHubUserPayload) {
     if (user.type === "Mannequin") {

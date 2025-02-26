@@ -1,29 +1,21 @@
 import {
     GitHubPullRequestCommentActionType,
     GitHubPullRequestCommentNotification
-} from "../GitHubAPI.contracts";
-import { SlackUserIdResolver } from "../ports/SlackUserIdResolver";
+} from "../../GitHubAPI.contracts";
+import { SlackUserIdResolver } from "../../ports/SlackUserIdResolver";
 import { mapPayloadGenericPart } from "./mapPayloadGenericPart";
 import {
-    PullRequestCommentActionEvent,
-    IgnoredEvent
-} from "../../../core/event-contracts";
+    PullRequestCommentActionEvent, PullRequestCommentActionEventKey
+} from "../../../../../notification-handlers/event-contracts";
 import mapGitHubUserToSlackUser from "./mapGitHubUserToSlackUser";
-import { GitHubAPI } from "../ports/GitHubAPI";
+import { GitHubAPI } from "../../ports/GitHubAPI";
 
 export async function transformPullRequestCommentPayload(
     notification: GitHubPullRequestCommentNotification,
     userIdResolver: SlackUserIdResolver,
     githubAPI: GitHubAPI
-): Promise<PullRequestCommentActionEvent | IgnoredEvent> {
+): Promise<PullRequestCommentActionEvent> {
     const action = notification.action;
-
-    if (notification.pull_request.state != "open" && notification.sender.type === "Bot") {
-        return {
-            eventKey: "ignored_event"
-        };
-    }
-
     return {
         ...(await mapPayloadGenericPart(
             notification,
@@ -43,12 +35,12 @@ export async function transformPullRequestCommentPayload(
             link: notification.comment.html_url
         },
         previousComment: notification.changes?.body?.from
-    } as PullRequestCommentActionEvent;
+    };
 }
 
 function mapGitHubCommentActionToEventKey(
     action: GitHubPullRequestCommentActionType
-): string {
+): PullRequestCommentActionEventKey {
     switch (action) {
         case "created":
             return "pr:comment:added";

@@ -1,4 +1,4 @@
-import { PullRequestPayload } from "../../core/event-contracts";
+import { PullRequestPayload } from "../../web-app/notification-handlers/event-contracts";
 
 interface PullRequestFlattenTraits {
     pullRequestId: string | number;

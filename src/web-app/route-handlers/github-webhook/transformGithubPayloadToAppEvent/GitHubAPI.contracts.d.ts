@@ -4,7 +4,8 @@ export type GitHubNotification =
     | GitHubPullRequestAssigneesUpdatedNotification
     | GitHubPullRequestEditedNotification
     | GitHubPullRequestReviewSubmittedNotification
-    | GitHubPullRequestThreadResolutionNotification;
+    | GitHubPullRequestThreadResolutionNotification
+    | GitHubPullRequestCommentNotification;
 
 export type GitHubPullRequestBasicNotification =
     GitHubPullRequestNotificationBasicPayload & {
