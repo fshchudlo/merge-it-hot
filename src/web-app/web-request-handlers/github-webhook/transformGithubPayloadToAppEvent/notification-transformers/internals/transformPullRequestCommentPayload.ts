@@ -1,7 +1,7 @@
 import { GitHubPullRequestCommentActionType, GitHubPullRequestCommentNotification } from "../../GitHubAPI.contracts";
 import { SlackUserIdResolver } from "../../ports/SlackUserIdResolver";
 import { mapPayloadGenericPart } from "./mapPayloadGenericPart";
-import { PullRequestCommentActionEvent, PullRequestCommentActionEventKey } from "../../../../../notification-handlers/event-contracts";
+import { PullRequestCommentActionEvent, PullRequestCommentActionEventKey } from "../../../../../pr-notification-handlers/event-contracts";
 import mapGitHubUserToSlackUser from "./mapGitHubUserToSlackUser";
 import { GitHubAPI } from "../../ports/GitHubAPI";
 

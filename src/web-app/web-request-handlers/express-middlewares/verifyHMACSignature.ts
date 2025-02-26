@@ -1,4 +1,4 @@
-import { AppConfig } from "../../app.config";
+import { AppConfig } from "../../../app.config";
 import crypto from "crypto";
 import type { Request, Response, NextFunction } from "express";
 

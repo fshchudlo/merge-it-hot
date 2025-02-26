@@ -1,8 +1,8 @@
 import * as slack from "@slack/web-api";
-import { SNAPSHOT_PULL_REQUEST_STATE_EVENT_TYPE } from "../../web-app/notification-handlers/specific-handlers/internals/snapshotPullRequestState";
-import { SlackChannelInfo } from "../../web-app/notification-handlers/ports/SlackTargetedChannel";
-import { SlackBroadcastChannel, PullRequestSnapshotInSlackMetadata } from "../../web-app/notification-handlers/ports/SlackBroadcastChannel";
-import { SendMessageArguments } from "../../web-app/notification-handlers/ports/SendMessageArguments";
+import { SNAPSHOT_PULL_REQUEST_STATE_EVENT_TYPE } from "../../web-app/pr-notification-handlers/specific-handlers/internals/snapshotPullRequestState";
+import { SlackChannelInfo } from "../../web-app/pr-notification-handlers/ports/SlackTargetedChannel";
+import { SlackBroadcastChannel, PullRequestSnapshotInSlackMetadata } from "../../web-app/pr-notification-handlers/ports/SlackBroadcastChannel";
+import { SendMessageArguments } from "../../web-app/pr-notification-handlers/ports/SendMessageArguments";
 import { SlackMessageSender } from "./internals/SlackMessageSender";
 import { findMessageInChannelHistory } from "./internals/findMessageInChannelHistory";
 

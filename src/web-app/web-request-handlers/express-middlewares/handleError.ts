@@ -1,4 +1,4 @@
-import { AppConfig } from "../../app.config";
+import { AppConfig } from "../../../app.config";
 import { WebClient } from "@slack/web-api";
 import type { Response, NextFunction } from "express";
 import util from "util";

@@ -1,6 +1,6 @@
 import { WebClient } from "@slack/web-api";
 import { SlackWebClientBroadcastChannel } from "../SlackWebClientBroadcastChannel";
-import { SlackChannelInfo } from "../../../web-app/notification-handlers/ports/SlackTargetedChannel";
+import { SlackChannelInfo } from "../../../web-app/pr-notification-handlers/ports/SlackTargetedChannel";
 
 jest.mock("@slack/web-api", () => ({
     WebClient: jest.fn().mockImplementation(() => ({

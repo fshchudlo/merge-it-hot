@@ -5,14 +5,14 @@ import { OrgSettingsDB } from "../adapters/organization-settings-provider/OrgSet
 import { AppConfig } from "../app.config";
 import express, { NextFunction, Request } from "express";
 import { SlackChannelProvisioner } from "../adapters/slack-api/SlackChannelProvisioner";
-import measureRequestDuration from "./middlewares/measureRequestDuration";
-import handleError from "./middlewares/handleError";
+import measureRequestDuration from "./web-request-handlers/express-middlewares/measureRequestDuration";
+import handleError from "./web-request-handlers/express-middlewares/handleError";
 import { register } from "prom-client";
-import { handleGitHubWebhookCall } from "./route-handlers/github-webhook/handleGitHubWebhookCall";
+import { handleGitHubWebhookCall } from "./web-request-handlers/github-webhook/handleGitHubWebhookCall";
 import bodyParser from "body-parser";
-import verifyHMACSignature from "./middlewares/verifyHMACSignature";
+import verifyHMACSignature from "./web-request-handlers/express-middlewares/verifyHMACSignature";
 import { SlackWebClientUserIdResolver } from "../adapters/slack-api/SlackWebClientUserIdResolver";
-import { getSlackChannelInfo } from "./route-handlers/slack-channel/getSlackChannelInfo";
+import { getSlackChannelInfo } from "./web-request-handlers/slack-channel/getSlackChannelInfo";
 import { slackApp } from "../slack-app/slackApp";
 
 const slackChannelFactory = new SlackChannelProvisioner(slackApp.client);
