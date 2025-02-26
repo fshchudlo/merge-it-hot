@@ -16,34 +16,24 @@ export type IgnoredEvent = {
 };
 
 export type PullRequestGenericEvent = PullRequestNotificationBasicPayload & {
-    readonly eventKey:
-        | "pr:reopened"
-        | "pr:opened"
-        | "pr:ready_for_review"
-        | "pr:converted_to_draft"
-        | "pr:merged"
-        | "pr:declined"
-        | "pr:deleted";
+    readonly eventKey: "pr:reopened" | "pr:opened" | "pr:ready_for_review" | "pr:converted_to_draft" | "pr:merged" | "pr:declined" | "pr:deleted";
 };
 
-export type PullRequestReviewSubmittedEvent =
-    PullRequestNotificationBasicPayload & {
-        readonly eventKey: "pr:review:submitted";
-        readonly review: {
-            state: PullRequestReviewState;
-            comment: string | null;
-        };
+export type PullRequestReviewSubmittedEvent = PullRequestNotificationBasicPayload & {
+    readonly eventKey: "pr:review:submitted";
+    readonly review: {
+        state: PullRequestReviewState;
+        comment: string | null;
     };
+};
 
-export type PullRequestCommentActionEvent =
-    PullRequestNotificationBasicPayload & {
-        readonly eventKey:
-            | "pr:comment:added"
-            | "pr:comment:deleted"
-            | "pr:comment:edited";
-        readonly previousComment?: string;
-        readonly comment: PullRequestCommentPayload;
-    };
+export type PullRequestCommentActionEvent = PullRequestNotificationBasicPayload & {
+    readonly eventKey: PullRequestCommentActionEventKey;
+    readonly previousComment?: string;
+    readonly comment: PullRequestCommentPayload;
+};
+
+export type PullRequestCommentActionEventKey = "pr:comment:added" | "pr:comment:deleted" | "pr:comment:edited";
 export type PullRequestModifiedEvent = PullRequestNotificationBasicPayload & {
     readonly eventKey: "pr:modified";
     readonly previousTitle: string;
@@ -53,18 +43,16 @@ export type PullRequestModifiedEvent = PullRequestNotificationBasicPayload & {
         readonly latestCommit: string;
     };
 };
-export type PullRequestParticipantsUpdatedEvent =
-    PullRequestNotificationBasicPayload & {
-        readonly eventKey: "pr:participants:changed";
-        readonly addedParticipants: Array<UserPayload>;
-        readonly removedParticipants: Array<UserPayload>;
-    };
-export type PullRequestFromBranchUpdatedEvent =
-    PullRequestNotificationBasicPayload & {
-        readonly eventKey: "pr:from_ref_updated";
-        readonly latestCommitMessage: string | null;
-        readonly latestCommitViewUrl: string;
-    };
+export type PullRequestParticipantsUpdatedEvent = PullRequestNotificationBasicPayload & {
+    readonly eventKey: "pr:participants:changed";
+    readonly addedParticipants: Array<UserPayload>;
+    readonly removedParticipants: Array<UserPayload>;
+};
+export type PullRequestFromBranchUpdatedEvent = PullRequestNotificationBasicPayload & {
+    readonly eventKey: "pr:from_ref_updated";
+    readonly latestCommitMessage: string | null;
+    readonly latestCommitViewUrl: string;
+};
 
 export type UserPayload = {
     readonly name: string;
@@ -106,8 +94,4 @@ export type ParticipantPayload = {
     status?: ReviewerReviewStatus;
 };
 export type ReviewerReviewStatus = "UNAPPROVED" | "NEEDS_WORK" | "APPROVED";
-export type PullRequestReviewState =
-    | "COMMENTED"
-    | "APPROVED"
-    | "CHANGES_REQUESTED"
-    | "DISMISSED";
+export type PullRequestReviewState = "COMMENTED" | "APPROVED" | "CHANGES_REQUESTED" | "DISMISSED";

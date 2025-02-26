@@ -1,29 +1,21 @@
 import {
     GitHubPullRequestCommentActionType,
     GitHubPullRequestCommentNotification
-} from "../GitHubAPI.contracts";
-import { SlackUserIdResolver } from "../ports/SlackUserIdResolver";
+} from "../../GitHubAPI.contracts";
+import { SlackUserIdResolver } from "../../ports/SlackUserIdResolver";
 import { mapPayloadGenericPart } from "./mapPayloadGenericPart";
 import {
-    PullRequestCommentActionEvent,
-    IgnoredEvent
-} from "../../../core/event-contracts";
+    PullRequestCommentActionEvent
+} from "../../../../core/event-contracts";
 import mapGitHubUserToSlackUser from "./mapGitHubUserToSlackUser";
-import { GitHubAPI } from "../ports/GitHubAPI";
+import { GitHubAPI } from "../../ports/GitHubAPI";
 
 export async function transformPullRequestCommentPayload(
     notification: GitHubPullRequestCommentNotification,
     userIdResolver: SlackUserIdResolver,
     githubAPI: GitHubAPI
-): Promise<PullRequestCommentActionEvent | IgnoredEvent> {
+): Promise<PullRequestCommentActionEvent> {
     const action = notification.action;
-
-    if (notification.pull_request.state != "open" && notification.sender.type === "Bot") {
-        return {
-            eventKey: "ignored_event"
-        };
-    }
-
     return {
         ...(await mapPayloadGenericPart(
             notification,

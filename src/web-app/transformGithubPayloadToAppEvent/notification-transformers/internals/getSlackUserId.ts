@@ -1,5 +1,5 @@
-import { SlackUserIdResolver } from "../ports/SlackUserIdResolver";
-import { GitHubUserPayload } from "../GitHubAPI.contracts";
+import { SlackUserIdResolver } from "../../ports/SlackUserIdResolver";
+import { GitHubUserPayload } from "../../GitHubAPI.contracts";
 
 export async function getSlackUserId(
     userIdResolver: SlackUserIdResolver,
