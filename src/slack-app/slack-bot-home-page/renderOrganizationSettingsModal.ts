@@ -7,7 +7,6 @@ import { bold, contextBlock, plainText } from "@slack-building-blocks";
 import { GithubRepositoriesCache } from "./internals/GithubRepositoriesCache";
 import createOrganizationGitHubAPI from "./internals/createOrganizationGitHubAPI";
 
-
 export async function renderOrganizationSettingsModal({ ack, body }: any) {
     await ack();
     const organizationSettings = await OrganizationSettingsProvider.findByKey(body.team_id, body.actions[0].value);
@@ -18,8 +17,7 @@ export async function renderOrganizationSettingsModal({ ack, body }: any) {
     GithubRepositoriesCache.fetchOrganizationRepositories(
         organizationSettings.githubOrganizationLogin,
         createOrganizationGitHubAPI(organizationSettings.githubOrganizationId)
-    ).then(() => {
-    });
+    ).then(() => {});
 
     await slackApp.client.views.open({
         trigger_id: body.trigger_id,
@@ -87,8 +85,7 @@ function buildOrganizationSettingsModalForm(organizationSettings: OrganizationSe
                     action_id: SlackActionKeys.GET_REPOSITORIES_TO_EXCLUDE_DROPDOWN_OPTIONS,
                     placeholder: plainText("Type at least 3 symbols..."),
                     min_query_length: 3,
-                    initial_options: organizationSettings.repositoriesToExclude
-                        .map(r => ({ text: plainText(r), value: r })) || []
+                    initial_options: organizationSettings.repositoriesToExclude.map(r => ({ text: plainText(r), value: r })) || []
                 },
                 optional: true
             },

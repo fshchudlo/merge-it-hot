@@ -16,8 +16,7 @@ export default class GitHubWebAPIAdapter implements GitHubAPI, GitHubRepositorie
         private readonly appId: number,
         private readonly privateKey: string,
         private readonly organizationId: number
-    ) {
-    }
+    ) {}
 
     async fetchCommitMessage(owner: string, repo: string, commitHash: string) {
         const url = `${this.baseUrl}/repos/${owner}/${repo}/commits/${commitHash}`;
@@ -47,22 +46,14 @@ export default class GitHubWebAPIAdapter implements GitHubAPI, GitHubRepositorie
 
             result.push(...response);
 
-            if (response.length < pageSize)
-                break;
+            if (response.length < pageSize) break;
             requestParams.page++;
         }
         return result;
     }
 
-    private async executeRequest<T>(
-        url: string,
-        params: AxiosRequestConfig["params"] = null
-    ) {
-        const accessToken = await fetchAccessToken(
-            this.appId,
-            this.privateKey,
-            this.organizationId
-        );
+    private async executeRequest<T>(url: string, params: AxiosRequestConfig["params"] = null) {
+        const accessToken = await fetchAccessToken(this.appId, this.privateKey, this.organizationId);
         const config: AxiosRequestConfig = {
             headers: {
                 Authorization: `Bearer ${accessToken}`,
@@ -74,8 +65,6 @@ export default class GitHubWebAPIAdapter implements GitHubAPI, GitHubRepositorie
         if (response.status === 200) {
             return response.data;
         }
-        throw new Error(
-            `Error executing request for ${url} message: ${response.statusText}`
-        );
+        throw new Error(`Error executing request for ${url} message: ${response.statusText}`);
     }
 }

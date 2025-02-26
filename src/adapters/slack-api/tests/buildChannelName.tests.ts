@@ -7,8 +7,8 @@ describe("buildChannelName", () => {
             number: 123,
             targetBranch: {
                 repositoryName: "REPOSITORY",
-                projectKey: "PROJECT",
-            },
+                projectKey: "PROJECT"
+            }
         };
         expect(buildChannelName(payload)).toEqual("pr-project-repository-123");
     });
@@ -17,7 +17,7 @@ describe("buildChannelName", () => {
         const payload = {
             pullRequestId: 123,
             repositorySlug: "REPOSITORY",
-            projectKey: "PROJECT",
+            projectKey: "PROJECT"
         };
         expect(buildChannelName(payload)).toEqual("pr-project-repository-123");
     });
@@ -27,8 +27,8 @@ describe("buildChannelName", () => {
             number: 123,
             targetBranch: {
                 repositoryName: "------REPOSITORY------",
-                projectKey: "------PROJECT------",
-            },
+                projectKey: "------PROJECT------"
+            }
         };
 
         expect(buildChannelName(payload)).toEqual("pr-project-repository-123");
@@ -39,13 +39,11 @@ describe("buildChannelName", () => {
             number: 456,
             targetBranch: {
                 repositoryName: "REPOSI.TORY.SLUG",
-                projectKey: "~PROJECT",
-            },
+                projectKey: "~PROJECT"
+            }
         };
 
-        expect(buildChannelName(payload)).toEqual(
-            "pr-project-reposi-tory-slug-456",
-        );
+        expect(buildChannelName(payload)).toEqual("pr-project-reposi-tory-slug-456");
     });
 
     it("should limit channel name to 80 symbols", () => {
@@ -53,11 +51,9 @@ describe("buildChannelName", () => {
             number: 789,
             targetBranch: {
                 repositoryName: "REALLY_REALLY_REALLY_LONG_REPOSITORY_SLUG",
-                projectKey: "REALLY_REALLY_REALLY_LONG_PROJECT_NAME",
-            },
+                projectKey: "REALLY_REALLY_REALLY_LONG_PROJECT_NAME"
+            }
         };
-        expect(buildChannelName(payload)).toEqual(
-            "pr-really_really_really_long_project_name-really_really_really_long_reposito-789",
-        );
+        expect(buildChannelName(payload)).toEqual("pr-really_really_really_long_project_name-really_really_really_long_reposito-789");
     });
 });

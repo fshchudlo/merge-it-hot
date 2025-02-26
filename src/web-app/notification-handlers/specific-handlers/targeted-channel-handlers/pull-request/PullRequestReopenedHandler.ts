@@ -10,10 +10,7 @@ export class PullRequestReopenedHandler implements PullRequestEventHandler {
         return payload.eventKey == "pr:reopened";
     }
 
-    public async handle(
-        payload: PullRequestGenericEvent,
-        slackChannel: SlackTargetedChannel,
-    ) {
+    public async handle(payload: PullRequestGenericEvent, slackChannel: SlackTargetedChannel) {
         await slackChannel.setTopic(payload.pullRequest.title);
         await slackChannel.sendMessage(buildMessage(payload));
     }
@@ -23,6 +20,6 @@ function buildMessage(payload: PullRequestGenericEvent): SendMessageArguments {
     const messageTitle = `:recycle: ${payload.actor.name} reopened ${link(payload.pullRequest.links.self, "pull request")}`;
     return {
         text: messageTitle,
-        blocks: [section(messageTitle), reviewPRAction(payload.pullRequest)],
+        blocks: [section(messageTitle), reviewPRAction(payload.pullRequest)]
     };
 }

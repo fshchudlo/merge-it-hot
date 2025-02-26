@@ -6,10 +6,7 @@ describe("Comment added use-case", () => {
     it("Should send message on PR comment", async () => {
         const channelMock = new SlackChannelSnapshottingMock();
 
-        await handlePullRequestEvent(
-            TestPayloadBuilder.pullRequestCommentAdded(),
-            channelMock,
-        );
+        await handlePullRequestEvent(TestPayloadBuilder.pullRequestCommentAdded(), channelMock);
 
         expect(channelMock.snapshot).toMatchSnapshot();
     });
@@ -17,17 +14,11 @@ describe("Comment added use-case", () => {
     it("Should invite the commenter to the channel if they are not participate yet", async () => {
         const channelMock = new SlackChannelSnapshottingMock();
 
-        await handlePullRequestEvent(
-            TestPayloadBuilder.pullRequestCommentAdded(reviewer1User),
-            channelMock,
-        );
+        await handlePullRequestEvent(TestPayloadBuilder.pullRequestCommentAdded(reviewer1User), channelMock);
 
         expect(channelMock.snapshot.invitesToChannels).toEqual([]);
 
-        await handlePullRequestEvent(
-            TestPayloadBuilder.pullRequestCommentAdded(nonReviewerUser),
-            channelMock,
-        );
+        await handlePullRequestEvent(TestPayloadBuilder.pullRequestCommentAdded(nonReviewerUser), channelMock);
 
         expect(channelMock.snapshot.invitesToChannels).toEqual([[nonReviewerUser.slackUserId]]);
     });

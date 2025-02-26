@@ -5,16 +5,16 @@ import { SlackChannelInfo } from "../../../../web-app/notification-handlers/port
 
 jest.mock("@slack/web-api", () => ({
     WebClient: jest.fn().mockImplementation(() => ({
-        chat: { postMessage: jest.fn() },
-    })),
+        chat: { postMessage: jest.fn() }
+    }))
 }));
 
 jest.mock("../cache/COMMENTS_CACHE", () => ({
     COMMENTS_CACHE: {
         get: jest.fn(),
         set: jest.fn(),
-        deleteWhere: jest.fn(),
-    },
+        deleteWhere: jest.fn()
+    }
 }));
 
 describe("SlackMessageSender", () => {
@@ -26,11 +26,7 @@ describe("SlackMessageSender", () => {
         // Reset mocks before each test
         slackClient = new WebClient();
         channelInfo = { id: "C123456", name: "test-channel" };
-        channel = new SlackMessageSender(
-            slackClient,
-            channelInfo,
-            ":emoji:",
-        );
+        channel = new SlackMessageSender(slackClient, channelInfo, ":emoji:");
 
         jest.clearAllMocks();
     });
@@ -40,18 +36,18 @@ describe("SlackMessageSender", () => {
             (slackClient.chat.postMessage as jest.Mock).mockResolvedValue({
                 message: {
                     ts: "1234567890.1234",
-                    thread_ts: "1234567890.0000",
-                },
+                    thread_ts: "1234567890.0000"
+                }
             });
 
             await channel.sendMessage({
                 text: "Hello, world!",
                 metadata: {
                     eventType: "test",
-                    eventPayload: { commentId: "123" },
+                    eventPayload: { commentId: "123" }
                 },
                 blocks: [],
-                threadId: "1234567890.0000",
+                threadId: "1234567890.0000"
             });
 
             expect(slackClient.chat.postMessage).toHaveBeenCalledWith({
@@ -60,17 +56,17 @@ describe("SlackMessageSender", () => {
                 text: "Hello, world!",
                 metadata: {
                     event_type: "test",
-                    event_payload: { commentId: "123" },
+                    event_payload: { commentId: "123" }
                 },
                 blocks: [],
                 thread_ts: "1234567890.0000",
-                reply_broadcast: undefined,
+                reply_broadcast: undefined
             });
 
             expect(COMMENTS_CACHE.set).toHaveBeenCalledWith("C123456-123", {
                 commentId: "123",
                 slackMessageId: "1234567890.1234",
-                slackThreadId: "1234567890.0000",
+                slackThreadId: "1234567890.0000"
             });
         });
     });

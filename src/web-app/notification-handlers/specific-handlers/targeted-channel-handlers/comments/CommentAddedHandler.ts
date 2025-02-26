@@ -9,22 +9,14 @@ export class CommentAddedHandler implements PullRequestEventHandler {
         return payload.eventKey == "pr:comment:added";
     }
 
-    async handle(
-        payload: PullRequestCommentActionEvent,
-        slackChannel: SlackTargetedChannel,
-    ) {
+    async handle(payload: PullRequestCommentActionEvent, slackChannel: SlackTargetedChannel) {
         const parentCommentSnapshot = payload.comment.replyToCommentId
-            ? await slackChannel.findLatestPullRequestCommentSnapshot(
-                  payload.comment.replyToCommentId,
-              )
+            ? await slackChannel.findLatestPullRequestCommentSnapshot(payload.comment.replyToCommentId)
             : null;
-        const message = buildCommentAddedMessage(
-            payload,
-            parentCommentSnapshot,
-        );
+        const message = buildCommentAddedMessage(payload, parentCommentSnapshot);
         await slackChannel.sendMessage(message);
 
-        if(shouldBeAddedAsParticipant(payload, payload.comment.author)) {
+        if (shouldBeAddedAsParticipant(payload, payload.comment.author)) {
             await slackChannel.inviteToChannel(payload.comment.author.slackUserId);
         }
     }

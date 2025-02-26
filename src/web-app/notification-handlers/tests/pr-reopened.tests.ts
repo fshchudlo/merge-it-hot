@@ -16,17 +16,9 @@ describe("PR reopened use-case", () => {
         const channelMock = new SlackChannelSnapshottingMock();
         const broadcastChannelMock = new SlackChannelSnapshottingMock();
 
-        await handlePullRequestEvent(
-            TestPayloadBuilder.pullRequestOpened(),
-            channelMock,
-            broadcastChannelMock,
-        );
+        await handlePullRequestEvent(TestPayloadBuilder.pullRequestOpened(), channelMock, broadcastChannelMock);
 
-        await handlePullRequestEvent(
-            TestPayloadBuilder.pullRequestReopened(),
-            channelMock,
-            broadcastChannelMock,
-        );
+        await handlePullRequestEvent(TestPayloadBuilder.pullRequestReopened(), channelMock, broadcastChannelMock);
 
         expect(broadcastChannelMock.snapshot).toMatchSnapshot();
     });

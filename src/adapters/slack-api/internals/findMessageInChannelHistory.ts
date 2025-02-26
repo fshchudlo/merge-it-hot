@@ -8,9 +8,7 @@ export async function findMessageInChannelHistory(
     oldestDate: Date | undefined = undefined
 ): Promise<MessageElement | null> {
     let cursor: string;
-    const slackTimestamp = oldestDate
-        ? Math.floor(oldestDate.getTime() / 1000) + ".000000"
-        : undefined;
+    const slackTimestamp = oldestDate ? Math.floor(oldestDate.getTime() / 1000) + ".000000" : undefined;
 
     while (true) {
         // noinspection JSUnusedAssignment

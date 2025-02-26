@@ -4,30 +4,24 @@ import { PullRequestEvent } from "../../web-app/notification-handlers/event-cont
 import { buildChannelName } from "./buildChannelName";
 import { CHANNELS_CACHE } from "./internals/cache/CHANNELS_CACHE";
 
-import {
-    SlackChannelInfo
-} from "../../web-app/notification-handlers/ports/SlackTargetedChannel";
+import { SlackChannelInfo } from "../../web-app/notification-handlers/ports/SlackTargetedChannel";
 import { SlackBroadcastChannel } from "../../web-app/notification-handlers/ports/SlackBroadcastChannel";
 import { SlackTargetedChannel } from "../../web-app/notification-handlers/ports/SlackTargetedChannel";
 import { SlackWebClientTargetedChannel } from "./SlackWebClientTargetedChannel";
 
 export class SlackChannelProvisioner {
-    constructor(private readonly client: slack.WebClient) {
-    }
+    constructor(private readonly client: slack.WebClient) {}
 
     async findBroadcastChannel(channelName: string, iconEmoji: BotEconEmoji): Promise<SlackBroadcastChannel | null> {
         const channelInfo = await this.tryFindChannel(channelName);
-        return channelInfo
-            ? new SlackWebClientBroadcastChannel(this.client, channelInfo, iconEmoji)
-            : null;
+        return channelInfo ? new SlackWebClientBroadcastChannel(this.client, channelInfo, iconEmoji) : null;
     }
 
     async provisionTargetedChannel(payload: PullRequestEvent, iconEmoji: BotEconEmoji, defaultChannelParticipants: string[]): Promise<SlackTargetedChannel> {
         const channelName = buildChannelName(payload.pullRequest);
         const channelInfo = await CHANNELS_CACHE.wrap(channelName, async () => {
-                return this.setupChannel(channelName, payload, iconEmoji, defaultChannelParticipants);
-            }
-        );
+            return this.setupChannel(channelName, payload, iconEmoji, defaultChannelParticipants);
+        });
 
         return new SlackWebClientTargetedChannel(this.client, channelInfo, iconEmoji);
     }
@@ -62,11 +56,7 @@ export class SlackChannelProvisioner {
     ): Promise<SlackChannelInfo> {
         const allParticipantsToInvite = [
             ...new Set(
-                defaultChannelParticipants.concat([
-                        payload.pullRequest.author,
-                        ...payload.pullRequest.participants.map(r => r.user)
-                    ].map(u => u.slackUserId)
-                )
+                defaultChannelParticipants.concat([payload.pullRequest.author, ...payload.pullRequest.participants.map(r => r.user)].map(u => u.slackUserId))
             )
         ];
 
@@ -121,9 +111,7 @@ export class SlackChannelProvisioner {
                 limit: 1000,
                 cursor
             });
-            const archivedChannel = result.channels?.find(
-                channel => channel.name === channelName && channel.is_archived
-            );
+            const archivedChannel = result.channels?.find(channel => channel.name === channelName && channel.is_archived);
             if (archivedChannel) {
                 await this.client.conversations.unarchive({
                     channel: archivedChannel.id
@@ -144,8 +132,7 @@ export class SlackChannelProvisioner {
             is_private: true
         });
         const channelInfo = { id: response.channel.id, name: response.channel.name };
-        await new SlackWebClientTargetedChannel(this.client, channelInfo, iconEmoji)
-            .inviteToChannel(...participants);
+        await new SlackWebClientTargetedChannel(this.client, channelInfo, iconEmoji).inviteToChannel(...participants);
         return channelInfo;
     }
 

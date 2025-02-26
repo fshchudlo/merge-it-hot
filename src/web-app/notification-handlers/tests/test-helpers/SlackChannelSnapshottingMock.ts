@@ -11,9 +11,7 @@ import { SlackTargetedChannel } from "../../ports/SlackTargetedChannel";
 import { SendMessageArguments } from "../../ports/SendMessageArguments";
 
 const messageId = "ABCDE";
-export default class SlackChannelSnapshottingMock
-    implements SlackTargetedChannel, SlackBroadcastChannel
-{
+export default class SlackChannelSnapshottingMock implements SlackTargetedChannel, SlackBroadcastChannel {
     snapshot: {
         addedReactions: any[];
         addedBookmarks: AddBookmarkArguments[];
@@ -38,13 +36,13 @@ export default class SlackChannelSnapshottingMock
             searchedCommentSnapshots: [],
             searchedPrOpenedBroadcastMessages: [],
             sentMessages: [],
-            deleteMessageCalls: [],
+            deleteMessageCalls: []
         };
     }
 
     readonly channelInfo: SlackChannelInfo = {
         id: "12345",
-        name: "test-channel",
+        name: "test-channel"
     };
 
     addBookmark(options: AddBookmarkArguments): Promise<void> {
@@ -80,7 +78,7 @@ export default class SlackChannelSnapshottingMock
         this.snapshot.addedReactions.push({
             channelId: this.channelInfo.id,
             messageId,
-            reaction,
+            reaction
         });
         return Promise.resolve();
     }
@@ -90,56 +88,43 @@ export default class SlackChannelSnapshottingMock
         return Promise.resolve();
     }
 
-    findLatestPullRequestCommentSnapshot(
-        reviewCommentId: number | string,
-    ): Promise<PullRequestCommentSnapshot | null> {
+    findLatestPullRequestCommentSnapshot(reviewCommentId: number | string): Promise<PullRequestCommentSnapshot | null> {
         this.snapshot.searchedCommentSnapshots.push({
             channelId: this.channelInfo.id,
-            reviewCommentId,
+            reviewCommentId
         });
 
         const snapshot = (<any>this.snapshot.sentMessages).findLast(
             (m: SendMessageArguments) =>
-                m.metadata?.eventType === SNAPSHOT_COMMENT_STATE_EVENT_TYPE &&
-                m.metadata?.eventPayload?.commentId ===
-                    reviewCommentId.toString(),
+                m.metadata?.eventType === SNAPSHOT_COMMENT_STATE_EVENT_TYPE && m.metadata?.eventPayload?.commentId === reviewCommentId.toString()
         );
 
         if (snapshot) {
-            const metadata = <PullrequestCommentSnapshotInSlackMetadata>(
-                snapshot.metadata?.eventPayload
-            );
+            const metadata = <PullrequestCommentSnapshotInSlackMetadata>snapshot.metadata?.eventPayload;
             return Promise.resolve({
                 commentId: metadata.commentId,
                 commentParentId: metadata.commentParentId,
                 resolvedDate: metadata.resolvedDate,
                 slackMessageId: messageId,
-                slackThreadId: snapshot.threadId,
+                slackThreadId: snapshot.threadId
             });
         }
         return Promise.resolve(null);
     }
 
-    findPROpenedBroadcastMessageId(
-        prCreationDate: Date,
-        pullRequestTraits: PullRequestSnapshotInSlackMetadata,
-    ): Promise<string | null> {
+    findPROpenedBroadcastMessageId(prCreationDate: Date, pullRequestTraits: PullRequestSnapshotInSlackMetadata): Promise<string | null> {
         this.snapshot.searchedPrOpenedBroadcastMessages.push({
             channelId: this.channelInfo.id,
             prCreationDate,
-            pullRequestTraits,
+            pullRequestTraits
         });
 
         const snapshot = (<any>this.snapshot.sentMessages).findLast(
             (m: SendMessageArguments) =>
-                m.metadata?.eventType ===
-                    SNAPSHOT_PULL_REQUEST_STATE_EVENT_TYPE &&
-                m.metadata?.eventPayload?.pullRequestId ===
-                    pullRequestTraits.pullRequestId &&
-                m.metadata?.eventPayload?.projectKey ===
-                    pullRequestTraits.projectKey &&
-                m.metadata?.eventPayload?.repositorySlug ===
-                    pullRequestTraits.repositorySlug,
+                m.metadata?.eventType === SNAPSHOT_PULL_REQUEST_STATE_EVENT_TYPE &&
+                m.metadata?.eventPayload?.pullRequestId === pullRequestTraits.pullRequestId &&
+                m.metadata?.eventPayload?.projectKey === pullRequestTraits.projectKey &&
+                m.metadata?.eventPayload?.repositorySlug === pullRequestTraits.repositorySlug
         );
 
         if (snapshot) {

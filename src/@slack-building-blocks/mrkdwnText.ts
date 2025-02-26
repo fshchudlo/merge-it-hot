@@ -7,4 +7,3 @@ export function mrkdwnText(text: string): MrkdwnElement {
         text: trimTextToSlackMessageLimits(text)
     };
 }
-

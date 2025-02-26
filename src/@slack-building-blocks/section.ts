@@ -8,4 +8,3 @@ export function section(text: string, type: "plain_text" | "mrkdwn" = "mrkdwn"):
         text: type == "plain_text" ? plainText(text) : mrkdwnText(text)
     };
 }
-

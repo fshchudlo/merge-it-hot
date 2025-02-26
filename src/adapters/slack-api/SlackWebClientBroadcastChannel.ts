@@ -1,8 +1,6 @@
 import * as slack from "@slack/web-api";
 import { SNAPSHOT_PULL_REQUEST_STATE_EVENT_TYPE } from "../../web-app/notification-handlers/specific-handlers/internals/snapshotPullRequestState";
-import {
-    SlackChannelInfo
-} from "../../web-app/notification-handlers/ports/SlackTargetedChannel";
+import { SlackChannelInfo } from "../../web-app/notification-handlers/ports/SlackTargetedChannel";
 import { SlackBroadcastChannel, PullRequestSnapshotInSlackMetadata } from "../../web-app/notification-handlers/ports/SlackBroadcastChannel";
 import { SendMessageArguments } from "../../web-app/notification-handlers/ports/SendMessageArguments";
 import { SlackMessageSender } from "./internals/SlackMessageSender";
@@ -14,8 +12,7 @@ export class SlackWebClientBroadcastChannel implements SlackBroadcastChannel {
         readonly channelInfo: SlackChannelInfo = null,
         iconEmoji: string,
         private readonly messageSender = new SlackMessageSender(client, channelInfo, iconEmoji)
-    ) {
-    }
+    ) {}
 
     async addReaction(messageId: string, reaction: string): Promise<void> {
         try {
@@ -35,28 +32,20 @@ export class SlackWebClientBroadcastChannel implements SlackBroadcastChannel {
         await this.messageSender.sendMessage(options);
     }
 
-    async findPROpenedBroadcastMessageId(
-        prCreationDate: Date,
-        pullRequestTraits: PullRequestSnapshotInSlackMetadata
-    ): Promise<string | null> {
+    async findPROpenedBroadcastMessageId(prCreationDate: Date, pullRequestTraits: PullRequestSnapshotInSlackMetadata): Promise<string | null> {
         const message = await findMessageInChannelHistory(
             this.client,
             this.channelInfo.id,
             message => {
                 const eventPayload =
-                    message.metadata?.event_type ===
-                    SNAPSHOT_PULL_REQUEST_STATE_EVENT_TYPE
-                        ? <PullRequestSnapshotInSlackMetadata>(
-                            message.metadata?.event_payload
-                        )
+                    message.metadata?.event_type === SNAPSHOT_PULL_REQUEST_STATE_EVENT_TYPE
+                        ? <PullRequestSnapshotInSlackMetadata>message.metadata?.event_payload
                         : null;
                 return (
                     eventPayload &&
-                    eventPayload.pullRequestId ===
-                    pullRequestTraits.pullRequestId &&
+                    eventPayload.pullRequestId === pullRequestTraits.pullRequestId &&
                     eventPayload.projectKey === pullRequestTraits.projectKey &&
-                    eventPayload.repositorySlug ===
-                    pullRequestTraits.repositorySlug
+                    eventPayload.repositorySlug === pullRequestTraits.repositorySlug
                 );
             },
             prCreationDate

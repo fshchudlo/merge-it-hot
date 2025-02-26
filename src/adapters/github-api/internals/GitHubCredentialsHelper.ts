@@ -22,55 +22,35 @@ const organizationTokensCache: ReturnType<typeof createCache> = createCache({
     ttl: 59 * 60 * 1000
 });
 
-export function fetchAccessToken(
-    appId: number,
-    privateKey: string,
-    organizationId: number
-) {
-    return organizationTokensCache.wrap<string>(
-        `organizationTokens:${organizationId}`,
-        async () => {
-            const appInstallation = await fetchAppInstallation(
-                appId,
-                privateKey,
-                organizationId
-            );
-            if (!appInstallation) {
-                throw new Error(
-                    `No installation found for organization ${organizationId}`
-                );
-            }
-            const jwtToken = await fetchAppJWTToken(appId, privateKey);
-            const url = `https://api.github.com/app/installations/${appInstallation.installationId}/access_tokens`;
-            const response = await axios.post(
-                url,
-                {},
-                {
-                    headers: {
-                        Authorization: `Bearer ${jwtToken}`,
-                        Accept: "application/vnd.github.v3+json"
-                    }
-                }
-            );
-            return response.data.token;
+export function fetchAccessToken(appId: number, privateKey: string, organizationId: number) {
+    return organizationTokensCache.wrap<string>(`organizationTokens:${organizationId}`, async () => {
+        const appInstallation = await fetchAppInstallation(appId, privateKey, organizationId);
+        if (!appInstallation) {
+            throw new Error(`No installation found for organization ${organizationId}`);
         }
-    );
+        const jwtToken = await fetchAppJWTToken(appId, privateKey);
+        const url = `https://api.github.com/app/installations/${appInstallation.installationId}/access_tokens`;
+        const response = await axios.post(
+            url,
+            {},
+            {
+                headers: {
+                    Authorization: `Bearer ${jwtToken}`,
+                    Accept: "application/vnd.github.v3+json"
+                }
+            }
+        );
+        return response.data.token;
+    });
 }
 
 const appInstallationsCache: ReturnType<typeof createCache> = createCache();
 
-function fetchAppInstallation(
-    appId: number,
-    privateKey: string,
-    organizationId: number
-) {
-    return appInstallationsCache.wrap(
-        `appInstallations:${organizationId}`,
-        async () => {
-            const installations = await getAppInstallations(appId, privateKey);
-            return installations.find(i => i.organizationId === organizationId);
-        }
-    );
+function fetchAppInstallation(appId: number, privateKey: string, organizationId: number) {
+    return appInstallationsCache.wrap(`appInstallations:${organizationId}`, async () => {
+        const installations = await getAppInstallations(appId, privateKey);
+        return installations.find(i => i.organizationId === organizationId);
+    });
 }
 
 /*
@@ -103,9 +83,7 @@ export async function getAppInstallations(appId: number, privateKey: string): Pr
     });
 
     if (response.status !== 200) {
-        throw new Error(
-            `An error occurred while initializing app installations cache: ${response.statusText}`
-        );
+        throw new Error(`An error occurred while initializing app installations cache: ${response.statusText}`);
     }
     return response.data.map((i: any) => {
         return <AppInstallation>{

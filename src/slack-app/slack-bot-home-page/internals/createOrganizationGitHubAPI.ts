@@ -3,9 +3,5 @@ import GitHubWebAPIAdapter from "../../../adapters/github-api/GitHubWebAPIAdapte
 import { AppConfig } from "../../../app.config";
 
 export default function createOrganizationGitHubAPI(organizationId: number): GitHubRepositoriesAPI {
-    return new GitHubWebAPIAdapter(
-        AppConfig.GITHUB_APP_ID,
-        AppConfig.GITHUB_APP_PRIVATE_KEY,
-        organizationId
-    );
+    return new GitHubWebAPIAdapter(AppConfig.GITHUB_APP_ID, AppConfig.GITHUB_APP_PRIVATE_KEY, organizationId);
 }

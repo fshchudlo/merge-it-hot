@@ -40,11 +40,7 @@ describe("SlackWebClientChannel", () => {
         // Reset mocks before each test
         slackClient = new WebClient();
         channelInfo = { id: "C123456", name: "test-channel" };
-        channel = new SlackWebClientTargetedChannel(
-            slackClient,
-            channelInfo,
-            ":emoji:"
-        );
+        channel = new SlackWebClientTargetedChannel(slackClient, channelInfo, ":emoji:");
 
         jest.clearAllMocks();
     });
@@ -77,26 +73,18 @@ describe("SlackWebClientChannel", () => {
         });
 
         it("should ignore 'already_in_channel' errors", async () => {
-            (
-                slackClient.conversations.invite as jest.Mock
-            ).mockRejectedValueOnce({
+            (slackClient.conversations.invite as jest.Mock).mockRejectedValueOnce({
                 data: { errors: [{ error: "already_in_channel" }] }
             });
 
-            await expect(
-                channel.inviteToChannel("U123")
-            ).resolves.toBeUndefined();
+            await expect(channel.inviteToChannel("U123")).resolves.toBeUndefined();
         });
         it("should ignore 'user_not_found' errors", async () => {
-            (
-                slackClient.conversations.invite as jest.Mock
-            ).mockRejectedValueOnce({
+            (slackClient.conversations.invite as jest.Mock).mockRejectedValueOnce({
                 data: { errors: [{ error: "user_not_found" }] }
             });
 
-            await expect(
-                channel.inviteToChannel("U123")
-            ).resolves.toBeUndefined();
+            await expect(channel.inviteToChannel("U123")).resolves.toBeUndefined();
         });
     });
 
@@ -116,15 +104,11 @@ describe("SlackWebClientChannel", () => {
         });
 
         it("should ignore 'not_in_channel' errors", async () => {
-            (slackClient.conversations.kick as jest.Mock).mockRejectedValueOnce(
-                {
-                    data: { error: "not_in_channel" }
-                }
-            );
+            (slackClient.conversations.kick as jest.Mock).mockRejectedValueOnce({
+                data: { error: "not_in_channel" }
+            });
 
-            await expect(
-                channel.kickFromChannel("U123")
-            ).resolves.toBeUndefined();
+            await expect(channel.kickFromChannel("U123")).resolves.toBeUndefined();
         });
     });
 
@@ -136,9 +120,7 @@ describe("SlackWebClientChannel", () => {
                 channel: "C123456"
             });
             expect(CHANNELS_CACHE.delete).toHaveBeenCalledWith("test-channel");
-            expect(COMMENTS_CACHE.deleteWhere).toHaveBeenCalledWith(
-                expect.any(Function)
-            );
+            expect(COMMENTS_CACHE.deleteWhere).toHaveBeenCalledWith(expect.any(Function));
         });
     });
 
@@ -148,8 +130,7 @@ describe("SlackWebClientChannel", () => {
                 commentId: "123"
             });
 
-            const result =
-                await channel.findLatestPullRequestCommentSnapshot("123");
+            const result = await channel.findLatestPullRequestCommentSnapshot("123");
 
             expect(result).toEqual({ commentId: "123" });
         });
@@ -171,18 +152,14 @@ describe("SlackWebClientChannel", () => {
                 response_metadata: {}
             });
 
-            const result =
-                await channel.findLatestPullRequestCommentSnapshot("123");
+            const result = await channel.findLatestPullRequestCommentSnapshot("123");
 
             expect(result).toEqual({
                 commentId: "123",
                 slackMessageId: "1234567890.1234",
                 slackThreadId: undefined
             });
-            expect(COMMENTS_CACHE.set).toHaveBeenCalledWith(
-                "C123456-123",
-                result
-            );
+            expect(COMMENTS_CACHE.set).toHaveBeenCalledWith("C123456-123", result);
         });
     });
 });

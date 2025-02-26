@@ -22,9 +22,6 @@ export const AppConfig = {
     DIAGNOSTIC_CHANNEL: process.env.DIAGNOSTIC_CHANNEL,
 
     GITHUB_APP_ID: +process.env.GITHUB_APP_ID,
-    GITHUB_APP_PRIVATE_KEY: process.env.GITHUB_APP_PRIVATE_KEY!.replace(
-        /\\n/g,
-        "\n"
-    ),
-    HMAC_SECRET: process.env.HMAC_SECRET as string,
+    GITHUB_APP_PRIVATE_KEY: process.env.GITHUB_APP_PRIVATE_KEY!.replace(/\\n/g, "\n"),
+    HMAC_SECRET: process.env.HMAC_SECRET as string
 };

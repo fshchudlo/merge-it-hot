@@ -2,27 +2,18 @@ import { NextFunction, Request, Response } from "express";
 import { SlackChannelProvisioner } from "../../../adapters/slack-api/SlackChannelProvisioner";
 import { buildChannelName } from "../../../adapters/slack-api/buildChannelName";
 
-export async function getSlackChannelInfo(
-    req: Request,
-    res: Response,
-    next: NextFunction,
-    slackChannelFactory: SlackChannelProvisioner,
-) {
+export async function getSlackChannelInfo(req: Request, res: Response, next: NextFunction, slackChannelFactory: SlackChannelProvisioner) {
     const { pullRequestId, repositorySlug, projectKey } = req.query;
 
     if (!pullRequestId || !repositorySlug || !projectKey) {
-        res
-            .status(400)
-            .send(
-                'Please, specify valid "pullRequestId", "repositorySlug" and "projectKey" as query parameters.',
-            );
+        res.status(400).send('Please, specify valid "pullRequestId", "repositorySlug" and "projectKey" as query parameters.');
     }
 
     try {
         const channelName = buildChannelName({
             pullRequestId: <string>pullRequestId,
             repositorySlug: <string>repositorySlug,
-            projectKey: <string>projectKey,
+            projectKey: <string>projectKey
         });
 
         const channelInfo = await slackChannelFactory.tryFindChannel(channelName);

@@ -14,15 +14,15 @@ export class CacheMetricsWrapper<T> {
         this.cache = createCache({ stores: [this.store] });
         this.cacheHitsCounter = new client.Counter({
             name: `${metricsNamePrefix}_cache_hits`,
-            help: "Successful cache hits counter",
+            help: "Successful cache hits counter"
         });
         this.cacheMissesCounter = new client.Counter({
             name: `${metricsNamePrefix}_cache_misses`,
-            help: "Missed cache hits counter",
+            help: "Missed cache hits counter"
         });
         this.utilizedCacheSizeGauge = new client.Gauge({
             name: `${metricsNamePrefix}_cache_utilized_size`,
-            help: "Utilized cache size",
+            help: "Utilized cache size"
         });
     }
 
@@ -55,10 +55,7 @@ export class CacheMetricsWrapper<T> {
 
     async deleteWhere(keyPredicate: (k: string) => boolean) {
         for (const key of (<any>this.store.opts.store).keys()) {
-            const clearKey = key.replace(
-                (<any>this.store.opts.store).namespace + ":",
-                "",
-            );
+            const clearKey = key.replace((<any>this.store.opts.store).namespace + ":", "");
             if (keyPredicate(clearKey)) {
                 await this.cache.del(clearKey);
                 this.utilizedCacheSizeGauge.dec();

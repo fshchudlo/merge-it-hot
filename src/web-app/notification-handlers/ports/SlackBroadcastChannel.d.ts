@@ -5,10 +5,7 @@ export interface SlackBroadcastChannel {
 
     sendMessage(options: SendMessageArguments): Promise<void>;
 
-    findPROpenedBroadcastMessageId(
-        prCreationDate: Date,
-        pullRequestTraits: PullRequestSnapshotInSlackMetadata
-    ): Promise<string | null>;
+    findPROpenedBroadcastMessageId(prCreationDate: Date, pullRequestTraits: PullRequestSnapshotInSlackMetadata): Promise<string | null>;
 }
 
 export type PullRequestSnapshotInSlackMetadata = {

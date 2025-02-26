@@ -17,9 +17,7 @@ export interface SlackTargetedChannel {
 
     deleteMessage(messageId: string): Promise<void>;
 
-    findLatestPullRequestCommentSnapshot(
-        commentId: number | string
-    ): Promise<PullRequestCommentSnapshot | null>;
+    findLatestPullRequestCommentSnapshot(commentId: number | string): Promise<PullRequestCommentSnapshot | null>;
 }
 
 export type SlackChannelInfo = {
@@ -32,8 +30,7 @@ export type PullrequestCommentSnapshotInSlackMetadata = {
     commentId: string;
     commentParentId?: string;
 };
-export type PullRequestCommentSnapshot =
-    PullrequestCommentSnapshotInSlackMetadata & {
+export type PullRequestCommentSnapshot = PullrequestCommentSnapshotInSlackMetadata & {
     slackMessageId: string;
     slackThreadId?: string;
 };

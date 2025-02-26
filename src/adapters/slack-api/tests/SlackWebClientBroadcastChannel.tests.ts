@@ -5,11 +5,11 @@ import { SlackChannelInfo } from "../../../web-app/notification-handlers/ports/S
 jest.mock("@slack/web-api", () => ({
     WebClient: jest.fn().mockImplementation(() => ({
         conversations: {
-            history: jest.fn(),
+            history: jest.fn()
         },
         reactions: { add: jest.fn() },
-        chat: { postMessage: jest.fn() },
-    })),
+        chat: { postMessage: jest.fn() }
+    }))
 }));
 
 describe("SlackWebClientChannel", () => {
@@ -21,11 +21,7 @@ describe("SlackWebClientChannel", () => {
         // Reset mocks before each test
         slackClient = new WebClient();
         channelInfo = { id: "C123456", name: "test-channel" };
-        channel = new SlackWebClientBroadcastChannel(
-            slackClient,
-            channelInfo,
-            ":emoji:",
-        );
+        channel = new SlackWebClientBroadcastChannel(slackClient, channelInfo, ":emoji:");
 
         jest.clearAllMocks();
     });
@@ -36,9 +32,8 @@ describe("SlackWebClientChannel", () => {
             expect(slackClient.reactions.add).toHaveBeenCalledWith({
                 channel: "C123456",
                 timestamp: "1234567890.1234",
-                name: "thumbsup",
+                name: "thumbsup"
             });
         });
     });
-
 });

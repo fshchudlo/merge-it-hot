@@ -7,11 +7,8 @@ const repositoriesCache: ReturnType<typeof createCache> = createCache({
 
 export class GithubRepositoriesCache {
     static async fetchOrganizationRepositories(orgName: string, gitHubAPI: GitHubRepositoriesAPI) {
-        return repositoriesCache.wrap<{ name: string }[]>(
-            `organizationRepositories:${orgName}`,
-            async () => {
-                return gitHubAPI.getRepositories(orgName);
-            }
-        );
+        return repositoriesCache.wrap<{ name: string }[]>(`organizationRepositories:${orgName}`, async () => {
+            return gitHubAPI.getRepositories(orgName);
+        });
     }
 }

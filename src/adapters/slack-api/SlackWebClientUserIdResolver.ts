@@ -10,9 +10,7 @@ export class SlackWebClientUserIdResolver implements SlackUserIdResolver {
         if (cachedUserId) {
             return Promise.resolve(cachedUserId);
         }
-        const user = await this.client.users
-            .lookupByEmail({ email })
-            .catch(e => (e.data?.error == "users_not_found" ? undefined : e));
+        const user = await this.client.users.lookupByEmail({ email }).catch(e => (e.data?.error == "users_not_found" ? undefined : e));
 
         const userId = user?.user?.id;
 

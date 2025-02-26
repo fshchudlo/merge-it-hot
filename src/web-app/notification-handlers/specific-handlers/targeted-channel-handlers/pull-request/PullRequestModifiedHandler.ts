@@ -1,12 +1,5 @@
-import {
-    contextBlock,
-    divider,
-    section
-} from "@slack-building-blocks";
-import {
-    markdownToSlackMarkup,
-    reviewPRAction
-} from "../../internals";
+import { contextBlock, divider, section } from "@slack-building-blocks";
+import { markdownToSlackMarkup, reviewPRAction } from "../../internals";
 import { PullRequestModifiedEvent } from "../../../event-contracts";
 import { PullRequestEventHandler } from "../../PullRequestEventHandler";
 
@@ -17,10 +10,7 @@ export class PullRequestModifiedHandler implements PullRequestEventHandler {
         return payload.eventKey == "pr:modified";
     }
 
-    public async handle(
-        payload: PullRequestModifiedEvent,
-        slackChannel: SlackTargetedChannel
-    ) {
+    public async handle(payload: PullRequestModifiedEvent, slackChannel: SlackTargetedChannel) {
         const visibleChanges = getPRChangesDescription(payload);
         if (visibleChanges.length == 0) {
             return;
@@ -29,12 +19,7 @@ export class PullRequestModifiedHandler implements PullRequestEventHandler {
         const messageTitle = `:writing_hand: ${payload.actor.name} changed the pull request`;
         await slackChannel.sendMessage({
             text: messageTitle,
-            blocks: [
-                section(messageTitle),
-                ...visibleChanges,
-                divider(),
-                reviewPRAction(payload.pullRequest)
-            ]
+            blocks: [section(messageTitle), ...visibleChanges, divider(), reviewPRAction(payload.pullRequest)]
         });
         if (payload.pullRequest.title != payload.previousTitle) {
             await slackChannel.setTopic(payload.pullRequest.title);
@@ -51,16 +36,9 @@ function getPRChangesDescription(payload: PullRequestModifiedEvent) {
     };
     const pullRequest = payload.pullRequest;
 
-    if (
-        pullRequest.targetBranch.branchName !=
-        payload.previousTargetBranch?.branchName
-    ) {
+    if (pullRequest.targetBranch.branchName != payload.previousTargetBranch?.branchName) {
         addDivider();
-        changesDescription.push(
-            section(
-                `Target is changed to \`${pullRequest.targetBranch.branchName}\``
-            )
-        );
+        changesDescription.push(section(`Target is changed to \`${pullRequest.targetBranch.branchName}\``));
     }
     if (pullRequest.title != payload.previousTitle) {
         addDivider();
@@ -71,9 +49,7 @@ function getPRChangesDescription(payload: PullRequestModifiedEvent) {
         addDivider();
         if (pullRequest.description) {
             changesDescription.push(section("Updated description:"));
-            changesDescription.push(
-                contextBlock(markdownToSlackMarkup(pullRequest.description))
-            );
+            changesDescription.push(contextBlock(markdownToSlackMarkup(pullRequest.description)));
         } else {
             changesDescription.push(section("Description is deleted."));
         }

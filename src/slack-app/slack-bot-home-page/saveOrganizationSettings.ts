@@ -15,9 +15,11 @@ export async function saveOrganizationSettings({ ack, body }: any) {
     };
 
     const organizationId = body.view.private_metadata;
-    const formValues = Object.values(body.view.state.values).flatMap(block => Object.entries(block))
+    const formValues = Object.values(body.view.state.values)
+        .flatMap(block => Object.entries(block))
         .reduce((accumulator: any, fieldEntry: any) => {
-            accumulator[fieldEntry[0]] = fieldEntry[1].selected_users || fieldEntry[1].selected_channel || fieldEntry[1].selected_options?.map((o: PlainTextOption) => o.value) || null;
+            accumulator[fieldEntry[0]] =
+                fieldEntry[1].selected_users || fieldEntry[1].selected_channel || fieldEntry[1].selected_options?.map((o: PlainTextOption) => o.value) || null;
             return accumulator;
         }, {});
     await OrganizationSettingsProvider.update(body.team.id, organizationId, formValues);

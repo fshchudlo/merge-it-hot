@@ -12,17 +12,23 @@ export async function getOrganizationRepositoriesDropdownOptions({ options, ack,
 
         const organization = await OrganizationSettingsProvider.findByKey(workspaceId, organizationId);
 
-        const allRepositories = await GithubRepositoriesCache.fetchOrganizationRepositories(organization.githubOrganizationLogin, createOrganizationGitHubAPI(organizationId));
+        const allRepositories = await GithubRepositoriesCache.fetchOrganizationRepositories(
+            organization.githubOrganizationLogin,
+            createOrganizationGitHubAPI(organizationId)
+        );
 
         const repositories = allRepositories
             .filter(repo => repo.name.toLowerCase().includes(userInput.toLowerCase()))
-            .map(repo => ({
-                text: {
-                    type: "plain_text",
-                    text: repo.name
-                },
-                value: repo.name
-            } as PlainTextOption));
+            .map(
+                repo =>
+                    ({
+                        text: {
+                            type: "plain_text",
+                            text: repo.name
+                        },
+                        value: repo.name
+                    }) as PlainTextOption
+            );
 
         await ack({ options: repositories });
     } catch (error) {

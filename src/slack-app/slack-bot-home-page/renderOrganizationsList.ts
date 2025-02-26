@@ -21,16 +21,15 @@ export async function renderOrganizationsList({ event, client }: { event: AppHom
                 type: "home",
                 blocks: [
                     header("Configure your preferences for the GitHub Organizations below:"),
-                    ...settings
-                        .flatMap(organizationSettings => {
-                            return [
-                                divider(),
-                                {
-                                    ...section(`*${organizationSettings.githubOrganizationLogin}*`),
-                                    accessory: button("Configure", SlackActionKeys.OPEN_ORGANIZATION_SETTINGS_MODAL, `${organizationSettings.githubOrganizationId}`)
-                                }
-                            ];
-                        })
+                    ...settings.flatMap(organizationSettings => {
+                        return [
+                            divider(),
+                            {
+                                ...section(`*${organizationSettings.githubOrganizationLogin}*`),
+                                accessory: button("Configure", SlackActionKeys.OPEN_ORGANIZATION_SETTINGS_MODAL, `${organizationSettings.githubOrganizationId}`)
+                            }
+                        ];
+                    })
                 ]
             }
         });

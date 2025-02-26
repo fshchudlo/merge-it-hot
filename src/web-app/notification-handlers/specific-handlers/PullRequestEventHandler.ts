@@ -4,8 +4,5 @@ import { SlackTargetedChannel } from "../ports/SlackTargetedChannel";
 export interface PullRequestEventHandler {
     canHandle(payload: PullRequestEvent): boolean;
 
-    handle(
-        payload: PullRequestEvent,
-        slackChannel: SlackTargetedChannel,
-    ): Promise<void>;
+    handle(payload: PullRequestEvent, slackChannel: SlackTargetedChannel): Promise<void>;
 }

@@ -7,8 +7,8 @@ describe("slackSection", () => {
             type: "section",
             text: {
                 type: "mrkdwn",
-                text: "This is a test section",
-            },
+                text: "This is a test section"
+            }
         };
         const result = section(text);
         expect(result).toEqual(expected);
@@ -21,8 +21,8 @@ describe("slackSection", () => {
             type: "section",
             text: {
                 type: "plain_text",
-                text: "This is another test section",
-            },
+                text: "This is another test section"
+            }
         };
         const result = section(text, type);
         expect(result).toEqual(expected);

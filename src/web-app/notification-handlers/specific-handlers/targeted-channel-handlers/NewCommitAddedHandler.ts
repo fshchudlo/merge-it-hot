@@ -11,31 +11,20 @@ export class NewCommitAddedHandler implements PullRequestEventHandler {
         return payload.eventKey == "pr:from_ref_updated";
     }
 
-    async handle(
-        payload: PullRequestFromBranchUpdatedEvent,
-        slackChannel: SlackTargetedChannel
-    ) {
+    async handle(payload: PullRequestFromBranchUpdatedEvent, slackChannel: SlackTargetedChannel) {
         await slackChannel.sendMessage(buildSlackMessage(payload));
-        if(shouldBeAddedAsParticipant(payload, payload.actor)) {
+        if (shouldBeAddedAsParticipant(payload, payload.actor)) {
             await slackChannel.inviteToChannel(payload.actor.slackUserId);
         }
     }
 }
 
-function buildSlackMessage(
-    payload: PullRequestFromBranchUpdatedEvent
-): SendMessageArguments {
+function buildSlackMessage(payload: PullRequestFromBranchUpdatedEvent): SendMessageArguments {
     const messageTitle = `:new: ${payload.actor.name} added ${link(payload.latestCommitViewUrl, "new commit")}.`;
 
-    const commentSection = payload.latestCommitMessage
-        ? section(`Commit message: \n${quote(markdownToSlackMarkup(payload.latestCommitMessage))}`)
-        : null;
+    const commentSection = payload.latestCommitMessage ? section(`Commit message: \n${quote(markdownToSlackMarkup(payload.latestCommitMessage))}`) : null;
     return {
         text: messageTitle,
-        blocks: [
-            section(messageTitle),
-            commentSection,
-            reviewPRAction(payload.pullRequest)
-        ].filter(s => !!s)
+        blocks: [section(messageTitle), commentSection, reviewPRAction(payload.pullRequest)].filter(s => !!s)
     };
 }

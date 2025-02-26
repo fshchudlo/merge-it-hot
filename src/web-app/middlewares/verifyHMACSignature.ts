@@ -2,17 +2,12 @@ import { AppConfig } from "../../app.config";
 import crypto from "crypto";
 import type { Request, Response, NextFunction } from "express";
 
-export default async function verifyHMACSignature(
-    req: Request,
-    res: Response,
-    next: NextFunction,
-) {
+export default async function verifyHMACSignature(req: Request, res: Response, next: NextFunction) {
     if (!AppConfig.HMAC_SECRET) {
         next();
         return;
     }
-    const signature =
-        req.headers["x-hub-signature-256"] || req.headers["x-hub-signature"];
+    const signature = req.headers["x-hub-signature-256"] || req.headers["x-hub-signature"];
     if (!signature || typeof signature !== "string") {
         console.warn("No signature found in request");
         res.status(401).send("Invalid signature");

@@ -35,11 +35,10 @@ export class OrganizationSettingsProvider {
         // TODO: After implementing normal installation workflow we should replace this to a simple query
         await Promise.all(
             installations.map(async installation => {
-                    const settings = await OrganizationSettingsProvider.fetch(slackWorkspaceId, installation.organizationId, installation.organizationLogin);
-                    await settingsRepository.save(settings);
-                    return settings;
-                }
-            )
+                const settings = await OrganizationSettingsProvider.fetch(slackWorkspaceId, installation.organizationId, installation.organizationLogin);
+                await settingsRepository.save(settings);
+                return settings;
+            })
         );
         return await settingsRepository.find({ where: { slackWorkspaceId }, order: { githubOrganizationLogin: "ASC" } });
     }

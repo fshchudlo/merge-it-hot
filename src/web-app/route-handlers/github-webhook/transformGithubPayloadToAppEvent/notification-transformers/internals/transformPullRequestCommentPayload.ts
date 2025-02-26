@@ -1,12 +1,7 @@
-import {
-    GitHubPullRequestCommentActionType,
-    GitHubPullRequestCommentNotification
-} from "../../GitHubAPI.contracts";
+import { GitHubPullRequestCommentActionType, GitHubPullRequestCommentNotification } from "../../GitHubAPI.contracts";
 import { SlackUserIdResolver } from "../../ports/SlackUserIdResolver";
 import { mapPayloadGenericPart } from "./mapPayloadGenericPart";
-import {
-    PullRequestCommentActionEvent, PullRequestCommentActionEventKey
-} from "../../../../../notification-handlers/event-contracts";
+import { PullRequestCommentActionEvent, PullRequestCommentActionEventKey } from "../../../../../notification-handlers/event-contracts";
 import mapGitHubUserToSlackUser from "./mapGitHubUserToSlackUser";
 import { GitHubAPI } from "../../ports/GitHubAPI";
 
@@ -17,20 +12,13 @@ export async function transformPullRequestCommentPayload(
 ): Promise<PullRequestCommentActionEvent> {
     const action = notification.action;
     return {
-        ...(await mapPayloadGenericPart(
-            notification,
-            userIdResolver,
-            githubAPI
-        )),
+        ...(await mapPayloadGenericPart(notification, userIdResolver, githubAPI)),
         eventKey: mapGitHubCommentActionToEventKey(action),
         comment: {
             id: notification.comment.id,
             replyToCommentId: notification.comment.in_reply_to_id,
             text: notification.comment.body,
-            author: await mapGitHubUserToSlackUser(
-                notification.comment.user,
-                userIdResolver
-            ),
+            author: await mapGitHubUserToSlackUser(notification.comment.user, userIdResolver),
             resolvedAt: null,
             link: notification.comment.html_url
         },
@@ -38,9 +26,7 @@ export async function transformPullRequestCommentPayload(
     };
 }
 
-function mapGitHubCommentActionToEventKey(
-    action: GitHubPullRequestCommentActionType
-): PullRequestCommentActionEventKey {
+function mapGitHubCommentActionToEventKey(action: GitHubPullRequestCommentActionType): PullRequestCommentActionEventKey {
     switch (action) {
         case "created":
             return "pr:comment:added";

@@ -6,10 +6,7 @@ describe("PR opened use-case", () => {
     it("Should add bookmark and invite author and reviewers on PR opened", async () => {
         const channelMock = new SlackChannelSnapshottingMock();
 
-        await handlePullRequestEvent(
-            TestPayloadBuilder.pullRequestOpened(),
-            channelMock,
-        );
+        await handlePullRequestEvent(TestPayloadBuilder.pullRequestOpened(), channelMock);
 
         expect(channelMock.snapshot).toMatchSnapshot();
     });
@@ -18,11 +15,7 @@ describe("PR opened use-case", () => {
         const channelMock = new SlackChannelSnapshottingMock();
         const broadcastChannelMock = new SlackChannelSnapshottingMock();
 
-        await handlePullRequestEvent(
-            TestPayloadBuilder.pullRequestOpened(),
-            channelMock,
-            broadcastChannelMock,
-        );
+        await handlePullRequestEvent(TestPayloadBuilder.pullRequestOpened(), channelMock, broadcastChannelMock);
 
         expect(broadcastChannelMock.snapshot).toMatchSnapshot();
     });

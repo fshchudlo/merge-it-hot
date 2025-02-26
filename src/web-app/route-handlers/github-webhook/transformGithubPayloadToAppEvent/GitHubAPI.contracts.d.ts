@@ -7,8 +7,7 @@ export type GitHubNotification =
     | GitHubPullRequestThreadResolutionNotification
     | GitHubPullRequestCommentNotification;
 
-export type GitHubPullRequestBasicNotification =
-    GitHubPullRequestNotificationBasicPayload & {
+export type GitHubPullRequestBasicNotification = GitHubPullRequestNotificationBasicPayload & {
     readonly action:
         | "opened"
         | "closed"
@@ -28,20 +27,17 @@ export type GitHubPullRequestBasicNotification =
         | "dequeued";
 };
 
-export type GitHubPullRequestReviewersUpdatedNotification =
-    GitHubPullRequestNotificationBasicPayload & {
+export type GitHubPullRequestReviewersUpdatedNotification = GitHubPullRequestNotificationBasicPayload & {
     readonly action: "review_requested" | "review_request_removed";
     readonly requested_reviewer?: GitHubUserPayload;
     readonly requested_team?: GitHubTeamPayload;
 };
 
-export type GitHubPullRequestAssigneesUpdatedNotification =
-    GitHubPullRequestNotificationBasicPayload & {
+export type GitHubPullRequestAssigneesUpdatedNotification = GitHubPullRequestNotificationBasicPayload & {
     readonly action: "assigned" | "unassigned";
     readonly assignee: GitHubUserPayload;
 };
-export type GitHubPullRequestEditedNotification =
-    GitHubPullRequestNotificationBasicPayload & {
+export type GitHubPullRequestEditedNotification = GitHubPullRequestNotificationBasicPayload & {
     readonly action: "edited";
     readonly changes: {
         readonly body?: {
@@ -61,8 +57,7 @@ export type GitHubPullRequestEditedNotification =
     };
 };
 
-export type GitHubPullRequestReviewSubmittedNotification =
-    GitHubPullRequestNotificationBasicPayload & {
+export type GitHubPullRequestReviewSubmittedNotification = GitHubPullRequestNotificationBasicPayload & {
     readonly action: "submitted";
     readonly review: {
         state: GitHubPullRequestReviewState;
@@ -70,8 +65,7 @@ export type GitHubPullRequestReviewSubmittedNotification =
     };
 };
 
-export type GitHubPullRequestCommentNotification =
-    GitHubPullRequestNotificationBasicPayload & {
+export type GitHubPullRequestCommentNotification = GitHubPullRequestNotificationBasicPayload & {
     readonly action: GitHubPullRequestCommentActionType;
     readonly comment: GitHubPullRequestCommentPayload;
     readonly changes?: {
@@ -81,8 +75,7 @@ export type GitHubPullRequestCommentNotification =
     };
 };
 
-export type GitHubPullRequestThreadResolutionNotification =
-    GitHubPullRequestNotificationBasicPayload & {
+export type GitHubPullRequestThreadResolutionNotification = GitHubPullRequestNotificationBasicPayload & {
     readonly action: "resolved" | "unresolved";
     readonly thread: {
         comments: GitHubPullRequestCommentPayload[];
@@ -95,7 +88,7 @@ export type GitHubPullRequestNotificationBasicPayload = {
         readonly name: string;
     };
     readonly sender: GitHubUserPayload;
-    readonly organization: { readonly login: string, id: number };
+    readonly organization: { readonly login: string; id: number };
 };
 
 export type GitHubPullRequestCommentPayload = {
@@ -149,15 +142,8 @@ export type GitHubRefPayload = {
     };
 };
 
-export type GitHubPullRequestCommentActionType =
-    | "created"
-    | "edited"
-    | "deleted";
-export type GitHubPullRequestReviewState =
-    | "commented"
-    | "approved"
-    | "changes_requested"
-    | "dismissed";
+export type GitHubPullRequestCommentActionType = "created" | "edited" | "deleted";
+export type GitHubPullRequestReviewState = "commented" | "approved" | "changes_requested" | "dismissed";
 export type GitHubPullRequestEventType =
     | "pull_request"
     | "issue_comment"

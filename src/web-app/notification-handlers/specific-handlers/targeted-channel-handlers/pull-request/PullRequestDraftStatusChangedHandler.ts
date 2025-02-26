@@ -4,18 +4,12 @@ import { PullRequestEventHandler } from "../../PullRequestEventHandler";
 import { SlackTargetedChannel } from "../../../ports/SlackTargetedChannel";
 import { SendMessageArguments } from "../../../ports/SendMessageArguments";
 
-export class PullRequestDraftStatusChangedHandler
-    implements PullRequestEventHandler {
+export class PullRequestDraftStatusChangedHandler implements PullRequestEventHandler {
     canHandle(payload: PullRequestGenericEvent) {
-        return ["pr:ready_for_review", "pr:converted_to_draft"].includes(
-            payload.eventKey
-        );
+        return ["pr:ready_for_review", "pr:converted_to_draft"].includes(payload.eventKey);
     }
 
-    async handle(
-        payload: PullRequestGenericEvent,
-        slackChannel: SlackTargetedChannel
-    ) {
+    async handle(payload: PullRequestGenericEvent, slackChannel: SlackTargetedChannel) {
         await slackChannel.sendMessage(buildSlackMessage(payload));
     }
 }

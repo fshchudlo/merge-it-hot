@@ -9,7 +9,6 @@ import { renderOrganizationSettingsModal } from "./slack-bot-home-page/renderOrg
 import { saveOrganizationSettings } from "./slack-bot-home-page/saveOrganizationSettings";
 import { getOrganizationRepositoriesDropdownOptions } from "./slack-bot-home-page/getOrganizationRepositoriesDropdownOptions";
 
-
 export const slackApp = new App({
     token: AppConfig.SLACK_BOT_TOKEN,
     appToken: AppConfig.SLACK_APP_TOKEN,

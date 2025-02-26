@@ -23,8 +23,7 @@ export class SlackWebClientTargetedChannel implements SlackTargetedChannel {
         readonly channelInfo: SlackChannelInfo = null,
         private readonly iconEmoji: string,
         private readonly messageSender = new SlackMessageSender(client, channelInfo, iconEmoji)
-    ) {
-    }
+    ) {}
 
     private getCommentCacheKey(reviewCommentId: number | string) {
         return `${this.channelInfo.id}-${reviewCommentId}`;
@@ -90,9 +89,7 @@ export class SlackWebClientTargetedChannel implements SlackTargetedChannel {
             channel: this.channelInfo.id
         });
         await CHANNELS_CACHE.delete(this.channelInfo.name);
-        await COMMENTS_CACHE.deleteWhere(key =>
-            key.startsWith(this.getCommentCacheKey(""))
-        );
+        await COMMENTS_CACHE.deleteWhere(key => key.startsWith(this.getCommentCacheKey("")));
     }
 
     async sendMessage(options: SendMessageArguments) {
@@ -106,36 +103,22 @@ export class SlackWebClientTargetedChannel implements SlackTargetedChannel {
         });
     }
 
-    async findLatestPullRequestCommentSnapshot(
-        reviewCommentId: number | string
-    ): Promise<PullRequestCommentSnapshot | null> {
+    async findLatestPullRequestCommentSnapshot(reviewCommentId: number | string): Promise<PullRequestCommentSnapshot | null> {
         const cacheKey = this.getCommentCacheKey(reviewCommentId);
         const cachedCommentInfo = await COMMENTS_CACHE.get(cacheKey);
 
         if (cachedCommentInfo) return cachedCommentInfo;
 
-        const comment = await findMessageInChannelHistory(
-            this.client,
-            this.channelInfo.id,
-            message => {
-                const eventPayload =
-                    message.metadata?.event_type ===
-                    SNAPSHOT_COMMENT_STATE_EVENT_TYPE
-                        ? <PullrequestCommentSnapshotInSlackMetadata>(
-                            message.metadata?.event_payload
-                        )
-                        : null;
-                return (
-                    eventPayload &&
-                    eventPayload.commentId === reviewCommentId.toString()
-                );
-            }
-        );
+        const comment = await findMessageInChannelHistory(this.client, this.channelInfo.id, message => {
+            const eventPayload =
+                message.metadata?.event_type === SNAPSHOT_COMMENT_STATE_EVENT_TYPE
+                    ? <PullrequestCommentSnapshotInSlackMetadata>message.metadata?.event_payload
+                    : null;
+            return eventPayload && eventPayload.commentId === reviewCommentId.toString();
+        });
 
         if (comment) {
-            const metadata = <PullrequestCommentSnapshotInSlackMetadata>(
-                comment.metadata?.event_payload
-            );
+            const metadata = <PullrequestCommentSnapshotInSlackMetadata>comment.metadata?.event_payload;
             const snapshot = <PullRequestCommentSnapshot>{
                 commentId: metadata.commentId,
                 commentParentId: metadata.commentParentId,
