@@ -1,4 +1,4 @@
-import { PullRequestModifiedEvent } from "../../../../core/event-contracts";
+import { PullRequestModifiedEvent } from "../../../../../../notification-handlers/event-contracts";
 import {
     GitHubPullRequestEditedNotification,
     GitHubPullRequestEventType

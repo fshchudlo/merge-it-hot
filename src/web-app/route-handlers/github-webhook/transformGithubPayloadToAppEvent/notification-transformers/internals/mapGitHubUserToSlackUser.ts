@@ -1,6 +1,6 @@
 import { GitHubUserPayload } from "../../GitHubAPI.contracts";
 import { SlackUserIdResolver } from "../../ports/SlackUserIdResolver";
-import { UserPayload } from "../../../../core/event-contracts";
+import { UserPayload } from "../../../../../../notification-handlers/event-contracts";
 import { formatUsername } from "./formatUsername";
 import { getSlackUserId } from "./getSlackUserId";
 

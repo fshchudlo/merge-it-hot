@@ -1,4 +1,4 @@
-import { PullRequestCommentActionEvent } from "../../../../core/event-contracts";
+import { PullRequestCommentActionEvent } from "../../../../../../notification-handlers/event-contracts";
 import { GitHubPullRequestCommentNotification, GitHubPullRequestEventType, GitHubPullRequestPayload } from "../../GitHubAPI.contracts";
 import { GitHubNotificationTransformer } from "../GitHubNotificationTransformer";
 import { SlackUserIdResolver } from "../../ports/SlackUserIdResolver";

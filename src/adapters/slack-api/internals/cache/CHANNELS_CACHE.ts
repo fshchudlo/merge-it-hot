@@ -1,5 +1,5 @@
 import { CacheMetricsWrapper } from "./cache-metrics-wrapper/CacheMetricsWrapper";
-import { SlackChannelInfo } from "../../../../core/ports/SlackTargetedChannel";
+import { SlackChannelInfo } from "../../../../notification-handlers/ports/SlackTargetedChannel";
 
 export const CHANNELS_CACHE = new CacheMetricsWrapper<SlackChannelInfo>(
     "channels",

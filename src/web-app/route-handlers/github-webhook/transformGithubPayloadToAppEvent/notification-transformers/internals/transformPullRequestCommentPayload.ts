@@ -5,8 +5,8 @@ import {
 import { SlackUserIdResolver } from "../../ports/SlackUserIdResolver";
 import { mapPayloadGenericPart } from "./mapPayloadGenericPart";
 import {
-    PullRequestCommentActionEvent
-} from "../../../../core/event-contracts";
+    PullRequestCommentActionEvent, PullRequestCommentActionEventKey
+} from "../../../../../../notification-handlers/event-contracts";
 import mapGitHubUserToSlackUser from "./mapGitHubUserToSlackUser";
 import { GitHubAPI } from "../../ports/GitHubAPI";
 
@@ -35,12 +35,12 @@ export async function transformPullRequestCommentPayload(
             link: notification.comment.html_url
         },
         previousComment: notification.changes?.body?.from
-    } as PullRequestCommentActionEvent;
+    };
 }
 
 function mapGitHubCommentActionToEventKey(
     action: GitHubPullRequestCommentActionType
-): string {
+): PullRequestCommentActionEventKey {
     switch (action) {
         case "created":
             return "pr:comment:added";

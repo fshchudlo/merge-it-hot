@@ -1,4 +1,4 @@
-import { PullRequestGenericEvent } from "../../../../core/event-contracts";
+import { PullRequestGenericEvent } from "../../../../../../notification-handlers/event-contracts";
 import { GitHubNotification, GitHubPullRequestEventType } from "../../GitHubAPI.contracts";
 import { GitHubNotificationTransformer } from "../GitHubNotificationTransformer";
 import { mapPayloadGenericPart } from "../internals/mapPayloadGenericPart";

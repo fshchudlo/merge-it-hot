@@ -1,5 +1,5 @@
 import { buildChannelName } from "../buildChannelName";
-import { PullRequestPayload } from "../../../core/event-contracts";
+import { PullRequestPayload } from "../../../notification-handlers/event-contracts";
 
 describe("buildChannelName", () => {
     it("should generate the correct channel name", () => {

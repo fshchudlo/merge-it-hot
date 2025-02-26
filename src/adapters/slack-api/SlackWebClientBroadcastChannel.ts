@@ -1,10 +1,10 @@
 import * as slack from "@slack/web-api";
-import { SNAPSHOT_PULL_REQUEST_STATE_EVENT_TYPE } from "../../core/specific-handlers/internals/snapshotPullRequestState";
+import { SNAPSHOT_PULL_REQUEST_STATE_EVENT_TYPE } from "../../notification-handlers/specific-handlers/internals/snapshotPullRequestState";
 import {
     SlackChannelInfo
-} from "../../core/ports/SlackTargetedChannel";
-import { SlackBroadcastChannel, PullRequestSnapshotInSlackMetadata } from "../../core/ports/SlackBroadcastChannel";
-import { SendMessageArguments } from "../../core/ports/SendMessageArguments";
+} from "../../notification-handlers/ports/SlackTargetedChannel";
+import { SlackBroadcastChannel, PullRequestSnapshotInSlackMetadata } from "../../notification-handlers/ports/SlackBroadcastChannel";
+import { SendMessageArguments } from "../../notification-handlers/ports/SendMessageArguments";
 import { SlackMessageSender } from "./internals/SlackMessageSender";
 import { findMessageInChannelHistory } from "./internals/findMessageInChannelHistory";
 

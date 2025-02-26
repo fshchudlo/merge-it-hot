@@ -4,8 +4,8 @@ import {
     PullRequestCommentSnapshot,
     PullrequestCommentSnapshotInSlackMetadata,
     SlackChannelInfo
-} from "../../../core/ports/SlackTargetedChannel";
-import { SendMessageArguments } from "../../../core/ports/SendMessageArguments";
+} from "../../../notification-handlers/ports/SlackTargetedChannel";
+import { SendMessageArguments } from "../../../notification-handlers/ports/SendMessageArguments";
 
 export class SlackMessageSender {
     constructor(

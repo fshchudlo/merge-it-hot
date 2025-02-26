@@ -1,14 +1,14 @@
 import * as slack from "@slack/web-api";
 import { SlackWebClientBroadcastChannel } from "./SlackWebClientBroadcastChannel";
-import { PullRequestEvent } from "../../core/event-contracts";
+import { PullRequestEvent } from "../../notification-handlers/event-contracts";
 import { buildChannelName } from "./buildChannelName";
 import { CHANNELS_CACHE } from "./internals/cache/CHANNELS_CACHE";
 
 import {
     SlackChannelInfo
-} from "../../core/ports/SlackTargetedChannel";
-import { SlackBroadcastChannel } from "../../core/ports/SlackBroadcastChannel";
-import { SlackTargetedChannel } from "../../core/ports/SlackTargetedChannel";
+} from "../../notification-handlers/ports/SlackTargetedChannel";
+import { SlackBroadcastChannel } from "../../notification-handlers/ports/SlackBroadcastChannel";
+import { SlackTargetedChannel } from "../../notification-handlers/ports/SlackTargetedChannel";
 import { SlackWebClientTargetedChannel } from "./SlackWebClientTargetedChannel";
 
 export class SlackChannelProvisioner {

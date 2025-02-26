@@ -2,8 +2,8 @@ import { WebClient } from "@slack/web-api";
 import { SlackWebClientTargetedChannel } from "../SlackWebClientTargetedChannel";
 import { CHANNELS_CACHE } from "../internals/cache/CHANNELS_CACHE";
 import { COMMENTS_CACHE } from "../internals/cache/COMMENTS_CACHE";
-import { SNAPSHOT_COMMENT_STATE_EVENT_TYPE } from "../../../core/specific-handlers/internals";
-import { SlackChannelInfo } from "../../../core/ports/SlackTargetedChannel";
+import { SNAPSHOT_COMMENT_STATE_EVENT_TYPE } from "../../../notification-handlers/specific-handlers/internals";
+import { SlackChannelInfo } from "../../../notification-handlers/ports/SlackTargetedChannel";
 
 jest.mock("@slack/web-api", () => ({
     WebClient: jest.fn().mockImplementation(() => ({

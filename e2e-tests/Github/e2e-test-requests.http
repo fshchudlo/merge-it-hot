@@ -274,9 +274,7 @@ X-GitHub-Event: pull_request
 }
 
 > {%
-    client.test("Invalid payload sending should lead to error", function() {
-        console.log(response.body)
-        client.assert(response.body.indexOf('"invalid-payload" action key is unknown') !== -1);
-        client.assert(response.status === 500)
+    client.test("Invalid payload should be ignored", function() {
+        client.assert(response.status === 200);
     });
 %}

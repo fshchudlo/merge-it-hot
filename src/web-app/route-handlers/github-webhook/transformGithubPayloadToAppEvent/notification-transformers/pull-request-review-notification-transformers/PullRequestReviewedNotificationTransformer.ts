@@ -1,4 +1,4 @@
-import { PullRequestReviewState, PullRequestReviewSubmittedEvent } from "../../../../core/event-contracts";
+import { PullRequestReviewState, PullRequestReviewSubmittedEvent } from "../../../../../../notification-handlers/event-contracts";
 import { GitHubPullRequestEventType, GitHubPullRequestReviewState, GitHubPullRequestReviewSubmittedNotification } from "../../GitHubAPI.contracts";
 import { GitHubNotificationTransformer } from "../GitHubNotificationTransformer";
 import { mapPayloadGenericPart } from "../internals/mapPayloadGenericPart";
