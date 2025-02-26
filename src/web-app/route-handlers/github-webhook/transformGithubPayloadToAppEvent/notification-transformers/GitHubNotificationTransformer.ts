@@ -1,5 +1,5 @@
 import { GitHubNotification, GitHubPullRequestEventType } from "../GitHubAPI.contracts";
-import { PullRequestEvent } from "../../../../../notification-handlers/event-contracts";
+import { PullRequestEvent } from "../../../../notification-handlers/event-contracts";
 import { SlackUserIdResolver } from "../ports/SlackUserIdResolver";
 import { GitHubAPI } from "../ports/GitHubAPI";
 

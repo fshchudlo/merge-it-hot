@@ -20,7 +20,7 @@
     "typeRoots": [
       "./types",
       "./node_modules/@types",
-      "./src/notification-handlers/event-contracts"
+      "./src/web-app/notification-handlers/event-contracts"
     ]
   },
   "include": [

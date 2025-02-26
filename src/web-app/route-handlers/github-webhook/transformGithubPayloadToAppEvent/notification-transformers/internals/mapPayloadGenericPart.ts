@@ -1,6 +1,6 @@
 import { GitHubPullRequestNotificationBasicPayload, GitHubUserPayload } from "../../GitHubAPI.contracts";
 import { SlackUserIdResolver } from "../../ports/SlackUserIdResolver";
-import { PullRequestGenericEvent, ParticipantPayload } from "../../../../../../notification-handlers/event-contracts";
+import { PullRequestGenericEvent, ParticipantPayload } from "../../../../../notification-handlers/event-contracts";
 import mapGitHubUserToSlackUser from "./mapGitHubUserToSlackUser";
 import { GitHubAPI } from "../../ports/GitHubAPI";
 

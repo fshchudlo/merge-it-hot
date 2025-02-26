@@ -6,7 +6,7 @@ import { SlackUserIdResolver } from "../../ports/SlackUserIdResolver";
 import { mapPayloadGenericPart } from "./mapPayloadGenericPart";
 import {
     PullRequestCommentActionEvent, PullRequestCommentActionEventKey
-} from "../../../../../../notification-handlers/event-contracts";
+} from "../../../../../notification-handlers/event-contracts";
 import mapGitHubUserToSlackUser from "./mapGitHubUserToSlackUser";
 import { GitHubAPI } from "../../ports/GitHubAPI";
 

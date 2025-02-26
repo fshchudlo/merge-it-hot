@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { SlackChannelProvisioner } from "../../../adapters/slack-api/SlackChannelProvisioner";
 import { transformGithubPayloadToAppEvent } from "./transformGithubPayloadToAppEvent/transformGithubPayloadToAppEvent";
 import { AppConfig } from "../../../app.config";
-import handlePullRequestEvent from "../../../notification-handlers/handlePullRequestEvent";
+import handlePullRequestEvent from "../../notification-handlers/handlePullRequestEvent";
 import { SlackUserIdResolver } from "./transformGithubPayloadToAppEvent/ports/SlackUserIdResolver";
 import GitHubWebAPIAdapter from "../../../adapters/github-api/GitHubWebAPIAdapter";
 import { GitHubPullRequestEventType } from "./transformGithubPayloadToAppEvent/GitHubAPI.contracts";
@@ -26,6 +26,7 @@ export async function handleGitHubWebhookCall(
         }
 
         if (!req.body?.organization?.id) {
+            // noinspection ExceptionCaughtLocallyJS
             throw new Error("Organization ID is missing in the request payload");
         }
         const githubAPI = new GitHubWebAPIAdapter(AppConfig.GITHUB_APP_ID, AppConfig.GITHUB_APP_PRIVATE_KEY, +req.body.organization.id);
