@@ -1,5 +1,5 @@
 import SlackChannelSnapshottingMock from "./test-helpers/SlackChannelSnapshottingMock";
-import TestPayloadBuilder, { botUser } from "./test-helpers/TestPayloadBuilder";
+import TestPayloadBuilder, { botUser, reviewer3User } from "./test-helpers/TestPayloadBuilder";
 import handlePullRequestEvent from "../handlePullRequestEvent";
 
 describe("Participants updated use-case", () => {
@@ -21,9 +21,9 @@ describe("Participants updated use-case", () => {
     it("Shouldn't add bot users to the channel", async () => {
         const channelMock = new SlackChannelSnapshottingMock();
 
-        await handlePullRequestEvent(TestPayloadBuilder.participantsUpdated([botUser]), channelMock, null);
+        await handlePullRequestEvent(TestPayloadBuilder.participantsUpdated([reviewer3User, botUser]), channelMock, null);
 
-        expect(channelMock.snapshot.invitesToChannels).toEqual([[]]);
+        expect(channelMock.snapshot.invitesToChannels).toEqual([[reviewer3User.slackUserId]]);
     });
 
 });
