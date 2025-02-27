@@ -14,7 +14,9 @@ export class PullRequestParticipantsChangedHandler implements PullRequestEventHa
 }
 
 async function updateChannelMembers(payload: PullRequestParticipantsUpdatedEvent, slackChannel: SlackTargetedChannel) {
-    const userIdsToAdd = payload.addedParticipants.map(payload => payload.slackUserId);
+    const userIdsToAdd = payload.addedParticipants
+        .filter(u=>!u.isBotUser)
+        .map(u => u.slackUserId);
 
     await slackChannel.inviteToChannel(...userIdsToAdd);
 

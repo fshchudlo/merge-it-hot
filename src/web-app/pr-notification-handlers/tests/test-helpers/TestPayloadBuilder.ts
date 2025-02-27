@@ -3,7 +3,9 @@ import {
     PullRequestGenericEvent,
     PullRequestCommentActionEvent,
     PullRequestModifiedEvent,
-    PullRequestParticipantsUpdatedEvent
+    PullRequestParticipantsUpdatedEvent,
+    ReviewerReviewStatus,
+    ParticipantPayload
 } from "../../event-contracts";
 
 export const authorUser = {
@@ -30,6 +32,12 @@ export const nonReviewerUser = {
     name: "Non Reviewer User",
     isBotUser: false,
     slackUserId: "444444"
+};
+
+export const botUser = {
+    name: "Bot User",
+    isBotUser: true,
+    slackUserId: "555555"
 };
 
 function getBasicPayload(): PullRequestGenericEvent {
@@ -84,6 +92,7 @@ export default class TestPayloadBuilder {
             eventKey: "pr:opened"
         };
     }
+
     static pullRequestIsReadyForReview(): PullRequestEvent {
         return {
             ...getBasicPayload(),
@@ -94,6 +103,7 @@ export default class TestPayloadBuilder {
             eventKey: "pr:ready_for_review"
         };
     }
+
     static pullRequestIsConvertedToDraft(): PullRequestEvent {
         return {
             ...getBasicPayload(),
@@ -104,6 +114,7 @@ export default class TestPayloadBuilder {
             eventKey: "pr:converted_to_draft"
         };
     }
+
     static pullRequestOpened(): PullRequestEvent {
         return {
             ...getBasicPayload(),
@@ -131,6 +142,7 @@ export default class TestPayloadBuilder {
             eventKey: "pr:deleted"
         };
     }
+
     static pullRequestReopened(): PullRequestEvent {
         return {
             ...getBasicPayload(),
@@ -360,25 +372,28 @@ export default class TestPayloadBuilder {
         };
     }
 
-    static participantsUpdated(): PullRequestParticipantsUpdatedEvent {
+    static participantsUpdated(participantsToAdd = [reviewer3User], participantsToRemove = [reviewer1User]): PullRequestParticipantsUpdatedEvent {
         return {
             ...getBasicPayload(),
             eventKey: "pr:participants:changed",
-            addedParticipants: [reviewer3User],
-            removedParticipants: [reviewer1User],
+            addedParticipants: participantsToAdd.map(p => {
+                return { ...p };
+            }),
+            removedParticipants: participantsToRemove.map(p => {
+                return { ...p };
+            }),
 
             pullRequest: {
                 ...getBasicPayload().pullRequest,
-                participants: [
-                    {
-                        user: { ...reviewer2User },
-                        status: "UNAPPROVED"
-                    },
-                    {
-                        user: { ...reviewer3User },
-                        status: "UNAPPROVED"
-                    }
-                ]
+                participants: participantsToAdd
+                    .map(p => {
+                        return {
+                            user: { ...p },
+                            status: "UNAPPROVED" as ReviewerReviewStatus
+                        } as ParticipantPayload;
+                    })
+                    .concat(getBasicPayload().pullRequest.participants)
+                    .filter(p => !participantsToRemove.some(r => r.name === p.user.name))
             }
         };
     }
