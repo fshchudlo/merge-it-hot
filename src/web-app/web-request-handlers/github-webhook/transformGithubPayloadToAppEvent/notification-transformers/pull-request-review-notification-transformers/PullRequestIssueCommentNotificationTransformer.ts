@@ -1,4 +1,4 @@
-import { PullRequestCommentActionEvent } from "../../../../../pr-notification-handlers/event-contracts";
+import { IgnoredEvent, PullRequestCommentActionEvent } from "../../../../../pr-notification-handlers/event-contracts";
 import { GitHubPullRequestCommentNotification, GitHubPullRequestEventType, GitHubPullRequestPayload } from "../../GitHubAPI.contracts";
 import { GitHubNotificationTransformer } from "../GitHubNotificationTransformer";
 import { SlackUserIdResolver } from "../../ports/SlackUserIdResolver";
@@ -15,8 +15,15 @@ export class PullRequestIssueCommentNotificationTransformer implements GitHubNot
         payload: GitHubPullRequestCommentNotification,
         userIdResolver: SlackUserIdResolver,
         githubAPI: GitHubAPI
-    ): Promise<PullRequestCommentActionEvent> {
+    ): Promise<PullRequestCommentActionEvent | IgnoredEvent> {
         const pullRequest = await githubAPI.fetchFromAPIUrl<GitHubPullRequestPayload>((<any>payload).issue.pull_request.url);
+
+        if (pullRequest.state === "closed" && payload.sender.type === "Bot") {
+            return {
+                eventKey: "ignored_event"
+            };
+        }
+
         payload = {
             ...payload,
             pull_request: pullRequest

@@ -1,13 +1,9 @@
-import { PullRequestEvent } from "../../../pr-notification-handlers/event-contracts";
+import { IgnoredEvent, PullRequestEvent } from "../../../pr-notification-handlers/event-contracts";
 import { SlackUserIdResolver } from "./ports/SlackUserIdResolver";
 import { GitHubNotification, GitHubPullRequestEventType } from "./GitHubAPI.contracts";
 import { GitHubAPI } from "./ports/GitHubAPI";
 import { GitHubNotificationTransformer } from "./notification-transformers/GitHubNotificationTransformer";
 import * as transformers from "./notification-transformers";
-
-export type IgnoredEvent = {
-    readonly eventKey: "ignored_event";
-};
 
 export async function transformGithubPayloadToAppEvent(
     eventType: GitHubPullRequestEventType,

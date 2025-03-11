@@ -6,6 +6,10 @@ export type PullRequestEvent =
     | PullRequestParticipantsUpdatedEvent
     | PullRequestReviewSubmittedEvent;
 
+export type IgnoredEvent = {
+    readonly eventKey: "ignored_event";
+};
+
 export type PullRequestNotificationBasicPayload = {
     readonly actor: UserPayload;
     readonly pullRequest: PullRequestPayload;
