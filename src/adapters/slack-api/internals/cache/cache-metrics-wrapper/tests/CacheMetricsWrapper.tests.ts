@@ -15,7 +15,7 @@ describe("CacheMetricsWrapper", () => {
         const cache = new CacheMetricsWrapper("test");
         await cache.set("key1", "value1");
         await cache.delete("key1");
-        expect(await cache.get("key1")).toBeNull();
+        expect(await cache.get("key1")).toBeUndefined();
     });
 
     it("should update value for existing key", async () => {
