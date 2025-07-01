@@ -32,12 +32,12 @@
     "@slack/bolt": "^4.4.0",
     "@types/express": "^5.0.3",
     "axios": "^1.10.0",
-    "cache-manager": "^7.0.0",
-    "dotenv": "^16.5.0",
+    "cache-manager": "^7.0.1",
+    "dotenv": "^17.0.0",
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
     "keyv": "^5.3.4",
-    "pg": "8.16.2",
+    "pg": "8.16.3",
     "prom-client": "^15.1.3",
     "reflect-metadata": "0.2.2",
     "ts-node": "10.9.2",
@@ -46,15 +46,15 @@
     "typeorm-naming-strategies": "4.1.0"
   },
   "devDependencies": {
-    "@eslint/js": "^9.29.0",
+    "@eslint/js": "^9.30.0",
     "@types/jest": "^30.0.0",
-    "@types/node": "^24.0.3",
-    "eslint": "^9.29.0",
+    "@types/node": "^24.0.8",
+    "eslint": "^9.30.0",
     "globals": "^16.2.0",
-    "jest": "^30.0.2",
-    "prettier": "^3.6.0",
+    "jest": "^30.0.3",
+    "prettier": "^3.6.2",
     "ts-jest": "^29.4.0",
     "typescript": "^5.8.3",
-    "typescript-eslint": "^8.35.0"
+    "typescript-eslint": "^8.35.1"
   }
 }
