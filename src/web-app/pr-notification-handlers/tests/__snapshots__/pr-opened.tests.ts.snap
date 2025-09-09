@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`PR opened use-case Should add bookmark and invite author and reviewers on PR opened 1`] = `
 {
