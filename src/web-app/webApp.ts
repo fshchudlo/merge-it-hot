@@ -26,10 +26,10 @@ if (AppConfig.HMAC_SECRET) {
                 req.rawBody = buf.toString();
             },
             limit: AppConfig.REQUEST_BODY_SIZE_LIMIT
-        } as any)
+        } as any) as any
     );
 } else {
-    webApp.use(express.json({ limit: AppConfig.REQUEST_BODY_SIZE_LIMIT }));
+    webApp.use(<any>express.json({ limit: AppConfig.REQUEST_BODY_SIZE_LIMIT }));
 }
 webApp.use(measureRequestDuration);
 

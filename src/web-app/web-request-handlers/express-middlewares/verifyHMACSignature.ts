@@ -2,7 +2,7 @@ import { AppConfig } from "../../../app.config";
 import crypto from "crypto";
 import type { Request, Response, NextFunction } from "express";
 
-export default async function verifyHMACSignature(req: Request, res: Response, next: NextFunction) {
+export default async function verifyHMACSignature(req: Request | any, res: Response, next: NextFunction) {
     if (!AppConfig.HMAC_SECRET) {
         next();
         return;

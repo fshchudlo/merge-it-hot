@@ -9,7 +9,7 @@ import { GitHubPullRequestEventType } from "./transformGithubPayloadToAppEvent/G
 import { OrganizationSettingsProvider } from "../../../adapters/organization-settings-provider/OrganizationSettingsProvider";
 
 export async function handleGitHubWebhookCall(
-    req: Request,
+    req: Request | any,
     res: Response,
     next: NextFunction,
     slackChannelFactory: SlackChannelProvisioner,
