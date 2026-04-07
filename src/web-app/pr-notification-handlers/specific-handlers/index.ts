@@ -13,4 +13,4 @@ export { PullRequestReviewSubmittedHandler } from "./targeted-channel-handlers/p
 export { CommentDeletedHandler } from "./targeted-channel-handlers/comments/CommentDeletedHandler";
 export { CommentEditedHandler } from "./targeted-channel-handlers/comments/CommentEditedHandler";
 export { PullRequestModifiedHandler } from "./targeted-channel-handlers/pull-request/PullRequestModifiedHandler";
-export { PullRequestEventHandler } from "./PullRequestEventHandler";
+export type { PullRequestEventHandler } from "./PullRequestEventHandler";

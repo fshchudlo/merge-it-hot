@@ -3,16 +3,16 @@
   "version": "1.0.0",
   "main": "src/web-app/webApp.ts",
   "scripts": {
-    "start": "ts-node -r tsconfig-paths/register src/web-app/webApp.ts",
+    "start": "node --import tsx -r tsconfig-paths/register src/web-app/webApp.ts",
     "build": "tsc -p tsconfig.json",
     "lint": "eslint ./src --fix",
     "format": "prettier ./src --write",
     "test": "jest",
     "test:coverage": "jest --coverage",
     "test:update-snapshots": "jest --updateSnapshot",
-    "migration:generate": "ts-node ./node_modules/typeorm/cli.js migration:generate -d src/adapters/organization-settings-provider/OrgSettingsDB.ts",
-    "migration:run": "ts-node ./node_modules/typeorm/cli.js migration:run -d src/adapters/organization-settings-provider/OrgSettingsDB.ts",
-    "migration:revert": "ts-node ./node_modules/typeorm/cli.js migration:revert -d src/adapters/organization-settings-provider/OrgSettingsDB.ts",
+    "migration:generate": "node --import tsx -r tsconfig-paths/register ./node_modules/typeorm/cli.js migration:generate -d src/adapters/organization-settings-provider/OrgSettingsDB.ts",
+    "migration:run": "node --import tsx -r tsconfig-paths/register ./node_modules/typeorm/cli.js migration:run -d src/adapters/organization-settings-provider/OrgSettingsDB.ts",
+    "migration:revert": "node --import tsx -r tsconfig-paths/register ./node_modules/typeorm/cli.js migration:revert -d src/adapters/organization-settings-provider/OrgSettingsDB.ts",
     "docker:init": "docker compose -p merge-it-hot -f assets/third-parties-compose.yml up -d",
     "docker:destroy": "docker compose -p merge-it-hot -f assets/third-parties-compose.yml down -v",
     "docker:start": "docker compose -p merge-it-hot -f assets/third-parties-compose.yml -f assets/merge-it-hot-compose.yml up --build"
@@ -54,6 +54,7 @@
     "jest": "^30.3.0",
     "prettier": "^3.8.1",
     "ts-jest": "^29.4.9",
+    "tsx": "^4.21.0",
     "typescript": "^6.0.2",
     "typescript-eslint": "^8.58.0"
   }

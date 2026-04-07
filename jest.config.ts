@@ -1,7 +1,6 @@
 import { Config } from '@jest/types';
 
 const config: Config.InitialOptions = {
-    preset: 'ts-jest',
     testEnvironment: 'node',
     rootDir: './',
     coverageDirectory: './coverage',
@@ -11,6 +10,9 @@ const config: Config.InitialOptions = {
     testMatch: [
         './**/*.test[s].ts',
     ],
+    transform: {
+        '^.+\\.ts$': ['ts-jest', {}]
+    },
     moduleNameMapper: {
         '^@slack-building-blocks$': '<rootDir>/src/@slack-building-blocks'
     },

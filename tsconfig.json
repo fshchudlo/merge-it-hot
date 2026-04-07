@@ -1,8 +1,7 @@
 {
   "compilerOptions": {
     "target": "es2022",
-    "module": "commonjs",
-    "baseUrl": "./",
+    "module": "Node16",
     "paths": {
       "@slack-building-blocks": [
         "./src/@slack-building-blocks"
@@ -10,13 +9,19 @@
     },
     "strict": true,
     "esModuleInterop": true,
+    "isolatedModules": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "strictNullChecks": false,
-    "moduleResolution": "node",
+    "moduleResolution": "node16",
+    "rootDir": ".",
     "outDir": "./dist",
+    "types": [
+      "node",
+      "jest"
+    ],
     "typeRoots": [
       "./types",
       "./node_modules/@types",
@@ -24,7 +29,8 @@
     ]
   },
   "include": [
-    "./**/*.ts"
+    "./**/*.ts",
+    "./**/*.d.ts"
   ],
   "exclude": [
     "./node_modules"
