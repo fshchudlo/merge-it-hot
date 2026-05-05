@@ -29,9 +29,9 @@
   "author": "Fedor Shchudlo",
   "license": "Apache 2.0",
   "dependencies": {
-    "@slack/bolt": "^4.7.1",
+    "@slack/bolt": "^4.7.2",
     "@types/express": "^5.0.6",
-    "axios": "^1.15.2",
+    "axios": "^1.16.0",
     "cache-manager": "^7.2.8",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
@@ -49,12 +49,12 @@
     "@eslint/js": "^10.0.1",
     "@types/jest": "^30.0.0",
     "@types/node": "^25.6.0",
-    "eslint": "^10.2.1",
-    "globals": "^17.5.0",
+    "eslint": "^10.3.0",
+    "globals": "^17.6.0",
     "jest": "^30.3.0",
     "prettier": "^3.8.3",
     "ts-jest": "^29.4.9",
     "typescript": "^6.0.3",
-    "typescript-eslint": "^8.59.1"
+    "typescript-eslint": "^8.59.2"
   }
 }
