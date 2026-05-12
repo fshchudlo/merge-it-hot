@@ -42,19 +42,19 @@
     "reflect-metadata": "0.2.2",
     "ts-node": "10.9.2",
     "tsconfig-paths": "^4.2.0",
-    "typeorm": "0.3.28",
+    "typeorm": "0.3.29",
     "typeorm-naming-strategies": "4.1.0"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "@types/jest": "^30.0.0",
-    "@types/node": "^25.6.0",
+    "@types/node": "^25.7.0",
     "eslint": "^10.3.0",
     "globals": "^17.6.0",
-    "jest": "^30.3.0",
+    "jest": "^30.4.2",
     "prettier": "^3.8.3",
     "ts-jest": "^29.4.9",
     "typescript": "^6.0.3",
-    "typescript-eslint": "^8.59.2"
+    "typescript-eslint": "^8.59.3"
   }
 }
