@@ -29,9 +29,9 @@
   "author": "Fedor Shchudlo",
   "license": "Apache 2.0",
   "dependencies": {
-    "@slack/bolt": "^4.7.2",
+    "@slack/bolt": "^4.7.3",
     "@types/express": "^5.0.6",
-    "axios": "^1.16.1",
+    "axios": "^1.17.0",
     "cache-manager": "^7.2.8",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
@@ -42,19 +42,19 @@
     "reflect-metadata": "0.2.2",
     "ts-node": "10.9.2",
     "tsconfig-paths": "^4.2.0",
-    "typeorm": "0.3.30",
+    "typeorm": "1.0.0",
     "typeorm-naming-strategies": "4.1.0"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "@types/jest": "^30.0.0",
-    "@types/node": "^25.9.0",
-    "eslint": "^10.4.0",
+    "@types/node": "^25.9.2",
+    "eslint": "^10.4.1",
     "globals": "^17.6.0",
     "jest": "^30.4.2",
     "prettier": "^3.8.3",
-    "ts-jest": "^29.4.10",
+    "ts-jest": "^29.4.11",
     "typescript": "^6.0.3",
-    "typescript-eslint": "^8.59.4"
+    "typescript-eslint": "^8.61.0"
   }
 }
