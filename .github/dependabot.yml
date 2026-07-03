@@ -9,6 +9,8 @@ updates:
     directory: "/" # Location of package manifests
     schedule:
       interval: "weekly"
+    ignore:
+      - dependency-name: "typeorm"
     groups:
       all-dependencies:      # Name of the group
         patterns:
