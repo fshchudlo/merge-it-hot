@@ -11,6 +11,9 @@ updates:
       interval: "weekly"
     ignore:
       - dependency-name: "typeorm"
+      - dependency-name: "typescript"
+        update-types:
+          - "version-update:semver-major"
     groups:
       all-dependencies:      # Name of the group
         patterns:
