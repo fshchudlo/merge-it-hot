@@ -11,6 +11,10 @@ updates:
       interval: "weekly"
     ignore:
       - dependency-name: "typeorm"
+      # cache-manager 7 requires Keyv 5 and uses its raw-value API.
+      - dependency-name: "keyv"
+        update-types:
+          - "version-update:semver-major"
       - dependency-name: "typescript"
         update-types:
           - "version-update:semver-major"
